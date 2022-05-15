@@ -5,14 +5,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -20,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 
 public class gestioUsuarisProjectes {
@@ -54,8 +51,9 @@ public class gestioUsuarisProjectes {
     
     //Projectes assignats a l'usuari
     private JPanel panell_assignats,panell_assignats_botons;
-    private JLabel titol_assignats,usuari_assignats;
+    private JLabel titol_assignats,usuari_assignats,rol_assignats;
     private JComboBox<String> combo_usuari_assignats;
+    private JComboBox<String> combo_rol_assignats;
     private JList llista_per_assignar,llista_assignats;
     private JButton btn_assigna,btn_treure;
     private JScrollPane scroll_pane_assingar, scroll_pane_assignats;
@@ -97,16 +95,14 @@ public class gestioUsuarisProjectes {
     private void disseny_usuaris() {
        
         disseny_north();
-        
+ 
         disseny_center();
-        
-        disseny_south();
         
         
     }
     
     
-    private void disseny_south() {
+    private void disseny_center() {
         
         panell_assignats = new JPanel(new FlowLayout());
         JPanel panell_vert = new JPanel();
@@ -125,6 +121,13 @@ public class gestioUsuarisProjectes {
         combo_usuari_assignats=new JComboBox<String>();
         combo_usuari_assignats.setBounds(10,10,80,20);
         panell_vert.add(combo_usuari_assignats);
+        
+        rol_assignats = new JLabel("Rol");
+        panell_vert.add(rol_assignats);
+        
+        combo_rol_assignats =new JComboBox<String>();
+        combo_rol_assignats.setBounds(10,10,80,20);
+        panell_vert.add(combo_rol_assignats);
         
         panell_assignats.add(panell_vert);
         panell_assignats.add(Box.createHorizontalStrut(20));
@@ -173,9 +176,9 @@ public class gestioUsuarisProjectes {
         btn_treure.addActionListener(gb);
         
         panell_assignats.add(btn_treure);
+        panell_assignats.add(Box.createVerticalStrut(300));
         
-        
-        contenidor_principal.add(panell_assignats, BorderLayout.SOUTH);
+        contenidor_principal.add(panell_assignats, BorderLayout.CENTER);
         
         
         
@@ -183,7 +186,7 @@ public class gestioUsuarisProjectes {
         
     }
 
-    private void disseny_center() {
+    private void d() {
         
         panell_projectes = new JPanel(new FlowLayout());
         panell_projectes.add(Box.createHorizontalStrut(-100));
@@ -380,6 +383,7 @@ public class gestioUsuarisProjectes {
         
         
         panell_usuaris.add(usuaris_botons2);
+        panell_usuaris.add(Box.createVerticalStrut(300));
         
         contenidor_principal.add(panell_usuaris, BorderLayout.NORTH);
     }
@@ -401,14 +405,6 @@ public class gestioUsuarisProjectes {
             }else if(b.getName().equals("eliminar_usuari")){
                 System.out.println(b.getName());
             }else if(b.getName().equals("guardar_usuari")){
-                System.out.println(b.getName());
-            }else if(b.getName().equals("nou_projetce")){
-                System.out.println(b.getName());
-            }else if(b.getName().equals("cancelar_projecte")){
-                System.out.println(b.getName());
-            }else if(b.getName().equals("eliminar_projecte")){
-                System.out.println(b.getName());
-            }else if(b.getName().equals("guardar_projecte")){
                 System.out.println(b.getName());
             }else if(b.getName().equals("assignar")){
                 System.out.println(b.getName());
