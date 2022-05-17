@@ -1,11 +1,17 @@
 create table rol(
 	
-	id_rol integer(2) PRIMARY KEY
+	id_rol integer(2) PRIMARY KEY,
+  nom varchar(90),
+  
+  CONSTRAINT ROL_UN_NOM unique(nom)
 );
 
 create table estat(
 
-	id_estat integer(2) PRIMARY KEY
+	id_estat integer(2) PRIMARY KEY,
+  nom varchar(90),
+  
+  CONSTRAINT ESTAT_UN_NOM unique(nom)
 	
 );
 
@@ -55,14 +61,14 @@ create table projecte_usuari(
 create table tasca(
 
 	id integer(6) AUTO_INCREMENT PRIMARY KEY,
-	data_creacio date NOT NULL,
+	data_creacio datetime NOT NULL,
 	nom varchar(80) NOT NULL,
 	descripcio varchar(300) NOT NULL,
-	data_limit date,
+	data_limit datetime,
 	propietari integer(6) NOT NULL,
 	responsable integer(6),
 	id_estat integer(2) NOT NULL,
-	projecte_id integer(2), 
+	projecte_id integer(6), 
 	
 	
 	
@@ -77,7 +83,7 @@ create table tasca(
 create table entrada(
 
 	numero integer(6) AUTO_INCREMENT PRIMARY KEY,
-	data_entrada date NOT NULL,
+	data_entrada datetime NOT NULL,
 	entrada varchar(300) NOT NULL,
 	nova_assignacio integer(6),
 	escriptor integer(6) NOT NULL,

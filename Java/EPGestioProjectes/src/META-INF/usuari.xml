@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+          http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+                 version="2.2">
+    
+    
+    <entity class="org.milaifontanals.model.Usuari" access="FIELD" metadata-complete="true">
+        <table name="USUARI"/> 
+        <named-query name="foundUsuaris">
+            <query>select u from Usuari u order by u.id desc</query>
+        </named-query>      
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>          
+            <basic name="nom" optional="false">
+                <column name="nom"/>
+            </basic>
+            <basic name="cognom1" optional="false">
+                <column name="cognom1"/>
+            </basic>
+            <basic name="cognom2">
+                <column name="cognom2"/>
+            </basic>
+            <basic name="dataNaixement">
+                <column name="data_naix"/>
+            </basic>
+            <basic name="login">
+                <column name="login"/>
+            </basic>
+            <basic name="passwdHash">
+                <column name="passwd_hash"/>
+            </basic>
+            
+            <one-to-many name="projectes_usuaris" mapped-by="usuari"/>
+            
+            <!--
+            <many-to-many name="projectes">
+                <join-table name="projecte_usuari">
+                    <join-column name="projectes" nullable="false" referenced-column-name="id"/>
+                    <inverse-join-column name="usuaris" nullable="false" referenced-column-name="id"/>
+                </join-table>   
+                <cascade>
+                    <cascade-persist/>
+                </cascade>
+            </many-to-many>
+            -->
+            
+            
+            <transient name="tasques"></transient>
+
+        </attributes>
+    </entity>
+
+</entity-mappings>

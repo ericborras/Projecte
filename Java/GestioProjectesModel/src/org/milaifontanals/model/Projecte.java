@@ -1,9 +1,10 @@
 package org.milaifontanals.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Projecte {
+public class Projecte implements Serializable{
     
     
     private int id;
@@ -11,13 +12,20 @@ public class Projecte {
     private String descripcio;
     private Usuari capProjecte;
     private List<Tasca> tasques;
-
-    public Projecte(int id, String nom, String descripcio, Usuari capProjecte, List<Tasca> tasques) {
+    private List<ProjecteUsuari> projectes_usuaris;
+    
+    
+    public Projecte(int id, String nom, String descripcio, Usuari capProjecte, List<Tasca> tasques, List<ProjecteUsuari> projectes_usuaris ) {
         this.id = id;
         this.nom = nom;
         this.descripcio = descripcio;
         this.capProjecte = capProjecte;
         this.tasques = tasques;
+        this.projectes_usuaris = projectes_usuaris;
+    }
+    
+    protected Projecte(){
+        
     }
 
     public int getId() {
@@ -59,6 +67,14 @@ public class Projecte {
     public void setTasques(List<Tasca> tasques) {
         this.tasques = tasques;
     }
+    public List<ProjecteUsuari> usuaris(){
+        return projectes_usuaris;
+    }
+    
+    public void setUsuaris(List<ProjecteUsuari> usuaris){
+        this.projectes_usuaris = usuaris;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -87,8 +103,11 @@ public class Projecte {
 
     @Override
     public String toString() {
-        return "Projecte{" + "id=" + id + ", nom=" + nom + ", descripcio=" + descripcio + ", capProjecte=" + capProjecte + ", tasques=" + tasques + '}';
+        return "Projecte{" + "id=" + id + ", nom=" + nom + ", descripcio=" + descripcio + ", capProjecte=" + capProjecte + ", tasques=" + tasques + ", usuaris=" + projectes_usuaris + '}';
     }
+
+
+    
     
     
     

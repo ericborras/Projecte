@@ -6,22 +6,15 @@ import java.util.Objects;
 
 public class ProjecteUsuari {
     
-    private Usuari usuari;
+    private int ids;
     private Projecte projecte;
+    private Usuari usuari;
     private Rol rol;
 
-    public ProjecteUsuari(Usuari usuari, Projecte projecte, Rol rol) {
-        this.usuari = usuari;
+    public ProjecteUsuari(Projecte projecte, Usuari usuari, Rol rol) {
         this.projecte = projecte;
-        this.rol = rol;
-    }
-
-    public Usuari getUsuari() {
-        return usuari;
-    }
-
-    public void setUsuari(Usuari usuari) {
         this.usuari = usuari;
+        this.rol = rol;
     }
 
     public Projecte getProjecte() {
@@ -30,6 +23,14 @@ public class ProjecteUsuari {
 
     public void setProjecte(Projecte projecte) {
         this.projecte = projecte;
+    }
+
+    public Usuari getUsuari() {
+        return usuari;
+    }
+
+    public void setUsuari(Usuari usuari) {
+        this.usuari = usuari;
     }
 
     public Rol getRol() {
@@ -42,9 +43,9 @@ public class ProjecteUsuari {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.usuari);
+        int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.projecte);
+        hash = 67 * hash + Objects.hashCode(this.usuari);
         return hash;
     }
 
@@ -60,10 +61,10 @@ public class ProjecteUsuari {
             return false;
         }
         final ProjecteUsuari other = (ProjecteUsuari) obj;
-        if (!Objects.equals(this.usuari, other.usuari)) {
+        if (!Objects.equals(this.projecte, other.projecte)) {
             return false;
         }
-        if (!Objects.equals(this.projecte, other.projecte)) {
+        if (!Objects.equals(this.usuari, other.usuari)) {
             return false;
         }
         return true;
@@ -71,7 +72,7 @@ public class ProjecteUsuari {
 
     @Override
     public String toString() {
-        return "ProjecteUsuari{" + "usuari=" + usuari + ", projecte=" + projecte + ", rol=" + rol + '}';
+        return "ProjecteUsuari{" + "projecte=" + projecte + ", usuari=" + usuari + ", rol=" + rol + '}';
     }
     
     

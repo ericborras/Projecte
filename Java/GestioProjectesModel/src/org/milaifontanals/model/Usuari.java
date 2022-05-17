@@ -1,10 +1,11 @@
 package org.milaifontanals.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 
-public class Usuari {
+public class Usuari implements Serializable{
     
     private int id;
     private String nom;
@@ -14,8 +15,9 @@ public class Usuari {
     private String login;
     private String passwdHash;
     private List<Tasca> tasques;
+    private List<ProjecteUsuari> projectes_usuaris;
 
-    public Usuari(int id, String nom, String cognom1, String cognom2, Date dataNaixement, String login, String passwdHash, List<Tasca> tasques) {
+    public Usuari(int id, String nom, String cognom1, String cognom2, Date dataNaixement, String login, String passwdHash, List<Tasca> tasques, List<ProjecteUsuari> projectes_usuaris) {
         this.id = id;
         this.nom = nom;
         this.cognom1 = cognom1;
@@ -24,6 +26,21 @@ public class Usuari {
         this.login = login;
         this.passwdHash = passwdHash;
         this.tasques = tasques;
+        this.projectes_usuaris = projectes_usuaris;
+    }
+
+    public Usuari(String nom, String cognom1, Date dataNaixement, String login, String passwdHash) {
+        this.nom = nom;
+        this.cognom1 = cognom1;
+        this.dataNaixement = dataNaixement;
+        this.login = login;
+        this.passwdHash = passwdHash;
+    }
+    
+    
+    
+    protected Usuari(){
+        
     }
 
     public int getId() {
@@ -89,6 +106,14 @@ public class Usuari {
     public void setTasques(List<Tasca> tasques) {
         this.tasques = tasques;
     }
+    
+    public List<ProjecteUsuari> getProjectes(){
+        return this.projectes_usuaris;
+    }
+    
+    public void setProjectes(List<ProjecteUsuari> projecetes){
+        this.projectes_usuaris = projectes_usuaris;
+    }
 
     @Override
     public int hashCode() {
@@ -117,8 +142,16 @@ public class Usuari {
 
     @Override
     public String toString() {
-        return "Usuari{" + "id=" + id + ", nom=" + nom + ", cognom1=" + cognom1 + ", cognom2=" + cognom2 + ", dataNaixement=" + dataNaixement + ", login=" + login + ", passwdHash=" + passwdHash + ", tasques=" + tasques + '}';
+        String out ="";
+        out += this.id+": "+this.nom+" "+this.cognom1+" ";
+        if(this.cognom2!=null){
+         out += this.cognom2+" ";   
+        }
+        return out;
+                
     }
+
+
     
     
 }

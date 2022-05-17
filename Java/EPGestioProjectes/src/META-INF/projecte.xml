@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+          http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+                 version="2.2">
+    
+    
+    <entity class="org.milaifontanals.model.Projecte" access="FIELD" metadata-complete="true">
+        <table name="PROJECTE"/>      
+        <attributes>
+            <id name="id">
+                <column name="id"/>
+            </id>
+            <basic name="nom" optional="false">
+                <column name="NOM"/>
+            </basic>
+            <basic name="descripcio">
+                <column name="descripcio"/>
+            </basic>
+            
+            <many-to-one name="capProjecte" fetch="EAGER">
+                <join-column name="cap_projecte"/>
+            </many-to-one>           
+            
+            <one-to-many name="projectes_usuaris" mapped-by="projecte"/>
+             
+            
+            <transient name="tasques"/>
+            
+            <!--<transient name="color"></transient>-->
+        </attributes>
+    </entity>
+
+</entity-mappings>

@@ -1,11 +1,12 @@
 
 package org.milaifontanals.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 
-public class Tasca {
+public class Tasca implements Serializable{
     
     private int id;
     private Date dataCreacio;
@@ -27,6 +28,10 @@ public class Tasca {
         this.responsable = responsable;
         this.entrades = entrades;
         this.estat = estat;
+    }
+    
+    protected Tasca(){
+        
     }
 
     public int getId() {

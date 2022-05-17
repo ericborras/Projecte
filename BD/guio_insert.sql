@@ -7,18 +7,18 @@ delete from rol;
 delete from estat;
 
 
-insert into rol values(0);
-insert into rol values(1);
-insert into rol values(2);
+insert into rol values(0,'PROGRAMADOR');
+insert into rol values(1,'ANALISTA');
+insert into rol values(2,'CLIENT');
 
 
 
 
-insert into estat values(0);
-insert into estat values(1);
-insert into estat values(2);
-insert into estat values(3);
-insert into estat values(4);
+insert into estat values(0,'TANCADA_SENSE_SOLUCIO');
+insert into estat values(1,'TANCADA_RESOLTA');
+insert into estat values(2,'TANCADA_DUPLICADA');
+insert into estat values(3,'OBERTA_NO_ASSIGNADA');
+insert into estat values(4,'OBERTA_ASSIGNADA');
 
 
 
@@ -74,84 +74,86 @@ insert into projecte values(NULL,'Proyecto creación de página web con PHP','Pr
 
 
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'placido'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'marisela'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'norberto'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'fausto'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'clara'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'lope'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macario'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macaria'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'nazario'),2);
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'marisela'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'norberto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'fausto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'clara'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'lope'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macaria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'CLIENT'));
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'tomasa'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'chelo'),2);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'inocencio'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'pepita'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'eli'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'buenaventura'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'maria'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'nereida'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'dolores'),0);
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'tomasa'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'chelo'),(select id_rol from rol where nom = 'CLIENT'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'inocencio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'pepita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'eli'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'maria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'nereida'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'dolores'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'soraya'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'ciro'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'concha'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'duilio'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'cecilia'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'montserrat'),2);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'jose'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'custodia'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'odalys'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'macario'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'buenaventura'),0);
-
-
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'nazario'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'irene'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'lorena'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'placido'),1);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'isidoro'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'juanita'),0);
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'dorotea'),0);
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'soraya'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'ciro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'concha'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'duilio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'cecilia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'montserrat'),(select id_rol from rol where nom = 'CLIENT'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'jose'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'custodia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'odalys'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
 
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'irene'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'lorena'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'isidoro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'juanita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'dorotea'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
 
-insert into tasca values(NULL,'2022-05-01','Crear base de datos','Tarea que consiste en crear la base de datos','2022-05-07',(select id from usuari where login = 'marisela'),(select id from usuari where login = 'placido'),0,(select id from projecte where nom = 'Proyecto aplicación Android'));
-insert into tasca values(NULL,'2022-01-22','Crear la lista de los clientes','Tarea que consiste en crear la lista de los clientes','2022-10-12',(select id from usuari where login = 'norberto'),(select id from usuari where login = 'placido'),2,(select id from projecte where nom = 'Proyecto aplicación Android'));
-insert into tasca values(NULL,'2022-01-22','Crear la lista de los representantes','Tarea que consiste en crear la lista de los representantes',NULL,(select id from usuari where login = 'fausto'),(select id from usuari where login = 'norberto'),1,(select id from projecte where nom = 'Proyecto aplicación Android'));
-insert into tasca values(NULL,'2022-03-06','Crear pantalla almacén','Tarea que consiste en crear la pantalla del almacén','2022-03-16',(select id from usuari where login = 'lope'),(select id from usuari where login = 'placido'),0,(select id from projecte where nom = 'Proyecto aplicación Android'));
-insert into tasca values(NULL,'2022-02-22','Leer códigos de barras','Tarea que consiste en leer códigos de barras',NULL,(select id from usuari where login = 'macaria'),(select id from usuari where login = 'placido'),3,(select id from projecte where nom = 'Proyecto aplicación Android'));
 
 
-insert into tasca values(NULL,'2022-03-09','Crear classes','Tarea que consiste en crear classes','2022-03-10',(select id from usuari where login = 'inocencio'),(select id from usuari where login = 'tomasa'),3,(select id from projecte where nom = 'Proyecto aplicación Java'));
-insert into tasca values(NULL,'2022-03-30','Crear servidor','Tarea que consiste en crear el servidor',NULL,(select id from usuari where login = 'inocencio'),(select id from usuari where login = 'tomasa'),3,(select id from projecte where nom = 'Proyecto aplicación Java'));
-insert into tasca values(NULL,'2022-01-02','Conectar a la base de datos','Tarea que consiste en conectar a la base de datos','2022-01-04',(select id from usuari where login = 'pepita'),(select id from usuari where login = 'nereida'),3,(select id from projecte where nom = 'Proyecto aplicación Java'));
-insert into tasca values(NULL,'2022-01-28','Crear pantallas con swing','Tarea que consiste en crear pantallas con swing','2022-02-28',(select id from usuari where login = 'maria'),(select id from usuari where login = 'tomasa'),3,(select id from projecte where nom = 'Proyecto aplicación Java'));
-insert into tasca values(NULL,'2022-03-05','Test de funcionalidades','Tarea que consiste en test de funcionalidades',NULL,(select id from usuari where login = 'dolores'),(select id from usuari where login = 'nereida'),3,(select id from projecte where nom = 'Proyecto aplicación Java'));
+insert into tasca values(NULL,'2022-05-01','Crear base de datos','Tarea que consiste en crear la base de datos','2022-05-07',(select id from usuari where login = 'marisela'),(select id from usuari where login = 'placido'),(select id_estat from estat where nom = 'TANCADA_SENSE_SOLUCIO'),(select id from projecte where nom = 'Proyecto aplicación Android'));
+insert into tasca values(NULL,'2022-01-22','Crear la lista de los clientes','Tarea que consiste en crear la lista de los clientes','2022-10-12',(select id from usuari where login = 'norberto'),(select id from usuari where login = 'placido'),(select id_estat from estat where nom = 'TANCADA_DUPLICADA'),(select id from projecte where nom = 'Proyecto aplicación Android'));
+insert into tasca values(NULL,'2022-01-22','Crear la lista de los representantes','Tarea que consiste en crear la lista de los representantes',NULL,(select id from usuari where login = 'fausto'),(select id from usuari where login = 'norberto'),(select id_estat from estat where nom = 'TANCADA_RESOLTA'),(select id from projecte where nom = 'Proyecto aplicación Android'));
+insert into tasca values(NULL,'2022-03-06','Crear pantalla almacén','Tarea que consiste en crear la pantalla del almacén','2022-03-16',(select id from usuari where login = 'lope'),(select id from usuari where login = 'placido'),(select id_estat from estat where nom = 'TANCADA_SENSE_SOLUCIO'),(select id from projecte where nom = 'Proyecto aplicación Android'));
+insert into tasca values(NULL,'2022-02-22','Leer códigos de barras','Tarea que consiste en leer códigos de barras',NULL,(select id from usuari where login = 'macaria'),(select id from usuari where login = 'placido'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Android'));
 
 
-insert into tasca values(NULL,'2022-03-22','Crear conexión a base de datos','Tarea que consiste en crear conexión a base de datos','2022-03-27',(select id from usuari where login = 'custodia'),(select id from usuari where login = 'soraya'),0,(select id from projecte where nom = 'Proyecto aplicación UWP'));
-insert into tasca values(NULL,'2022-01-26','Crear elementos interfaz','Tarea que consiste en crear elementos interfaz',NULL,(select id from usuari where login = 'concha'),(select id from usuari where login = 'soraya'),3,(select id from projecte where nom = 'Proyecto aplicación UWP'));
-insert into tasca values(NULL,'2022-02-19','Programar métodos de cáclulos de impuestos','Tarea que consiste en programar métodos de cáclulos de impuestos','2022-03-01',(select id from usuari where login = 'duilio'),(select id from usuari where login = 'macario'),3,(select id from projecte where nom = 'Proyecto aplicación UWP'));
+insert into tasca values(NULL,'2022-03-09','Crear classes','Tarea que consiste en crear classes','2022-03-10',(select id from usuari where login = 'inocencio'),(select id from usuari where login = 'tomasa'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Java'));
+insert into tasca values(NULL,'2022-03-30','Crear servidor','Tarea que consiste en crear el servidor',NULL,(select id from usuari where login = 'inocencio'),(select id from usuari where login = 'tomasa'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Java'));
+insert into tasca values(NULL,'2022-01-02','Conectar a la base de datos','Tarea que consiste en conectar a la base de datos','2022-01-04',(select id from usuari where login = 'pepita'),(select id from usuari where login = 'nereida'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Java'));
+insert into tasca values(NULL,'2022-01-28','Crear pantallas con swing','Tarea que consiste en crear pantallas con swing','2022-02-28',(select id from usuari where login = 'maria'),(select id from usuari where login = 'tomasa'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Java'));
+insert into tasca values(NULL,'2022-03-05','Test de funcionalidades','Tarea que consiste en test de funcionalidades',NULL,(select id from usuari where login = 'dolores'),(select id from usuari where login = 'nereida'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación Java'));
 
 
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'marisela'),4,(select id from tasca where propietari = (select id from usuari where login = 'marisela')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'norberto'),4,(select id from tasca where propietari = (select id from usuari where login = 'norberto')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'fausto'),4,(select id from tasca where propietari = (select id from usuari where login = 'fausto')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'lope'),4,(select id from tasca where propietari = (select id from usuari where login = 'lope')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'macaria'),4,(select id from tasca where propietari = (select id from usuari where login = 'macaria')));
+insert into tasca values(NULL,'2022-03-22','Crear conexión a base de datos','Tarea que consiste en crear conexión a base de datos','2022-03-27',(select id from usuari where login = 'custodia'),(select id from usuari where login = 'soraya'),(select id_estat from estat where nom = 'TANCADA_SENSE_SOLUCIO'),(select id from projecte where nom = 'Proyecto aplicación UWP'));
+insert into tasca values(NULL,'2022-01-26','Crear elementos interfaz','Tarea que consiste en crear elementos interfaz',NULL,(select id from usuari where login = 'concha'),(select id from usuari where login = 'soraya'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación UWP'));
+insert into tasca values(NULL,'2022-02-19','Programar métodos de cáclulos de impuestos','Tarea que consiste en programar métodos de cáclulos de impuestos','2022-03-01',(select id from usuari where login = 'duilio'),(select id from usuari where login = 'macario'),(select id_estat from estat where nom = 'OBERTA_NO_ASSIGNADA'),(select id from projecte where nom = 'Proyecto aplicación UWP'));
 
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'inocencio'),4,(select id from tasca where propietari = (select id from usuari where login = 'inocencio') and data_creacio = '2022-03-09'));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'inocencio'),4,(select id from tasca where propietari = (select id from usuari where login = 'inocencio') and data_creacio = '2022-03-30'));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'pepita'),4,(select id from tasca where propietari = (select id from usuari where login = 'pepita')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'maria'),4,(select id from tasca where propietari = (select id from usuari where login = 'maria')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),4,(select id from tasca where propietari = (select id from usuari where login = 'dolores')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),4,(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
 
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'custodia'),4,(select id from tasca where propietari = (select id from usuari where login = 'custodia')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),4,(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'concha'),4,(select id from tasca where propietari = (select id from usuari where login = 'concha')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),4,(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
-insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'duilio'),4,(select id from tasca where propietari = (select id from usuari where login = 'duilio')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),4,(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
+
+
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'marisela'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'marisela')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'norberto'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'norberto')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'fausto'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'fausto')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'lope'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'lope')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'macaria'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'macaria')));
+
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'inocencio'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'inocencio') and data_creacio = '2022-03-09'));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'inocencio'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'inocencio') and data_creacio = '2022-03-30'));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'pepita'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'pepita')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'maria'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'maria')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'dolores')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
+
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'custodia'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'custodia')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'concha'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'concha')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
+insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'duilio'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'duilio')));insert into entrada values(NULL,'2022-05-15','Entrada',NULL,(select id from usuari where login = 'dolores'),(select id_estat from estat where nom = 'OBERTA_ASSIGNADA'),(select id from tasca where propietari = (select id from usuari where login = 'dolores')));
 
 
 

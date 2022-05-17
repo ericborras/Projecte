@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
+          http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+                 version="2.2">
+    
+    
+    <entity class="org.milaifontanals.model.ProjecteUsuari" access="FIELD" metadata-complete="true">
+        <table name="PROJECTE_USUARI"/>      
+        <attributes>
+            <id name="ids">
+                
+            </id>
+            
+            <basic name="rol"></basic>
+
+            <many-to-one name="usuari" optional="false" fetch="LAZY">
+                    <join-column name="id_usuari" nullable="false"/>             
+            </many-to-one>
+            
+            <many-to-one name="projecte" optional="false" fetch="LAZY">
+                    <join-column name="id_projecte" nullable="false"/>            
+            </many-to-one>
+            
+            
+        </attributes>
+    </entity>
+
+</entity-mappings>

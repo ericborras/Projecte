@@ -1,10 +1,11 @@
 
 package org.milaifontanals.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class Entrada {
+public class Entrada implements Serializable{
     
     private int numero;
     private Date dataEntrada;
@@ -20,6 +21,10 @@ public class Entrada {
         this.escriptor = escriptor;
         this.novaAssignacio = novaAssignacio;
         this.nouEstat = nouEstat;
+    }
+    
+    protected Entrada(){
+        
     }
 
     public int getNumero() {

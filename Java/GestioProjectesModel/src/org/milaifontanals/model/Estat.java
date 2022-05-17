@@ -5,11 +5,15 @@
  */
 package org.milaifontanals.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Lenovo T530
  */
-public enum Estat {
+public enum Estat implements Serializable{
+    
+    
     
     TANCADA_SENSE_SOLUCIO,TANCADA_RESOLTA,TANCADA_DUPLICADA,OBERTA_NO_ASSIGNADA,OBERTA_ASSIGNADA;
     
