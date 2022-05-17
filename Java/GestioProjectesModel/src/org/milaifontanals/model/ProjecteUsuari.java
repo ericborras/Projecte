@@ -1,16 +1,21 @@
 
 package org.milaifontanals.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
-public class ProjecteUsuari {
+public class ProjecteUsuari implements Serializable{
     
-    private int ids;
+    private int id;
     private Projecte projecte;
     private Usuari usuari;
     private Rol rol;
 
+    protected ProjecteUsuari(){
+        
+    }
+    
     public ProjecteUsuari(Projecte projecte, Usuari usuari, Rol rol) {
         this.projecte = projecte;
         this.usuari = usuari;

@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,6 +35,8 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Usuari;
 import org.milaifontanals.persistence.Persistencia;
 
@@ -41,6 +47,7 @@ public class UI {
     //Buttons
     private GestioButton gb;
     private GestioLlista gll;
+    private GestioCombo gc;
     
     private JFrame contenidor_principal;
     
@@ -63,17 +70,20 @@ public class UI {
     private JTextField text_nom_projecte;
     private JTextArea text_descripcio_projecte;
     
-    private JList llista_projectes;
+    private JList<Usuari> llista_projectes;
     private JScrollPane scroll_pane_projectes;
     
     private JComboBox<String> combo_cap_projecte;
+    
+    private Projecte[] projectes;
+    private Rol[] rols;
     
     
     //Projectes assignats a l'usuari
     private JPanel panell_assignats,panell_assignats_botons;
     private JLabel titol_assignats,usuari_assignats,rol_assignats;
-    private JComboBox<String> combo_usuari_assignats;
-    private JComboBox<String> combo_rol_assignats;
+    private JComboBox combo_projectes;
+    private JComboBox combo_rols;
     private JList llista_per_assignar,llista_assignats;
     private JButton btn_assigna,btn_treure;
     private JScrollPane scroll_pane_assingar, scroll_pane_assignats;
@@ -94,6 +104,9 @@ public class UI {
     
     //USUARI QUE SERÀ EL SELECCIONAT DE LA JLIST
     Usuari usuari = null;
+    //PROJECTE QUE SERÀ EL SELECCIONAT DEL JCOMBOBOX
+    Projecte projecte = null;
+    private int idx_llista_usuaris;
     private int day,month,year;
     
     public UI(){ 
@@ -101,14 +114,21 @@ public class UI {
         
         em = pers_mysql.obrir_connexio();
         
+        //Per defecte està en mode edit
+        modeEdit = true;
+        
+        
         
         if(em==null){
             //Mostrar pantalla error
             gui_error();
         }else{
             usuaris = pers_mysql.mostrar_usuaris();
+            projectes = pers_mysql.mostrar_projectes();
+            rols = pers_mysql.mostrar_rols();
             gui();
-            
+           
+           
             
         }
     }
@@ -125,6 +145,7 @@ public class UI {
     private void gui(){
         gb = new GestioButton();
         gll = new GestioLlista();
+        gc = new GestioCombo();
         
         contenidor_principal = new JFrame("Gestió usuaris");
         contenidor_principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,7 +155,7 @@ public class UI {
         
         contenidor_principal.setVisible(true);
         contenidor_principal.setResizable(false);
-        contenidor_principal.setSize(950,700);
+        contenidor_principal.setSize(1100,700);
         
         
     }
@@ -153,9 +174,9 @@ public class UI {
     private void disseny_center() {
         
         panell_assignats = new JPanel(new FlowLayout());
-        JPanel panell_vert = new JPanel();
-        panell_assignats.add(Box.createHorizontalStrut(-40));
+        JPanel panell_vert = new JPanel();     
         titol_assignats = new JLabel("Proyectos assignados");
+        titol_assignats.add(Box.createHorizontalStrut(-200));
         titol_assignats.setFont(new Font(titol_assignats.getName(), Font.BOLD, 25));
         panell_vert.add(titol_assignats);
         
@@ -166,16 +187,19 @@ public class UI {
         panell_vert.setLayout(new BoxLayout(panell_vert, BoxLayout.Y_AXIS));
         
         
-        combo_usuari_assignats=new JComboBox<String>();
-        combo_usuari_assignats.setBounds(10,10,80,20);
-        panell_vert.add(combo_usuari_assignats);
+        combo_projectes=new JComboBox(new DefaultComboBoxModel(projectes));  
+        combo_projectes.addItemListener(gc);
+        combo_projectes.setMaximumSize(combo_projectes.getPreferredSize());
+        combo_projectes.setSelectedIndex(-1);
+        panell_vert.add(combo_projectes);
         
         rol_assignats = new JLabel("Rol");
         panell_vert.add(rol_assignats);
         
-        combo_rol_assignats =new JComboBox<String>();
-        combo_rol_assignats.setBounds(10,10,80,20);
-        panell_vert.add(combo_rol_assignats);
+        combo_rols =new JComboBox(new DefaultComboBoxModel(rols));
+        combo_rols.setMaximumSize(combo_rols.getPreferredSize());
+        combo_rols.setSelectedIndex(-1);
+        panell_vert.add(combo_rols);       
         
         panell_assignats.add(panell_vert);
         panell_assignats.add(Box.createHorizontalStrut(20));
@@ -405,11 +429,11 @@ public class UI {
         panell_usuaris.add(Box.createHorizontalStrut(20));
         
         llista_usuaris = new JList(usuaris);
-        //AFEGIR EL LISTER A LA LLISTA
+        //AFEGIR EL LISTENER A LA LLISTA
         llista_usuaris.addListSelectionListener(gll);
         
         
-        Dimension listSize = new Dimension(300, 200);
+        Dimension listSize = new Dimension(300, 300);
         //Assignem la mida i fem que es mostri la llista
         
         scroll_pane_usuaris = new JScrollPane(llista_usuaris);
@@ -483,7 +507,8 @@ public class UI {
                 usuari = (Usuari) llista_usuaris.getSelectedValue();
                 emplena_camps();
                 btn_esborra_usuari.setEnabled(true);
-                
+                idx_llista_usuaris = llista_usuaris.getSelectedIndex();
+                System.out.println("IDX: "+idx_llista_usuaris);
             }
             
             
@@ -529,9 +554,9 @@ public class UI {
             
             
             if(b.getName().equals("nou_usuari")){
-                afegir_usuari();
+                neteja_inputs();
             }else if(b.getName().equals("cancelar_usuari")){
-                System.out.println(b.getName());
+                cancelar_usuari();
             }else if(b.getName().equals("eliminar_usuari")){
                 eliminar_usuari();
             }else if(b.getName().equals("guardar_usuari")){
@@ -557,7 +582,7 @@ public class UI {
            
         }
 
-        private void afegir_usuari() {
+        private void neteja_inputs() {
             modeAlta = true;
             modeEdit = false;
             
@@ -589,24 +614,37 @@ public class UI {
                 && text_passwd.getText().length()>0 && text_naix_usuari.getText().length()>0)
                 {
                     //Construir objecte usuari
-                    Usuari u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),new Date(),text_login_usuari.getText(),text_passwd.getText());
+                    
+                    
+                    Date data_naix = new GregorianCalendar(year, month, day).getTime();
+                    
+                    Usuari u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),data_naix,text_login_usuari.getText(),text_passwd.getText());
                     if(text_cognom2_usuari.getText().length()>0){
                         u.setCognom2(text_cognom2_usuari.getText());
                     }
                     
                     try{
-                        em.getTransaction().begin();
+                        
+                        
+                        em.getTransaction().begin();                      
                         em.persist(u);
                         em.getTransaction().commit();
+                        em.clear();
                         
-                        //Eliminar de la ModelList
-                        //usuaris.remove(llista_usuaris.)
+                        try{
+                            //Guardar a la modelLlist
+                            usuaris.addElement(u);
+                        }catch(Exception ex){
+                        
+                        }
                         
                         JOptionPane.showMessageDialog(contenidor_principal,"Usuario guardado con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
                     }catch(Exception ex){
                         System.out.println(ex.getMessage());
                         JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido guardar el usuario","Error al guardar",JOptionPane.ERROR_MESSAGE);
                     }
+
+                        
                     
                     
                     
@@ -634,47 +672,118 @@ public class UI {
         private void eliminar_usuari() {
             
             //Esborrar usuari
+            boolean merge=false;
             try{
                 
-                Object[] options = {"Si","No"};
+                Object[] options = {"Sí","No"};
                     int n = JOptionPane.showOptionDialog(contenidor_principal,
-                                                        "Estás segur que quieres eliminar el usuario "+usuari+"?", 
+                                                        "Estás seguro que quieres eliminar el usuario "+usuari+"?", 
                                                         "Eliminar", 
                                                         JOptionPane.YES_NO_OPTION, 
                                                         JOptionPane.QUESTION_MESSAGE,
                                                         null,
                                                         options, 
                                                         null);
-                    if(n==0){
-                        
-                        int pos = llista_usuaris.getSelectedIndex();
-                        
-                        
+                    if(n==0){                      
                         System.out.println("SI");
-                        em.getTransaction().begin();           
+
+                        em.getTransaction().begin();
+                        System.out.println(usuari);                       
                         em.remove(usuari);
+                        
                         em.getTransaction().commit();
                         
-                        
-                        
-                        
+                        //Treure de la llista
+                        //Esborrar en memoria
+                        try{
+
+                            System.out.println("SIZE INICIAL: "+usuaris.size());
+                            usuaris.remove(idx_llista_usuaris);
+                            System.out.println("SIZE FINAL: "+usuaris.size());
+                            
+                        }catch(Exception ex){
+                            
+                            System.out.println(ex.getMessage());
+                            
+                        }
+                        neteja_inputs();
                         JOptionPane.showMessageDialog(contenidor_principal,"Usuario eliminado con éxito","Eliminar usuario",JOptionPane.INFORMATION_MESSAGE);
                     }else if(n==1){
                         System.out.println("NO");
                     }
-                
+              
 
                 
-                //Treure de la llista
-                
-                
             }catch(Exception ex){
-                JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido eliminar el usuario","Error al eliminar el usuario",JOptionPane.ERROR_MESSAGE);
+                merge = true;
+                em.getTransaction().rollback();             
+                System.out.println(ex.getMessage());
+                
             }
+            
+            if(merge){
+                try{
+                    em.getTransaction().begin();
+                    em.remove(em.contains(usuari) ? usuari : em.merge(usuari));
+                    em.getTransaction().commit();
+                    
+                    //Treure de la llista
+                    //Esborrar en memoria
+                    try{
+
+                        System.out.println("SIZE INICIAL: "+usuaris.size());
+                        usuaris.remove(idx_llista_usuaris);
+                        System.out.println("SIZE FINAL: "+usuaris.size());
+
+                    }catch(Exception ex){
+
+                        System.out.println(ex.getMessage());
+
+                    }
+                    neteja_inputs();
+                    
+                    JOptionPane.showMessageDialog(contenidor_principal,"Usuario eliminado con éxito","Eliminar usuario",JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido eliminar el usuario","Error al eliminar el usuario",JOptionPane.ERROR_MESSAGE);
+                }
+
+                
+            }
+            
+
             
             
             
         }
+
+        private void cancelar_usuari() {
+            modeEdit = true;
+            modeAlta = false;
+            
+            //En cas que tingui un usuari seleccionat previament, posarem les seves dades inicials
+            if(usuari!=null){
+                gll.emplena_camps();
+                
+                
+            }
+            
+            
+        }
+    
+    }
+    
+    class GestioCombo implements ItemListener{
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            
+           projecte = (Projecte) e.getItem();
+           pers_mysql.mostrar_projecteUsuari();
+           
+           
+            
+        }
+    
     
     }
     

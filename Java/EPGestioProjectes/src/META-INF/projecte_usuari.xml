@@ -7,23 +7,27 @@
     
     
     <entity class="org.milaifontanals.model.ProjecteUsuari" access="FIELD" metadata-complete="true">
-        <table name="PROJECTE_USUARI"/>      
+        <table name="PROJECTE_USUARI"/>  
+        <named-query name="foundProjecteUsuari">
+            <query>select pru from ProjecteUsuari pru</query>
+        </named-query>     
         <attributes>
-            <id name="ids">
-                
+            <id name="id">
+                <generated-value strategy="IDENTITY"></generated-value>
             </id>
-            
-            <basic name="rol"></basic>
+                     
 
             <many-to-one name="usuari" optional="false" fetch="LAZY">
-                    <join-column name="id_usuari" nullable="false"/>             
+                <join-column name="id_usuari" nullable="false"/>             
             </many-to-one>
             
             <many-to-one name="projecte" optional="false" fetch="LAZY">
-                    <join-column name="id_projecte" nullable="false"/>            
+                <join-column name="id_projecte" nullable="false"/>            
             </many-to-one>
-            
-            
+                      
+            <many-to-one name="rol" optional="false" fetch="LAZY">
+                <join-column name="id_rol" nullable="false"/> 
+            </many-to-one>
         </attributes>
     </entity>
 

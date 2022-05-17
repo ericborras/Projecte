@@ -8,6 +8,8 @@ package org.milaifontanals.persistence;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.DefaultListModel;
+import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Usuari;
 
 /**
@@ -19,5 +21,7 @@ public interface IPersistence {
     EntityManager obrir_connexio();
     void tancar_connexio();
     DefaultListModel mostrar_usuaris();
+    Projecte[] mostrar_projectes();
+    Rol[] mostrar_rols();
     
 }

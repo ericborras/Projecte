@@ -11,6 +11,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.DefaultListModel;
+import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.ProjecteUsuari;
+import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Usuari;
 
 /**
@@ -90,6 +93,50 @@ public class Persistencia implements IPersistence{
         }
         return modelLlista;
         
+    }
+
+    @Override
+    public Projecte[] mostrar_projectes() {
+        Query q = em.createNamedQuery("foundProjectes");
+
+        List<Projecte> ll = (List<Projecte>)q.getResultList();
+        Projecte projectes[] = new Projecte[ll.size()];
+        
+        for(int i=0;i<ll.size();i++){
+            projectes[i] = ll.get(i);
+        }
+
+        return projectes;
+    }
+
+    @Override
+    public Rol[] mostrar_rols() {
+        
+        Query q = em.createNamedQuery("foundRol");
+
+        List<Rol> ll = (List<Rol>)q.getResultList();
+        Rol rols[] = new Rol[ll.size()];
+        
+        for(int i=0;i<ll.size();i++){
+            rols[i] = ll.get(i);
+            
+        }
+
+        return rols;
+        
+        
+    }
+    
+    public List<ProjecteUsuari> mostrar_projecteUsuari(){
+        Query q = em.createNamedQuery("foundProjecteUsuari");
+
+        List<ProjecteUsuari> ll = (List<ProjecteUsuari>)q.getResultList();
+        
+        for(ProjecteUsuari pru : ll){
+            System.out.println(pru);
+        }
+
+        return ll;
     }
     
     

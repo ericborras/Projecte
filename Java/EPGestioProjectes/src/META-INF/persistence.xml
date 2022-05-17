@@ -5,9 +5,11 @@
         <mapping-file>META-INF/projecte.xml</mapping-file>
         <mapping-file>META-INF/usuari.xml</mapping-file>
         <mapping-file>META-INF/projecte_usuari.xml</mapping-file>
+        <mapping-file>META-INF/rol.xml</mapping-file>
         <class>org.milaifontanals.model.Projecte</class>
         <class>org.milaifontanals.model.Usuari</class>
         <class>org.milaifontanals.model.ProjecteUsuari</class>
+        <class>org.milaifontanals.model.Rol</class>
         <properties>
             <property name="javax.persistence.jdbc.url" 
                       value="jdbc:mysql://localhost:3306/gestio_projectes"/>

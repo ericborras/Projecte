@@ -7,10 +7,14 @@
     
     
     <entity class="org.milaifontanals.model.Projecte" access="FIELD" metadata-complete="true">
-        <table name="PROJECTE"/>      
+        <table name="PROJECTE"/>   
+        <named-query name="foundProjectes">
+            <query>select p from Projecte p</query>
+        </named-query>   
         <attributes>
             <id name="id">
                 <column name="id"/>
+                <generated-value strategy="IDENTITY"></generated-value>
             </id>
             <basic name="nom" optional="false">
                 <column name="NOM"/>

@@ -46,10 +46,11 @@ create table projecte(
 
 create table projecte_usuari(
 
-	id_projecte integer(6),
-	id_usuari integer(6),
+	id integer(6) AUTO_INCREMENT PRIMARY KEY,
+	id_projecte integer(6) NOT NULL,
+	id_usuari integer(6) NOT NULL,
 	id_rol integer(2) NOT NULL,
-	PRIMARY KEY(id_projecte,id_usuari),
+	CONSTRAINT PROJECTEUSUARI_UN_PROJUSU unique(id_projecte,id_usuari),
 	CONSTRAINT FK_PROJECTEUSUARI_PROJECTE FOREIGN KEY(id_projecte) REFERENCES projecte(id),
 	CONSTRAINT FK_PROJECTEUSUARI_USUARI FOREIGN KEY(id_usuari) REFERENCES usuari(id),
 	CONSTRAINT FK_PROJECTEUSUARI_ROL FOREIGN KEY(id_rol) REFERENCES rol(id_rol)

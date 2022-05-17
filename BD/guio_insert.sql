@@ -74,46 +74,46 @@ insert into projecte values(NULL,'Proyecto creación de página web con PHP','Pr
 
 
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'marisela'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'norberto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'fausto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'clara'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'lope'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macaria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'CLIENT'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'marisela'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'norberto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'fausto'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'clara'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'lope'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'macaria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Android'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'CLIENT'));
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'tomasa'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'chelo'),(select id_rol from rol where nom = 'CLIENT'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'inocencio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'pepita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'eli'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'maria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'nereida'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'dolores'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'tomasa'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'chelo'),(select id_rol from rol where nom = 'CLIENT'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'inocencio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'pepita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'eli'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'maria'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'nereida'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación Java'), (select id from usuari where login = 'dolores'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'soraya'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'ciro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'concha'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'duilio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'cecilia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'montserrat'),(select id_rol from rol where nom = 'CLIENT'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'jose'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'custodia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'odalys'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'soraya'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'ciro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'concha'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'duilio'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'cecilia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'montserrat'),(select id_rol from rol where nom = 'CLIENT'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'jose'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'custodia'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'odalys'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'macario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto aplicación UWP'), (select id from usuari where login = 'buenaventura'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
 
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'irene'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'lorena'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'isidoro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'juanita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
-insert into projecte_usuari values((select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'dorotea'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'nazario'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'irene'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'lorena'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'placido'),(select id_rol from rol where nom = 'ANALISTA'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'isidoro'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'juanita'),(select id_rol from rol where nom = 'PROGRAMADOR'));
+insert into projecte_usuari values(NULL,(select id from projecte where nom = 'Proyecto creación de página web con PHP'), (select id from usuari where login = 'dorotea'),(select id_rol from rol where nom = 'PROGRAMADOR'));
 
 
 
