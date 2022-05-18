@@ -9,13 +9,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.Box;
@@ -35,7 +42,9 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import static org.milaifontanals.MD5Utils.bytesToHex;
 import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.ProjecteUsuari;
 import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Usuari;
 import org.milaifontanals.persistence.Persistencia;
@@ -63,33 +72,24 @@ public class UI {
     private JScrollPane scroll_pane_usuaris;
     
     
-    //Projectes
-    private JPanel panell_projectes, projectes_botons,projectes_botons2,projectes_text_field;
-    private JLabel titol_projectes,titol_cap_projecte;
-    private JButton btn_nou_projecte,btn_cancel_projecte,btn_esborra_projecte,btn_guarda_projecte;
-    private JTextField text_nom_projecte;
-    private JTextArea text_descripcio_projecte;
-    
-    private JList<Usuari> llista_projectes;
-    private JScrollPane scroll_pane_projectes;
-    
-    private JComboBox<String> combo_cap_projecte;
-    
     private Projecte[] projectes;
     private Rol[] rols;
+    private String[] s_rols;
     
     
     //Projectes assignats a l'usuari
-    private JPanel panell_assignats,panell_assignats_botons;
+    private JPanel panell_assignats,panell_guarda;
     private JLabel titol_assignats,usuari_assignats,rol_assignats;
     private JComboBox combo_projectes;
     private JComboBox combo_rols;
-    private JList llista_per_assignar,llista_assignats;
-    private JButton btn_assigna,btn_treure;
+    JList llista_per_assignar,llista_assignats;
+    private JButton btn_assigna,btn_treure,btn_guarda;
     private JScrollPane scroll_pane_assingar, scroll_pane_assignats;
     
     
     private DefaultListModel usuaris = new DefaultListModel();
+    private DefaultListModel usuaris_assignats_projecte = null;
+    private DefaultListModel usuaris_assignar_projecte = null;
     
     //Persistència
     private Persistencia pers_mysql;
@@ -101,11 +101,27 @@ public class UI {
     
     private boolean modeAlta = false;
     private boolean modeEdit = false;
+    private boolean rol_selected = false;
+    private boolean llista_assignar_selected = false;
     
     //USUARI QUE SERÀ EL SELECCIONAT DE LA JLIST
     Usuari usuari = null;
     //PROJECTE QUE SERÀ EL SELECCIONAT DEL JCOMBOBOX
     Projecte projecte = null;
+    //USUARI QUE SERÀ EL SELECCIONAT DE LA JLIST QUE NO ESTAN ASSIGNATS AL PROJECTE SELECCIONAT
+    Usuari usuari_pendent_assignar = null;
+    //USUARI QUE SERÀ EL SELECCIONAT DE LA JLIST QUE ESTAN ASSIGNATS AL PROJECTE SELECCIONAT
+    Usuari usuari_assignat = null;
+    
+    //LLISTA QUE CONTÉ EL PROJECTE-USUARI QUE CLICA EL COMBO
+    //LA ANIREM MODIFICANT EN MEMÒRIA I ANIRÀ A LA BASE DE DADES
+    List<ProjecteUsuari> projectes_usuaris = null;
+    
+    List<ProjecteUsuari> projectes_usuaris_per_esborrar = null;
+    List<ProjecteUsuari> projectes_usuari_per_afegir = null;
+    
+    List<Integer> llista_ids_projectes =null;
+
     private int idx_llista_usuaris;
     private int day,month,year;
     
@@ -126,6 +142,10 @@ public class UI {
             usuaris = pers_mysql.mostrar_usuaris();
             projectes = pers_mysql.mostrar_projectes();
             rols = pers_mysql.mostrar_rols();
+            s_rols = new String[rols.length];
+            for(int i=0;i<rols.length;i++){
+                s_rols[i] = rols[i].getNom();
+            }
             gui();
            
            
@@ -138,7 +158,7 @@ public class UI {
         
         JFrame main = new JFrame("Gestió usuaris");
         JOptionPane.showMessageDialog(main, "Error crític","No s'ha pogut establir la connexió",JOptionPane.ERROR_MESSAGE);
-        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.exit(0);
     }
     
@@ -146,9 +166,15 @@ public class UI {
         gb = new GestioButton();
         gll = new GestioLlista();
         gc = new GestioCombo();
+        usuaris_assignats_projecte = new DefaultListModel();
+        usuaris_assignar_projecte = new DefaultListModel();
+        projectes_usuaris = new ArrayList();
+        projectes_usuaris_per_esborrar = new ArrayList();
+        projectes_usuari_per_afegir = new ArrayList();
+        llista_ids_projectes = new ArrayList();
         
         contenidor_principal = new JFrame("Gestió usuaris");
-        contenidor_principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        contenidor_principal.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
        
         disseny_usuaris();
         
@@ -156,6 +182,25 @@ public class UI {
         contenidor_principal.setVisible(true);
         contenidor_principal.setResizable(false);
         contenidor_principal.setSize(1100,700);
+        
+        contenidor_principal.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                int dialogButton = JOptionPane.showConfirmDialog (contenidor_principal, "Are you sure?","WARNING",JOptionPane.YES_NO_OPTION);
+
+                switch(dialogButton){
+                    case JOptionPane.YES_OPTION:
+                        pers_mysql.tancar_connexio();
+                        System.exit(0);
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        break;
+                }
+                
+                
+            }
+        });
+       
         
         
     }
@@ -166,6 +211,8 @@ public class UI {
         disseny_north();
  
         disseny_center();
+        
+        disseny_south();
         
         
     }
@@ -189,6 +236,7 @@ public class UI {
         
         combo_projectes=new JComboBox(new DefaultComboBoxModel(projectes));  
         combo_projectes.addItemListener(gc);
+        combo_projectes.setName("combo_projectes");
         combo_projectes.setMaximumSize(combo_projectes.getPreferredSize());
         combo_projectes.setSelectedIndex(-1);
         panell_vert.add(combo_projectes);
@@ -196,7 +244,9 @@ public class UI {
         rol_assignats = new JLabel("Rol");
         panell_vert.add(rol_assignats);
         
-        combo_rols =new JComboBox(new DefaultComboBoxModel(rols));
+        combo_rols =new JComboBox(new DefaultComboBoxModel(s_rols));
+        combo_rols.setName("combo_rols");
+        combo_rols.addItemListener(gc);
         combo_rols.setMaximumSize(combo_rols.getPreferredSize());
         combo_rols.setSelectedIndex(-1);
         panell_vert.add(combo_rols);       
@@ -204,7 +254,9 @@ public class UI {
         panell_assignats.add(panell_vert);
         panell_assignats.add(Box.createHorizontalStrut(20));
         
-        llista_per_assignar = new JList();
+        llista_per_assignar = new JList(usuaris_assignar_projecte);
+        llista_per_assignar.setName("llista_per_assignar");
+        llista_per_assignar.addListSelectionListener(gll);
         
         Dimension listSize = new Dimension(200, 200);
         //Assignem la mida i fem que es mostri la llista       
@@ -229,7 +281,9 @@ public class UI {
         panell_assignats.add(btn_assigna);
         panell_assignats.add(Box.createHorizontalStrut(10));
         
-        llista_assignats = new JList();
+        llista_assignats = new JList(usuaris_assignats_projecte);
+        llista_assignats.setName("llista_assignats");
+        llista_assignats.addListSelectionListener(gll);
         //Assignem la mida i fem que es mostri la llista       
         
         scroll_pane_assignats = new JScrollPane(llista_assignats);
@@ -258,105 +312,6 @@ public class UI {
         
     }
 
-    private void d() {
-        
-        panell_projectes = new JPanel(new FlowLayout());
-        panell_projectes.add(Box.createHorizontalStrut(-100));
-        titol_projectes = new JLabel("Proyectos");
-        titol_projectes.setFont(new Font(titol_projectes.getName(), Font.BOLD, 25));
-        panell_projectes.add(titol_projectes);
-        panell_projectes.add(Box.createHorizontalStrut(20));
-        
-       
-        text_nom_projecte = new HintTextField("Nombre proyecto",10);
-        text_descripcio_projecte = new HintTextArea("Descripción proyecto");
-        Dimension descripcio_size = new Dimension(150, 50);
-        text_descripcio_projecte.setMaximumSize(descripcio_size);
-        text_descripcio_projecte.setPreferredSize(descripcio_size);
-        text_descripcio_projecte.setSize(descripcio_size);
-        
-        projectes_text_field = new JPanel();
-        projectes_text_field.add(text_nom_projecte);
-        projectes_text_field.add(Box.createVerticalStrut(5));
-        projectes_text_field.add(text_descripcio_projecte);
-        
-        //titol_cap_projecte = new JLabel("Cap projecte");
-        //projectes_text_field.add(titol_cap_projecte);
-        projectes_text_field.add(Box.createVerticalStrut(15));
-        
-        combo_cap_projecte=new JComboBox<String>();
-        combo_cap_projecte.setBounds(10,10,80,20);
-        projectes_text_field.add(combo_cap_projecte);
-        
-        projectes_text_field.setLayout(new BoxLayout(projectes_text_field, BoxLayout.Y_AXIS));
-        
-
-        
-        panell_projectes.add(projectes_text_field);
-        panell_projectes.add(Box.createHorizontalStrut(20));
-        
-        
-        llista_projectes = new JList();
-        Dimension listSize = new Dimension(300, 200);
-        //Assignem la mida i fem que es mostri la llista
-     
-        
-        scroll_pane_projectes = new JScrollPane(llista_projectes);
-        
-        scroll_pane_projectes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scroll_pane_projectes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scroll_pane_projectes.setMaximumSize(listSize);
-        scroll_pane_projectes.setPreferredSize(listSize);
-        scroll_pane_projectes.setSize(listSize);
-        
-        panell_projectes.add(scroll_pane_projectes);
-        panell_projectes.add(Box.createHorizontalStrut(20)); 
-   
-        
-        btn_nou_projecte = new JButton("Nuevo");
-        btn_nou_projecte.setName("nou_projetce");
-        btn_nou_projecte.addActionListener(gb);
-                
-        btn_cancel_projecte = new JButton("Canelar");
-        btn_cancel_projecte.setName("cancelar_projecte");
-        btn_cancel_projecte.addActionListener(gb);
-        
-        btn_esborra_projecte = new JButton("Eliminar");
-        btn_esborra_projecte.setEnabled(false);
-        btn_esborra_projecte.setName("eliminar_projecte");
-        btn_esborra_projecte.addActionListener(gb);
-        
-        btn_guarda_projecte = new JButton("Guardar");
-        btn_guarda_projecte.setEnabled(false);
-        btn_guarda_projecte.setName("guardar_projecte");
-        btn_guarda_projecte.addActionListener(gb);
-        
-        
-        
-        projectes_botons = new JPanel();
-        projectes_botons.add(btn_nou_projecte);
-        projectes_botons.add(Box.createVerticalStrut(10));
-        projectes_botons.add(btn_cancel_projecte);
-        projectes_botons.add(Box.createVerticalStrut(10));
-        projectes_botons.setLayout(new BoxLayout(projectes_botons, BoxLayout.Y_AXIS));
-        
-        panell_projectes.add(projectes_botons);
-        panell_projectes.add(Box.createHorizontalStrut(10));
-        
-        projectes_botons2 = new JPanel();
-    
-        projectes_botons2.add(btn_esborra_projecte);
-        projectes_botons2.add(Box.createVerticalStrut(10));
-        projectes_botons2.add(btn_guarda_projecte);
-        projectes_botons2.add(Box.createVerticalStrut(10));
-        projectes_botons2.setLayout(new BoxLayout(projectes_botons2, BoxLayout.Y_AXIS));
-        
-
-        panell_projectes.add(projectes_botons2);
-        
-        contenidor_principal.add(panell_projectes, BorderLayout.CENTER);
-        
-    }
     
     
     private void disseny_north() {
@@ -429,6 +384,7 @@ public class UI {
         panell_usuaris.add(Box.createHorizontalStrut(20));
         
         llista_usuaris = new JList(usuaris);
+        llista_usuaris.setName("llista_usuaris");
         //AFEGIR EL LISTENER A LA LLISTA
         llista_usuaris.addListSelectionListener(gll);
         
@@ -494,6 +450,18 @@ public class UI {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    private void disseny_south() {
+        panell_guarda = new JPanel();
+        btn_guarda = new JButton("Guarda");
+        btn_guarda.setName("guarda");
+        btn_guarda.addActionListener(gb);
+        
+        panell_guarda.add(btn_guarda);
+        
+        contenidor_principal.add(panell_guarda,BorderLayout.SOUTH);
+    }
+
+
     private class GestioLlista implements ListSelectionListener{
 
         
@@ -501,15 +469,51 @@ public class UI {
         @Override
         public void valueChanged(ListSelectionEvent e) {
             
+            JList llista = (JList) e.getSource();
             
-            if(!e.getValueIsAdjusting()){
-                System.out.println(llista_usuaris.getSelectedValue().toString()); 
-                usuari = (Usuari) llista_usuaris.getSelectedValue();
-                emplena_camps();
-                btn_esborra_usuari.setEnabled(true);
-                idx_llista_usuaris = llista_usuaris.getSelectedIndex();
-                System.out.println("IDX: "+idx_llista_usuaris);
+            if(llista.getName().equals("llista_usuaris")){
+                if(!e.getValueIsAdjusting()){
+                    System.out.println(llista_usuaris.getSelectedValue().toString()); 
+                    usuari = (Usuari) llista_usuaris.getSelectedValue();
+                    emplena_camps();
+                    btn_esborra_usuari.setEnabled(true);
+                    idx_llista_usuaris = llista_usuaris.getSelectedIndex();
+                    System.out.println("IDX: "+idx_llista_usuaris);
+                    modeEdit = true;
+                }
+            }else if(llista.getName().equals("llista_per_assignar")){
+                if(!e.getValueIsAdjusting()){
+                    rol_selected = false;
+                    llista_assignar_selected = true;                    
+
+                    btn_assigna.setEnabled(llista_assignar_selected && rol_selected);
+                    usuari_pendent_assignar = (Usuari) llista_per_assignar.getSelectedValue();
+                    
+                    combo_rols.setSelectedIndex(-1);
+                    
+                }               
+            }else if(llista.getName().equals("llista_assignats")){
+                if(!e.getValueIsAdjusting()){
+                    btn_treure.setEnabled(true);
+                    
+                    usuari_assignat = (Usuari) llista_assignats.getSelectedValue();
+                    
+                    if(usuari_assignat!=null){
+                        //Mostrar el rol de l'usuari seleccionat
+                        for(ProjecteUsuari pru : projectes_usuaris){
+                            if(usuari_assignat.equals(pru.getUsuari())){
+                                System.out.println("ENTRO!!!"+pru.getRol().getNom());
+
+                                combo_rols.setSelectedItem(pru.getRol().getNom());
+                            }
+                        }
+                    }
+
+                    
+                }
             }
+            
+
             
             
             
@@ -535,6 +539,8 @@ public class UI {
             //Camp data
             
         }
+
+
     }
 
 
@@ -562,9 +568,9 @@ public class UI {
             }else if(b.getName().equals("guardar_usuari")){
                 guardar_usuari();
             }else if(b.getName().equals("assignar")){
-                System.out.println(b.getName());
+                assignar_usuari_projecte();
             }else if(b.getName().equals("quitar")){
-                System.out.println(b.getName());
+                treure_usuari_projecte();
             }else if(b.getName().equals("data_naix")){
                 //INVESTIGAR COM POSAR UN NOU JFRAME A TRAVÉS DE UN BUTTON
                 JPanel panell_datepicker = new JPanel();
@@ -576,6 +582,8 @@ public class UI {
                 text_naix_usuari.setText(day+"/"+month+"/"+year);
                 
                 
+            }else if(b.getName().equals("guarda")){
+                guardar_usuari_projecte();
             }
             
 
@@ -618,7 +626,17 @@ public class UI {
                     
                     Date data_naix = new GregorianCalendar(year, month, day).getTime();
                     
-                    Usuari u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),data_naix,text_login_usuari.getText(),text_passwd.getText());
+                    //Encriptar 
+                    MD5Utils md5 = new MD5Utils();
+                    byte[] md5InBytes = md5.digest(text_passwd.getText().getBytes(StandardCharsets.UTF_8));
+                    String hash = bytesToHex(md5InBytes);
+
+                   
+                   
+                    
+                    
+                    
+                    Usuari u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),data_naix,text_login_usuari.getText(),hash);
                     if(text_cognom2_usuari.getText().length()>0){
                         u.setCognom2(text_cognom2_usuari.getText());
                     }
@@ -655,6 +673,46 @@ public class UI {
             }else{
                 //MODE UPDATE
                 if(usuari!=null){
+                    if(text_nom_usuari.getText().length()>0 && text_cognom1_usuari.getText().length()>0 && text_login_usuari.getText().length()>0 
+                    && text_passwd.getText().length()>0 && text_naix_usuari.getText().length()>0)
+                    {
+                        usuari.setNom(text_nom_usuari.getText());
+                        usuari.setCognom1(text_cognom1_usuari.getText());
+                        if(text_cognom2_usuari.getText().length()>0){
+                            usuari.setCognom2(text_cognom2_usuari.getText());
+                        }
+                        usuari.setLogin(text_login_usuari.getText());
+                        usuari.setPasswdHash(text_passwd.getText());
+                        Date data_naix = new GregorianCalendar(year, month, day).getTime();
+                        usuari.setDataNaixement(data_naix);
+                        
+                        
+                        
+                    try{
+                        
+                        
+                        em.getTransaction().begin();
+                        em.merge(usuari);
+                        em.getTransaction().commit();
+                        em.clear();
+                        
+                        try{
+                            //Guardar a la modelLlist
+                            //usuaris.addElement(u);
+                        }catch(Exception ex){
+                        
+                        }
+                        
+                        JOptionPane.showMessageDialog(contenidor_principal,"Usuario modificado con éxito","Modificar",JOptionPane.INFORMATION_MESSAGE);
+                    }catch(Exception ex){
+                        System.out.println(ex.getMessage());
+                        JOptionPane.showMessageDialog(contenidor_principal,"Error al modificar el usuario","Error al modificar",JOptionPane.ERROR_MESSAGE);
+                    }
+                        
+                    }
+                    
+                    
+                    
                     
                 }
                 
@@ -769,6 +827,124 @@ public class UI {
             
             
         }
+
+        private void assignar_usuari_projecte() {
+
+            String nom_rol = combo_rols.getSelectedItem().toString();
+            Rol r = null;
+            for(int i=0;i<rols.length;i++){
+                if(rols[i].getNom().equals(nom_rol)){
+                    r = rols[i];
+                }
+            }
+            //Quan s'assigna, afegim a la llista projectes_usuaris amb el ROL que ha escollit
+                       
+            if(r!=null){
+                ProjecteUsuari pru = new ProjecteUsuari(projecte, (Usuari) llista_per_assignar.getSelectedValue(),r);
+                projectes_usuaris.add(pru);
+                System.out.println(pru);
+                System.out.println("MIDA DESPRÉS D'AFEGIR: "+projectes_usuaris.size());
+                projectes_usuari_per_afegir.add(pru);
+            }
+        
+            usuaris_assignats_projecte.add(0, llista_per_assignar.getSelectedValue());
+            usuaris_assignar_projecte.remove(llista_per_assignar.getSelectedIndex());
+            
+
+            
+            llista_per_assignar.setSelectedIndex(-1);
+            btn_assigna.setEnabled(false);
+        }
+
+        private void treure_usuari_projecte() {
+            
+            //Quan s'esborra, treiem a la llista projectes_usuaris 
+            
+            String nom_rol = combo_rols.getSelectedItem().toString();
+            Rol r = null;
+            for(int i=0;i<rols.length;i++){
+                if(rols[i].getNom().equals(nom_rol)){
+                    r = rols[i];
+                }
+            }
+            //Quan s'assigna, afegim a la llista projectes_usuaris amb el ROL que ha escollit
+                       
+            if(r!=null){
+                Usuari aux = (Usuari) llista_assignats.getSelectedValue();
+                for(ProjecteUsuari pr : projectes_usuaris){
+                    if(pr.getUsuari().getLogin().equals(aux.getLogin())){
+                        //Ens guardem id del projecte
+                        try{
+                            llista_ids_projectes.add(pr.getId());
+                            projectes_usuaris_per_esborrar.add(new ProjecteUsuari(null,null,null));
+                        }catch(Exception ex){
+                            System.out.println("HOLA?");
+                            System.out.println(llista_ids_projectes.size());
+                        }
+                        
+                    }
+                }
+                
+                
+                
+                usuaris_assignar_projecte.add(0, llista_assignats.getSelectedValue());
+                usuaris_assignats_projecte.remove(llista_assignats.getSelectedIndex());
+            }
+            
+            
+
+            
+            llista_assignats.setSelectedIndex(-1);
+            btn_treure.setEnabled(false);
+        }
+
+        private void guardar_usuari_projecte() {
+                      
+            try{
+                        
+                //Esborrem els que estan seleccionats
+                em.getTransaction().begin();                             
+                System.out.println("PROJECTES USUARIS PER ESBORRAR: "+projectes_usuaris_per_esborrar.size());
+                int qt=0;
+                for(ProjecteUsuari pru : projectes_usuaris_per_esborrar){                                                   
+                    ProjecteUsuari pru_find = em.find(ProjecteUsuari.class, llista_ids_projectes.get(qt));
+                    
+                    try{
+                       em.remove(pru_find); 
+                    }catch(Exception ex){
+                        em.merge(pru_find);
+                        em.remove(pru);                     
+                    }
+                    qt++;
+                }
+                
+                projectes_usuaris_per_esborrar.clear();
+                em.getTransaction().commit();
+                em.clear();
+
+                //---------------------------------------
+                
+                em.getTransaction().begin(); 
+                //Afegim
+                for(ProjecteUsuari pru : projectes_usuari_per_afegir){
+                    em.persist(pru);
+                    em.flush();
+
+                }
+                System.out.println("PROJECTES USUARI PER AFEGIR: "+projectes_usuari_per_afegir.size());
+                projectes_usuari_per_afegir.clear();
+                em.getTransaction().commit();
+                em.clear();
+                
+                llista_ids_projectes.clear();
+
+                JOptionPane.showMessageDialog(contenidor_principal,"Assignación de usarios realizada con éxito","Modificar",JOptionPane.INFORMATION_MESSAGE);
+            }catch(Exception ex){
+                System.out.println(ex.getMessage());
+                JOptionPane.showMessageDialog(contenidor_principal,"Error al modificar las asignaciones de usuarios","Error al modificar",JOptionPane.ERROR_MESSAGE);
+            }
+            
+        }
     
     }
     
@@ -777,9 +953,30 @@ public class UI {
         @Override
         public void itemStateChanged(ItemEvent e) {
             
-           projecte = (Projecte) e.getItem();
-           pers_mysql.mostrar_projecteUsuari();
-           
+            JComboBox combo = (JComboBox) e.getSource();
+            
+            if(combo.getName().equals("combo_projectes")){
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    projecte = (Projecte) e.getItem();
+
+                    usuaris_assignats_projecte = pers_mysql.mostrar_usuarsisPerProjecte(projecte.getId());
+                    llista_assignats.setModel(usuaris_assignats_projecte);
+
+                    usuaris_assignar_projecte = pers_mysql.mostrar_usuarsisPerProjectePendent(projecte.getId());
+                    llista_per_assignar.setModel(usuaris_assignar_projecte);
+
+                    projectes_usuaris = pers_mysql.mostrar_projecteUsuari(projecte.getId());
+                }
+            }else if(combo.getName().equals("combo_rols")){
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                    rol_selected = true;
+
+                    btn_assigna.setEnabled(llista_assignar_selected && rol_selected);
+                }
+            }
+            
+            
+
            
             
         }

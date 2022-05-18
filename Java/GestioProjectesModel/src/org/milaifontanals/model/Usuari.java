@@ -3,6 +3,7 @@ package org.milaifontanals.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Usuari implements Serializable{
@@ -115,6 +116,7 @@ public class Usuari implements Serializable{
         this.projectes_usuaris = projectes_usuaris;
     }
 
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -134,11 +136,12 @@ public class Usuari implements Serializable{
             return false;
         }
         final Usuari other = (Usuari) obj;
-        if (this.id != other.id) {
+        if (!Objects.equals(this.login, other.login)) {
             return false;
         }
         return true;
     }
+
 
     @Override
     public String toString() {

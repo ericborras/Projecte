@@ -10,7 +10,10 @@
         <table name="USUARI"/> 
         <named-query name="foundUsuaris">
             <query>select u from Usuari u order by u.id desc</query>
-        </named-query>      
+        </named-query>    
+        <named-query name="foundUsuarisProjectPending">
+            <query>select u from Usuari u where u.id not in (select pru.usuari.id from ProjecteUsuari pru where pru.projecte.id = :iden_projecte) order by u.cognom1 desc</query>
+        </named-query>   
         <attributes>
             <id name="id">
                 <column name="id"/>

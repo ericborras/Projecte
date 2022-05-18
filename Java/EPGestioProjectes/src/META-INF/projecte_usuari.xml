@@ -9,10 +9,14 @@
     <entity class="org.milaifontanals.model.ProjecteUsuari" access="FIELD" metadata-complete="true">
         <table name="PROJECTE_USUARI"/>  
         <named-query name="foundProjecteUsuari">
-            <query>select pru from ProjecteUsuari pru</query>
-        </named-query>     
+            <query>select pru from ProjecteUsuari pru where pru.projecte.id = :identi_proj</query>
+        </named-query>
+        <named-query name="foundProjecteUsuariByProject">
+            <query>select pru from ProjecteUsuari pru where pru.projecte.id = :numero order by pru.usuari.cognom1 desc</query>
+        </named-query>    
         <attributes>
             <id name="id">
+                <column name="id" column-definition="integer(6)"/>
                 <generated-value strategy="IDENTITY"></generated-value>
             </id>
                      

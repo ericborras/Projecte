@@ -5,6 +5,7 @@
  */
 package org.milaifontanals.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -70,7 +71,18 @@ public class Persistencia implements IPersistence{
 
     @Override
     public void tancar_connexio() {
-        
+        EntityManagerFactory emf = null;
+        try {
+            emf = em.getEntityManagerFactory();
+            em.close();
+            em = null;
+        } catch (Exception ex) {
+ 
+        } finally {
+            if (emf != null) {
+                emf.close();
+            }
+        }
     }
 
     @Override
@@ -127,10 +139,11 @@ public class Persistencia implements IPersistence{
         
     }
     
-    public List<ProjecteUsuari> mostrar_projecteUsuari(){
+    public List<ProjecteUsuari> mostrar_projecteUsuari(int identi_proj){
         Query q = em.createNamedQuery("foundProjecteUsuari");
-
+        q.setParameter("identi_proj", identi_proj);
         List<ProjecteUsuari> ll = (List<ProjecteUsuari>)q.getResultList();
+        
         
         for(ProjecteUsuari pru : ll){
             System.out.println(pru);
@@ -138,6 +151,39 @@ public class Persistencia implements IPersistence{
 
         return ll;
     }
+    
+    public DefaultListModel mostrar_usuarsisPerProjecte(int id_projecte){
+        Query q = em.createNamedQuery("foundProjecteUsuariByProject");
+        q.setParameter("numero", id_projecte);
+
+        List<ProjecteUsuari> ll = (List<ProjecteUsuari>)q.getResultList();
+        DefaultListModel modelLlista = new DefaultListModel();
+        
+        for(ProjecteUsuari pru : ll){
+            modelLlista.add(0,pru.getUsuari());
+            
+        }
+
+        return modelLlista;
+    }
+    
+    public DefaultListModel mostrar_usuarsisPerProjectePendent(int id_projecte){
+        Query q = em.createNamedQuery("foundUsuarisProjectPending");
+        q.setParameter("iden_projecte", id_projecte);
+
+        List<Usuari> ll = (List<Usuari>)q.getResultList();
+        DefaultListModel modelLlista = new DefaultListModel();
+        
+        for(Usuari u : ll){
+            modelLlista.add(0,u);
+            
+        }
+
+        return modelLlista;
+    }
+    
+
+
     
     
     

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class ProjecteUsuari implements Serializable{
     
-    private int id;
+    private Integer id;
     private Projecte projecte;
     private Usuari usuari;
     private Rol rol;
@@ -22,6 +22,25 @@ public class ProjecteUsuari implements Serializable{
         this.rol = rol;
     }
 
+    public ProjecteUsuari(Integer id, Projecte projecte, Usuari usuari, Rol rol) {
+        this.id = id;
+        this.projecte = projecte;
+        this.usuari = usuari;
+        this.rol = rol;
+    }
+    
+    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
+    
     public Projecte getProjecte() {
         return projecte;
     }
@@ -77,8 +96,10 @@ public class ProjecteUsuari implements Serializable{
 
     @Override
     public String toString() {
-        return "ProjecteUsuari{" + "projecte=" + projecte + ", usuari=" + usuari + ", rol=" + rol + '}';
+        return "ProjecteUsuari{" + "id=" + id + ", projecte=" + projecte + ", usuari=" + usuari + ", rol=" + rol + '}';
     }
+
+
     
     
     

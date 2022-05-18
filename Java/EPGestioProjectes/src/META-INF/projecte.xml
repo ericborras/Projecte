@@ -23,7 +23,7 @@
                 <column name="descripcio"/>
             </basic>
             
-            <many-to-one name="capProjecte" fetch="EAGER">
+            <many-to-one name="capProjecte" fetch="LAZY">
                 <join-column name="cap_projecte"/>
             </many-to-one>           
             
