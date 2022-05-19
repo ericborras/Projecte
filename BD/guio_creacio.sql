@@ -69,7 +69,7 @@ create table tasca(
 	propietari integer(6) NOT NULL,
 	responsable integer(6),
 	id_estat integer(2) NOT NULL,
-	projecte_id integer(6), 
+	projecte_id integer(6) NOT NULL, 
 	
 	
 	

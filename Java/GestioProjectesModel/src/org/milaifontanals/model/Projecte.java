@@ -23,6 +23,14 @@ public class Projecte implements Serializable{
         this.tasques = tasques;
         this.projectes_usuaris = projectes_usuaris;
     }
+
+    public Projecte(int id, String nom, String descripcio) {
+        this.id = id;
+        this.nom = nom;
+        this.descripcio = descripcio;
+    }
+    
+    
     
     protected Projecte(){
         

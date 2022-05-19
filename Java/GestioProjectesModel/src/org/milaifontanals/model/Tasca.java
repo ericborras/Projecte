@@ -29,6 +29,26 @@ public class Tasca implements Serializable{
         this.entrades = entrades;
         this.estat = estat;
     }
+
+    public Tasca(int id, String nom, String descripcio, Usuari propietari, Estat estat) {
+        this.id = id;
+        this.nom = nom;
+        this.descripcio = descripcio;
+        this.propietari = propietari;
+        this.estat = estat;
+    }
+
+    public Tasca(int id, Date dataCreacio, String nom, String descripcio) {
+        this.id = id;
+        this.dataCreacio = dataCreacio;
+        this.nom = nom;
+        this.descripcio = descripcio;
+    }
+
+    
+
+    
+    
     
     protected Tasca(){
         

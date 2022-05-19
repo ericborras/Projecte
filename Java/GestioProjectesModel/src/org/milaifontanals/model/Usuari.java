@@ -37,6 +37,23 @@ public class Usuari implements Serializable{
         this.login = login;
         this.passwdHash = passwdHash;
     }
+
+    public Usuari(int id, String nom, String cognom1, Date dataNaixement, String login, String passwdHash) {
+        this.id = id;
+        this.nom = nom;
+        this.cognom1 = cognom1;
+        this.dataNaixement = dataNaixement;
+        this.login = login;
+        this.passwdHash = passwdHash;
+    }
+
+    public Usuari(int id, String nom, String cognom1) {
+        this.id = id;
+        this.nom = nom;
+        this.cognom1 = cognom1;
+    }
+
+
     
     
     

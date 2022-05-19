@@ -3,25 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.milaifontanals.persistence;
+package org.milaifontanals;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.DefaultListModel;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.Rol;
-import org.milaifontanals.model.Usuari;
 
 /**
  *
- * @author Usuari
+ * @author Lenovo T530
  */
 public interface IPersistence {
     
+    /*
     EntityManager obrir_connexio();
     void tancar_connexio();
     DefaultListModel mostrar_usuaris();
     Projecte[] mostrar_projectes();
     Rol[] mostrar_rols();
+    */
+    
+    void connect(String nomFitx);
+    void close();
+    void commit();
+    void rollback();
+    
+    
     
 }

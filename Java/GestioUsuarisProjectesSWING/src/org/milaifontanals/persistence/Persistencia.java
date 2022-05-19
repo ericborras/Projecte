@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.DefaultListModel;
+import org.milaifontanals.IPersistence;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.ProjecteUsuari;
 import org.milaifontanals.model.Rol;
