@@ -186,7 +186,7 @@ public class UI {
         contenidor_principal.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                int dialogButton = JOptionPane.showConfirmDialog (contenidor_principal, "Are you sure?","WARNING",JOptionPane.YES_NO_OPTION);
+                int dialogButton = JOptionPane.showConfirmDialog (contenidor_principal, "Seguro que quieres cerrar la aplicación?","ALERTA",JOptionPane.YES_NO_OPTION);
 
                 switch(dialogButton){
                     case JOptionPane.YES_OPTION:

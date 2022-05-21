@@ -22,6 +22,16 @@ public class Entrada implements Serializable{
         this.novaAssignacio = novaAssignacio;
         this.nouEstat = nouEstat;
     }
+
+    public Entrada(int numero, Date dataEntrada, String entrada, Usuari escriptor, Usuari novaAssignacio) {
+        this.numero = numero;
+        this.dataEntrada = dataEntrada;
+        this.entrada = entrada;
+        this.escriptor = escriptor;
+        this.novaAssignacio = novaAssignacio;
+    }
+    
+    
     
     protected Entrada(){
         

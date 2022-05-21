@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.milaifontanals.IPersistence;
 import org.milaifontanals.exception.ServidorException;
+import org.milaifontanals.model.Entrada;
 import org.milaifontanals.model.Estat;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.Tasca;
@@ -35,8 +36,11 @@ public class CPGestioProjecte implements IPersistence{
     
     
     //PreparedStatements
-    PreparedStatement psLogin, psCapProjecte;
+    PreparedStatement psLogin;
     PreparedStatement psProjectes, psTasquesAssignades;
+    PreparedStatement psTasca, psEntradaTasca;
+    PreparedStatement psNotificacionsPendents;
+    PreparedStatement psNovaEntrada;
     
     @Override
     public void connect(String nomFitx) {
@@ -153,9 +157,7 @@ public class CPGestioProjecte implements IPersistence{
         
         Statement stProjectes = null;
         ResultSet rsProjectes = null;
-        
-        Statement stCapProjecte = null;
-        ResultSet rsCapProjecte = null;
+
         try {
             stProjectes = con.createStatement();
             
@@ -165,18 +167,9 @@ public class CPGestioProjecte implements IPersistence{
             System.out.println("CONSULTA: "+psProjectes.toString());
             while(rsProjectes.next()){
                 projecte = new Projecte(rsProjectes.getInt("id"),rsProjectes.getString("nom"),rsProjectes.getString("descripcio"));              
-                stCapProjecte = con.createStatement();
-            
-                psCapProjecte.setInt(1, rsProjectes.getInt("cap_projecte"));
-                rsCapProjecte = psCapProjecte.executeQuery();
-                System.out.println("CONSULTA: "+psCapProjecte.toString());
-                while(rsCapProjecte.next()){
-                    capProjecte = new Usuari(rsCapProjecte.getInt("id"),rsCapProjecte.getString("nom"),
-                            rsCapProjecte.getString("cognom1"),rsCapProjecte.getDate("data_naix"), rsCapProjecte.getString("login"), 
-                            rsCapProjecte.getString("passwd_hash"));
-                }
-                projecte.setCapProjecte(capProjecte);
                 
+                capProjecte = new Usuari(rsProjectes.getInt("id_cap_projecte"),rsProjectes.getString("nom_cap_projecte"),rsProjectes.getString("cognom1"));
+                projecte.setCapProjecte(capProjecte);
                 
                 
                 projectes.add(projecte);
@@ -258,6 +251,140 @@ public class CPGestioProjecte implements IPersistence{
         return tasques;
     }
     
+    public DetallTasca getDetallTasca(int id_usuari, int id_tasca){
+        DetallTasca detallTasca = null;
+        Tasca tasca = null;
+        List<Entrada> entrades = new ArrayList();
+        
+        
+        Statement stTasca = null;
+        ResultSet rsTasca = null;
+        
+        Statement stEntrada = null;
+        ResultSet rsEntrada = null;
+        
+        try {
+            stTasca = con.createStatement();
+            
+            psTasca.setInt(1, id_usuari);
+            psTasca.setInt(2, id_tasca);
+            
+            rsTasca = psTasca.executeQuery();
+            while(rsTasca.next()){
+                //public Tasca(int id, Date dataCreacio, String nom, String descripcio, Date dataLimit, Usuari responsable, Estat estat) {
+                tasca = new Tasca(rsTasca.getInt("id"),rsTasca.getDate("data_creacio"),rsTasca.getString("nom"),rsTasca.getString("descripcio"),rsTasca.getDate("data_limit"),new Usuari(rsTasca.getInt("id_responsable"),rsTasca.getString("nom_responsable"),rsTasca.getString("cognom1_responsable")));  
+                
+            
+                //ESTAT
+                switch(rsTasca.getInt("id_estat")){
+                    
+                    case 0:
+                        tasca.setEstat(Estat.TANCADA_SENSE_SOLUCIO);
+                        break;
+                        
+                    case 1:
+                        tasca.setEstat(Estat.TANCADA_RESOLTA);
+                        break;
+                        
+                    case 2:
+                        tasca.setEstat(Estat.TANCADA_DUPLICADA);
+                        break;
+                        
+                    case 3:
+                        tasca.setEstat(Estat.OBERTA_NO_ASSIGNADA);
+                        break;
+                        
+                    case 4:
+                        tasca.setEstat(Estat.OBERTA_ASSIGNADA);
+                        break;
+                    
+                }
+            }
+            
+            
+            //Buscar les entrades de la tasca
+            stEntrada = con.createStatement();
+            
+            psEntradaTasca.setInt(1, id_tasca);
+            
+            rsTasca = psEntradaTasca.executeQuery();
+            
+            while(rsTasca.next()){
+                Entrada entrada = new Entrada(rsTasca.getInt("numero"),rsTasca.getDate("data_entrada"),rsTasca.getString("entrada"),new Usuari(rsTasca.getInt("escriptor_id"),rsTasca.getString("escriptor_nom"),rsTasca.getString("escriptor_cognom1")),new Usuari(rsTasca.getInt("assignacio_id"),rsTasca.getString("assignacio_nom"),rsTasca.getString("assignacio_cognom1")));                             
+                
+                 //ESTAT
+                switch(rsTasca.getInt("nou_estat")){
+                    
+                    case 0:
+                        entrada.setNouEstat(Estat.TANCADA_SENSE_SOLUCIO);
+                        break;
+                        
+                    case 1:
+                        entrada.setNouEstat(Estat.TANCADA_RESOLTA);
+                        break;
+                        
+                    case 2:
+                        entrada.setNouEstat(Estat.TANCADA_DUPLICADA);
+                        break;
+                        
+                    case 3:
+                        entrada.setNouEstat(Estat.OBERTA_NO_ASSIGNADA);
+                        break;
+                        
+                    case 4:
+                        entrada.setNouEstat(Estat.OBERTA_ASSIGNADA);
+                        break;
+                    
+                }
+                
+                entrades.add(entrada);
+                detallTasca = new DetallTasca(tasca,entrades);
+                
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new ServidorException("Error: ",ex);
+        }
+        
+        return detallTasca;
+        
+    }
+    
+    
+    public List<Tasca> getNotificacionsPendents(int id_usuari){
+        
+        List<Tasca> tasques = new ArrayList();
+        
+        Statement stNotificacions = null;
+        ResultSet rsNotificacions = null;
+        
+        try {
+            stNotificacions = con.createStatement();
+            
+            psNotificacionsPendents.setInt(1, id_usuari);
+            
+            rsNotificacions = psNotificacionsPendents.executeQuery();
+            //public Tasca(int id, Date dataCreacio, String nom, String descripcio, Date dataLimit, Usuari responsable) {
+            while(rsNotificacions.next()){
+                tasques.add(new Tasca(rsNotificacions.getInt("id"),rsNotificacions.getDate("data_creacio"),rsNotificacions.getString("nom"),
+                                    rsNotificacions.getString("descripcio"), rsNotificacions.getDate("data_limit"),new Usuari(rsNotificacions.getInt("responsable_id"),
+                                    rsNotificacions.getString("responsable_nom"), rsNotificacions.getString("responsable_cognom1"))));
+                
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new ServidorException("Error: ",ex);
+        }
+        
+        
+        
+        return tasques;
+        
+    }
+    
+    
     private void prepararStatements() throws SQLException {
         
         //Consulta login
@@ -265,9 +392,12 @@ public class CPGestioProjecte implements IPersistence{
         psLogin = con.prepareStatement("select * from usuari where login = ? and passwd_hash = ?");
         
         //Consulta Projectes que està associat l'usuari
-        psProjectes = con.prepareStatement("select p.* from projecte p join projecte_usuari pr on p.id = pr.id_projecte where pr.id_usuari = ?");
-        //Consulta per agafar el cap del projecte
-        psCapProjecte = con.prepareStatement("select * from usuari where id = ?");
+        psProjectes = con.prepareStatement("select p.id, p.nom, p.descripcio, u.nom as nom_cap_projecte, u.cognom1, u.id as id_cap_projecte \n" +
+                                            "from projecte p join projecte_usuari pr on p.id = pr.id_projecte \n" +
+                                            "join usuari u on u.id = p.cap_projecte\n" +
+                                            "where pr.id_usuari = ?");
+        
+
         
         //Consulta tasques OBERTES assignades a usuari
         //select t.id, t.data_creacio, t.nom, t.descripcio, t.data_limit, u.id as id_propietari,u.nom as nom_propietari, u.cognom1 as cognom1_propietari, us.id as id_responsable,us.nom as nom_responsable, us.cognom1 as cognom1_responsable, p.id as id_projecte, p.nom as nom_projecte, p.descripcio as descripcio_projecte 
@@ -280,6 +410,24 @@ public class CPGestioProjecte implements IPersistence{
                                                     "			 join usuari us on t.responsable = us.id\n" +
                                                     "             join projecte p on t.projecte_id = p.id\n" +
                                                     "where t.propietari = ? and t.id_estat = 4");
+        
+        
+        psTasca = con.prepareStatement("select t.id, t.data_creacio, t.nom, t.descripcio, t.data_limit, u.id as id_responsable, u.nom as nom_responsable, u.cognom1 as cognom1_responsable, e.id_estat as id_estat,e.nom as nom_estat, p.id as id_projecte, p.nom as nom_projecte, p.descripcio as descripcio_projecte  \n" +
+                                            "from tasca t join usuari u on t.responsable = u.id\n" +
+                                            "	 		 join estat e on t.id_estat = e.id_estat\n" +
+                                            "             join projecte p on t.projecte_id = p.id\n" +
+                                            "where t.propietari = ? and t.id=?");
+        
+        psEntradaTasca = con.prepareStatement("select e.numero, e.data_entrada, e.entrada, ue.id as escriptor_id, ue.nom as escriptor_nom, ue.cognom1 as escriptor_cognom1, ua.id as assignacio_id, ua.nom as assignacio_nom, ua.cognom1 as assignacio_cognom1, e.nou_estat from "
+                                                + "entrada e join usuari ue on e.escriptor = ue.id left join usuari ua on e.nova_assignacio = ua.id where tasca_id = ?");
+    
+        psNotificacionsPendents = con.prepareStatement("select t.id, t.data_creacio, t.nom, t.descripcio, t.data_limit, u.id as responsable_id, u.nom as responsable_nom, u.cognom1 as responsable_cognom1\n" +
+                                                        "from tasca t join usuari u on t.responsable=u.id\n" +
+                                                        "where (t.id_estat=4 or t.id_estat=3) and t.propietari=?");
+        
+        psNovaEntrada = con.prepareStatement("insert into entrada(numero,data_entrada,entrada,nova_assignacio,escriptor,nou_estat,tasca_id) \n" +
+"  values(NULL,?,?,?,?,?,?);");
+    
     }
     
 }

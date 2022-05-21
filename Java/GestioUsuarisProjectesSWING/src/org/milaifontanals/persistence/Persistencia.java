@@ -22,7 +22,7 @@ import org.milaifontanals.model.Usuari;
  *
  * @author Usuari
  */
-public class Persistencia implements IPersistence{
+public class Persistencia{
 
     EntityManager em = null;
     
@@ -31,7 +31,7 @@ public class Persistencia implements IPersistence{
     }
     
     
-    @Override
+    //@Override
     public EntityManager obrir_connexio() {
         
         String up = "UP-MYSQL";
@@ -70,7 +70,7 @@ public class Persistencia implements IPersistence{
         
     }
 
-    @Override
+    //@Override
     public void tancar_connexio() {
         EntityManagerFactory emf = null;
         try {
@@ -86,7 +86,7 @@ public class Persistencia implements IPersistence{
         }
     }
 
-    @Override
+    //@Override
     public DefaultListModel mostrar_usuaris() {
         
         Query q = em.createNamedQuery("foundUsuaris");
@@ -108,7 +108,7 @@ public class Persistencia implements IPersistence{
         
     }
 
-    @Override
+    //@Override
     public Projecte[] mostrar_projectes() {
         Query q = em.createNamedQuery("foundProjectes");
 
@@ -122,7 +122,7 @@ public class Persistencia implements IPersistence{
         return projectes;
     }
 
-    @Override
+    //@Override
     public Rol[] mostrar_rols() {
         
         Query q = em.createNamedQuery("foundRol");

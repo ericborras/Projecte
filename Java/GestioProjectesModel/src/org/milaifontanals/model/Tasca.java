@@ -37,6 +37,8 @@ public class Tasca implements Serializable{
         this.propietari = propietari;
         this.estat = estat;
     }
+    
+    
 
     public Tasca(int id, Date dataCreacio, String nom, String descripcio) {
         this.id = id;
@@ -44,6 +46,18 @@ public class Tasca implements Serializable{
         this.nom = nom;
         this.descripcio = descripcio;
     }
+
+    public Tasca(int id, Date dataCreacio, String nom, String descripcio, Date dataLimit, Usuari responsable) {
+        this.id = id;
+        this.dataCreacio = dataCreacio;
+        this.nom = nom;
+        this.descripcio = descripcio;
+        this.dataLimit = dataLimit;
+        this.responsable = responsable;
+    }
+    
+    
+    
 
     
 

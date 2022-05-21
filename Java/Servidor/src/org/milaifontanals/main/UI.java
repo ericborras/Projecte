@@ -5,20 +5,37 @@
  */
 package org.milaifontanals.main;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.corba.se.impl.orbutil.ObjectWriter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import org.milaifontanals.exception.ServidorException;
+import org.milaifontanals.model.Entrada;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.Tasca;
 import org.milaifontanals.persist.CPGestioProjecte;
+import org.milaifontanals.persist.DetallTasca;
 
 /**
  *
@@ -39,6 +56,10 @@ public class UI {
     private CPGestioProjecte capa_pers;
     private String arxiu = "connexioMySQL.properties";
     
+    private Thread thread;
+    private ServerSocket socket_connections;
+    
+    private static final int port = 4444;
     
     public UI(){
         capa_pers = new CPGestioProjecte();
@@ -101,26 +122,96 @@ public class UI {
                 capa_pers.close();
                 btn_atura.setEnabled(false);
                 btn_engega.setEnabled(true);
+                thread.stop();
+                
             }else if(button.getName().equals("engega")){
                 System.out.println("engega");
                 capa_pers.connect(arxiu);
                 btn_atura.setEnabled(true);
                 btn_engega.setEnabled(false);
-                System.out.println(capa_pers.getLogin("Marisela","1234"));
-                List<Projecte> projectes = capa_pers.getProjectes(10);
-                for(Projecte p : projectes){
-                    System.out.println(p+" CAP PROJECTE: "+p.getCapProjecte());
+
+
+                
+                
+                thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            socket_connections = new ServerSocket(port);
+                        } catch (IOException ex) {
+                            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        while (true) { // TODO: while ! tancar servidor
+                            Socket s = null;
+
+                            try {
+                                // socket object to receive incoming client requests
+                                System.out.println("Esperant clients...");
+                                s = socket_connections.accept();
+
+                                System.out.println("Nou client connectat : " + s);
+
+                                /*
+                                // obtaining input and out streams
+                                ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+                                ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+
+                                System.out.println("[SRV] Client handlers = " + cs.clientHandlers.size());
+                //                System.out.println("[SRV] Assignant ClientHandler per al client");
+
+                                // create a new thread object
+                                ClientHandler ch = new ClientHandler(s, ois, oos, cs, cs.dbManager, cs.nomFitxerPropietats);
+                                cs.clientHandlers.add(ch);
+
+                                // Invoking the start() method
+                                ch.start();
+            */
+
+                            } catch (Exception e) {
+                                System.out.println("PRIMER TRY CATCH: "+e.getMessage());
+                                try {
+                                    s.close();
+                                } catch (IOException ex) {
+                                    System.out.println("SEGON TRY CATCH: "+ex.getMessage());
+                                }
+                                e.printStackTrace();
+                            }
+
+
+
+                            List<Tasca> tasques_pendents = capa_pers.getNotificacionsPendents(12);
+                            for(Tasca tasca : tasques_pendents){
+                                System.out.println(tasca);
+                            }
+
+                            //Passar a json
+                            ObjectMapper mapper = new ObjectMapper();
+                            try{
+                                String json = mapper.writeValueAsString(tasques_pendents);
+                                System.out.println(json);
+                            }catch(Exception ex){
+                                throw new ServidorException("Error: ",ex);
+                            }
+
+                            //System.out.println(json);
+                    }
+                            }
+                });
+                
+                try{
+                    SwingUtilities.invokeLater(thread);
+                }catch(Exception ex){
+                    System.out.println("EE ERROR: "+ex.getMessage());
                 }
-                List<Tasca> tasques = capa_pers.getTasques(3);
-                for(Tasca t : tasques){
-                    System.out.println(t+" PROPIETARI: "+t.getPropietari()+" ESTAT: "+t.getEstat()+" RESPONSABLE"+t.getResponsable());
-                }
-            }
+                
+                    
+                
+                
             
         }
 
 
     }
     
-    
+    }   
 }
