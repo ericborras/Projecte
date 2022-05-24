@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,9 +33,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import org.milaifontanals.exception.ServidorException;
+import static org.milaifontanals.main.TipusOperacio.GET_LOGIN;
 import org.milaifontanals.model.Entrada;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.Tasca;
+import org.milaifontanals.model.Usuari;
 import org.milaifontanals.persist.CPGestioProjecte;
 import org.milaifontanals.persist.DetallTasca;
 
@@ -148,27 +152,75 @@ public class UI {
                                 // socket object to receive incoming client requests
                                 System.out.println("Esperant clients...");
                                 s = socket_connections.accept();
-
-                                System.out.println("Nou client connectat : " + s);
-
-                                /*
-                                // obtaining input and out streams
+                                System.out.println("Nou client connectat : " + s);                               
+                              
+                                
+                                                                   
                                 ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
-                                ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
+                                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                                                                   
+                                System.out.println("Abans tipus operacio");
+                                int tipus_operacio = ois.readInt();
+                                System.out.println("Tipus operació: "+tipus_operacio);
+                                switch(tipus_operacio){
 
-                                System.out.println("[SRV] Client handlers = " + cs.clientHandlers.size());
-                //                System.out.println("[SRV] Assignant ClientHandler per al client");
+                                    //Login
+                                    case 1:
+                                        String usu,contrasenya;
+                                        //Convertir ObjectInputStream to String                                  
+                                        usu = (String) ois.readObject();
+                                        contrasenya = (String) ois.readObject();
 
-                                // create a new thread object
-                                ClientHandler ch = new ClientHandler(s, ois, oos, cs, cs.dbManager, cs.nomFitxerPropietats);
-                                cs.clientHandlers.add(ch);
+                                        Usuari usuari = capa_pers.getLogin(usu, contrasenya);                                    
+                                        out.writeObject(usuari);
+                                        
+                                        if(ois.readInt()==0){
+                                            System.out.println("LOGIN HA ANAT BÉ");
+                                        }else{
+                                            System.out.println("LOGIN NO HA ANAT BÉ");
+                                        }
+                                        
 
-                                // Invoking the start() method
-                                ch.start();
-            */
+
+                                        break;  
+                                        
+                                    //
+                                    case 2:
+                                        System.out.println("ENTRO");
+                                        
+                                        int id_usuari = ois.readInt();
+                                        
+                                        List<Projecte> projectes = capa_pers.getProjectes(id_usuari);
+                                        //Hem de passar la quantitat de projectes, per tal de passar-li 
+                                        out.writeInt(projectes.size());
+                                                                                                                     
+                                        /*
+                                        for(Projecte p : projectes){
+                                            out.writeObject(p);
+                                        }
+                                        
+                                        
+                                        
+                                        if(ois.readInt()==0){
+                                            System.out.println("PROJECTES HA ANAT BÉ");
+                                        }else{
+                                            System.out.println("PROJECTES NO HA ANAT BÉ");
+                                        }*/
+                                        
+                                        
+                                        
+                                        break;
+                                }
+                                
+                                out.close();
+                                ois.close();
+                                                              
 
                             } catch (Exception e) {
                                 System.out.println("PRIMER TRY CATCH: "+e.getMessage());
+                                
+                                
+                                
                                 try {
                                     s.close();
                                 } catch (IOException ex) {
@@ -177,8 +229,8 @@ public class UI {
                                 e.printStackTrace();
                             }
 
-
-
+                            
+/*
                             List<Tasca> tasques_pendents = capa_pers.getNotificacionsPendents(12);
                             for(Tasca tasca : tasques_pendents){
                                 System.out.println(tasca);
@@ -192,7 +244,7 @@ public class UI {
                             }catch(Exception ex){
                                 throw new ServidorException("Error: ",ex);
                             }
-
+                            */
                             //System.out.println(json);
                     }
                             }
@@ -215,3 +267,13 @@ public class UI {
     
     }   
 }
+
+
+                                               /*
+                                                    ObjectMapper mapper = new ObjectMapper();
+                                                    try{
+                                                        String json = mapper.writeValueAsString(usuari);
+                                                        out.writeObject(json);
+                                                    }catch(Exception ex){
+                                                        throw new ServidorException("Error: ",ex);
+                                                    }*/

@@ -1,0 +1,9 @@
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\bin\Debug\netstandard2.0\BDLib.deps.json
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\bin\Debug\netstandard2.0\BDLib.dll
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\bin\Debug\netstandard2.0\BDLib.pdb
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.csprojAssemblyReference.cache
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.AssemblyInfoInputs.cache
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.AssemblyInfo.cs
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.csproj.CoreCompileInputs.cache
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.dll
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\obj\Debug\netstandard2.0\BDLib.pdb

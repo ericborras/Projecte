@@ -1,0 +1,90 @@
+﻿<Page x:ConnectionId='1'
+    x:Class="GestioProjectes.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GestioProjectes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                        >
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <controls:DataGrid x:ConnectionId='2' x:Name="dtgProjectes"                                                  Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+
+                <controls:DataGrid.Columns>
+
+                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nom}" Foreground="#2D6399"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Descripción" Binding="{Binding Descripcio}" Foreground="#2D6399"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Jefe proyecto" Binding="{Binding CapProjecte.Nomcomplet}"></controls:DataGridTextColumn>
+
+
+                </controls:DataGrid.Columns>
+
+            </controls:DataGrid>
+
+            <Grid Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Nombre " VerticalAlignment="Center"></TextBlock>
+                    <TextBox x:ConnectionId='9' x:Name="txbNomProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Descripción proyecto " VerticalAlignment="Center"></TextBlock>
+                    <TextBox x:ConnectionId='8' x:Name="txbDescProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="80" AcceptsReturn="True"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Jefe proyecto " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='7' x:Name="cboCapProjecte"                                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"></ComboBox>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Column="2">
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <Button x:ConnectionId='3' x:Name="btnNouProjecte"                              Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
+                <Button x:ConnectionId='4' x:Name="btnSaveProjecte"                               Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
+                <Button x:ConnectionId='5' x:Name="btnCancelProjecte"                                 Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
+                <Button x:ConnectionId='6' x:Name="btnEliminaProjecte"                                  Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+</Page>
+
