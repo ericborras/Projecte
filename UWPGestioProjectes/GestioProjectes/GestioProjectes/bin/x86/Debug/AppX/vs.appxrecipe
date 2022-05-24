@@ -30,13 +30,13 @@
     <AppXManifest Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2022-05-24T17:26:36.865</Modified>
+      <Modified>2022-05-24T21:32:34.625</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\GestioProjectes.exe">
       <PackagePath>entrypoint\GestioProjectes.exe</PackagePath>
-      <Modified>2022-05-24T17:26:35.821</Modified>
+      <Modified>2022-05-24T21:32:34.156</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Lenovo T530\.nuget\packages\bouncycastle.netcore\1.8.3\lib\netstandard2.0\BouncyCastle.Crypto.dll">
       <PackagePath>BouncyCastle.Crypto.dll</PackagePath>
@@ -184,7 +184,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\bin\Debug\netstandard2.0\BDLib.dll">
       <PackagePath>BDLib.dll</PackagePath>
-      <Modified>2022-05-24T17:26:29.946</Modified>
+      <Modified>2022-05-24T21:19:07.150</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\bin\10.0.18362.0\XamlCompiler\Microsoft.UI.Xaml.Markup.winmd">
       <PackagePath>Microsoft.UI.Xaml.Markup.winmd</PackagePath>
@@ -238,11 +238,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2022-05-24T17:26:35.721</Modified>
+      <Modified>2022-05-24T21:32:34.071</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2022-05-24T17:26:35.722</Modified>
+      <Modified>2022-05-24T21:32:34.081</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.18362.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -250,11 +250,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2022-05-24T15:28:14.073</Modified>
+      <Modified>2022-05-24T21:19:11.891</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Core\GestioProjectes.exe">
       <PackagePath>GestioProjectes.exe</PackagePath>
-      <Modified>2022-05-24T17:26:36.861</Modified>
+      <Modified>2022-05-24T21:32:34.618</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

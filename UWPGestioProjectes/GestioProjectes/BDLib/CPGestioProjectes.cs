@@ -166,7 +166,7 @@ namespace BDLib
         }
 
 
-        public static bool InsertTeam(Projecte p)
+        public static bool InsertProjecte(Projecte p)
         {
             using (MyDBContext context = new MyDBContext("Server=localhost;Database=gestio_projectes;UID=root;Password=")) //crea el contexte de la base de dades
             {
@@ -210,6 +210,70 @@ namespace BDLib
 
         }
 
+
+        public static ObservableCollection<Usuari> GetUsuaris()
+        {
+            return launchQuery<ObservableCollection<Usuari>>(
+                 delegate (DbCommand consulta)
+                 {
+
+                     ObservableCollection<Usuari> usuaris = new ObservableCollection<Usuari>();
+
+
+                     //SELECT team.logo, team.caption as nomequip, division.caption as nomdivisio FROM team join division on team.current_division_id = division.id where current_division_id = (select id from division where caption like 'Atlantic');
+
+                     consulta.CommandText = @"select id, nom, cognom1, cognom2 from usuari order by cognom1";
+
+
+                     DbDataReader reader = consulta.ExecuteReader(); //per cuan pot retorna mes d'una fila
+
+                     Dictionary<string, int> ordinals = new Dictionary<string, int>();
+                     string[] cols = { "id", "nom", "cognom1", "cognom2" };
+                     foreach (string c in cols)
+                     {
+                         ordinals[c] = reader.GetOrdinal(c);
+                     }
+
+
+                     while (reader.Read()) //llegeix la fila seguent, retorna true si ha pogut llegir la fila, retorna false si no hi ha mes dades per lleguir
+                     {
+
+                         int id = reader.GetInt32(ordinals["id"]);
+                         string nom = reader.GetString(ordinals["nom"]);
+                         string cognom1 = reader.GetString(ordinals["cognom1"]);
+
+                         string cognom2 = "";
+
+                         try
+                         {
+                             reader.GetString(ordinals["cognom2"]);
+                         }
+                         catch (Exception ex)
+                         {
+
+                         }
+
+                         //Montar nom complet
+
+                         Usuari usuari = new Usuari(id, nom, cognom1, cognom2);
+                         if (cognom2 != "")
+                         {
+                             usuari.Nomcomplet = nom + " " + cognom1 + " " + cognom2;
+                         }
+                         else
+                         {
+                             usuari.Nomcomplet = nom + " " + cognom1;
+                         }
+
+
+
+
+                         usuaris.Add(usuari);
+                     }
+
+                     return usuaris;
+                 });
+        }
 
 
 

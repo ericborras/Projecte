@@ -31,6 +31,13 @@ namespace BDLib.Model
             this.capProjecte = capProjecte;
         }
 
+        public Projecte(string nom, string descripcio, Usuari capProjecte)
+        {
+            this.nom = nom;
+            this.descripcio = descripcio;
+            this.capProjecte = capProjecte;
+        }
+
         public int Id { get => id; set => id = value; }
         public string Nom { get => nom; set => nom = value; }
         public string Descripcio { get => descripcio; set => descripcio = value; }

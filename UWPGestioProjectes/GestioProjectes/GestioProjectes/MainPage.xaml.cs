@@ -30,6 +30,7 @@ namespace GestioProjectes
 
         private ObservableCollection<Projecte> projectes = new ObservableCollection<Projecte>();
         private ObservableCollection<Usuari> usuaris_projecte = new ObservableCollection<Usuari>();
+        private ObservableCollection<Usuari> usuaris = new ObservableCollection<Usuari>();
         private bool modeAltaProjectes = false;
         private bool modeEditProjectes = false;
         private int idxCapProjecte = -1;
@@ -81,6 +82,13 @@ namespace GestioProjectes
             cboCapProjecte.SelectedIndex = -1;
 
             btnEliminaProjecte.IsEnabled = false;
+
+            //Carregar tota la llista d'usuaris
+            usuaris = CPGestioProjectes.GetUsuaris();
+            cboCapProjecte.ItemsSource = usuaris;
+            cboCapProjecte.DisplayMemberPath = "Nomcomplet";
+
+
         }
 
         private void btnCancelProjecte_Click(object sender, RoutedEventArgs e)
@@ -105,11 +113,60 @@ namespace GestioProjectes
             if (modeAltaProjectes)
             {
                 //Insert
+
+                if (txbNomProjecte.Text.Trim().Length > 0 && txbDescProjecte.Text.Trim().Length > 0 && cboCapProjecte.SelectedIndex!= -1)
+                {
+                    Usuari capProjecte = (Usuari)cboCapProjecte.SelectedValue;
+                    Projecte projecte = new Projecte(txbNomProjecte.Text.Trim(), txbDescProjecte.Text.Trim(), capProjecte);
+                    if (CPGestioProjectes.InsertProjecte(projecte))
+                    {
+                        //Afegir a la llista en memòria
+                        projectes.Add(projecte);
+                        dtgProjectes.ItemsSource = null;
+                        dtgProjectes.ItemsSource = projectes;
+                        mostraMissatge("Inserción", "Se ha insertado el proyecto correctamente", "OK");
+                    }
+                    else
+                    {
+                        mostraMissatge("Error", "Ha habido un error al insertar el proyecto", "OK");
+                    }
+
+                }
+                else
+                {
+                    mostraMissatge("Error", "No puedes insertar un proyecto con algún campo vacío", "OK");
+                }
             }
             else
             {
                 //Mode edit
             }
+        }
+
+        private async void mostraMissatge(string title, string content, string contentButton)
+        {
+            
+                ContentDialog deleteFileDialog = new ContentDialog
+                {
+                    Title = title,
+                    Content = content,
+                    PrimaryButtonText = contentButton
+                };
+
+                ContentDialogResult result = await deleteFileDialog.ShowAsync();
+
+                // Delete the file if the user clicked the primary button.
+                /// Otherwise, do nothing.
+                if (result == ContentDialogResult.Primary)
+                {
+
+                }
+                else
+                {
+                    // The user clicked the CLoseButton, pressed ESC, Gamepad B, or the system back button.
+                    // Do nothing.
+                }
+            
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
