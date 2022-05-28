@@ -31,6 +31,29 @@ namespace BDLib.Model
             this.estat = estat;
         }
 
+        public Tasca(int id, DateTime dataCreacio, string nom, string descripcio, DateTime dataLimit)
+        {
+            this.id = id;
+            this.dataCreacio = dataCreacio;
+            this.nom = nom;
+            this.descripcio = descripcio;
+            this.dataLimit = dataLimit;
+        }
+
+        public Tasca(int id, DateTime dataCreacio, string nom, string descripcio)
+        {
+            this.id = id;
+            this.dataCreacio = dataCreacio;
+            this.nom = nom;
+            this.descripcio = descripcio;
+        }
+
+        public Tasca(string nom, string descripcio)
+        {
+            this.nom = nom;
+            this.descripcio = descripcio;
+        }
+
         public int Id { get => id; set => id = value; }
         public DateTime DataCreacio { get => dataCreacio; set => dataCreacio = value; }
         public string Nom { get => nom; set => nom = value; }

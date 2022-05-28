@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_gravity="center_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="1"
+        android:rowCount="5"
+        android:layout_marginTop="150dp">
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Introducir nueva entrada"
+            android:textSize="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp">
+
+        </TextView>
+
+        <LinearLayout android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre "
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red"
+                android:text="*"
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/edtNomEntrada"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content">
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginBottom="20dp">
+            <TextView
+                android:text="Nueva assignación"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <Spinner
+                android:id="@+id/spnNovaAssignacioEntrada"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+
+        </LinearLayout>
+
+        <LinearLayout>
+            <TextView
+                android:text="Nuevo estado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <Spinner
+                android:id="@+id/spnNouEstatEntrada"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:id="@+id/btnAceptar"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:text="Aceptar"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="20dp"
+                >
+
+            </Button>
+
+
+
+            <Button
+                android:id="@+id/btnCancelar"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"
+                android:layout_gravity="center_horizontal">
+
+            </Button>
+        </LinearLayout>
+
+
+
+
+    </GridLayout>
+
+
+
+
+</LinearLayout>

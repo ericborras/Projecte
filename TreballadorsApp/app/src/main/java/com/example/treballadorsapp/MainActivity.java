@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.treballadorsapp.utils.MD5Utils;
 
@@ -36,10 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // initialize socket and input output streams
     private static Socket socket  = null;
-    private static ObjectInputStream input   = null;
-    private static ObjectOutputStream out     = null;
 
-    private static final int port = 4444;
+    private static final int port = 44444;
+    //private static final String address = "10.132.0.120";
     private static final String address = "192.168.0.11";
     private static Socket sock;
 
@@ -47,8 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edtPassword;
     private Button btnConnectarBD;
 
+    TextView txvToast;
 
 
+    int toast=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inicialitzar_ui();
         btnConnectarBD.setOnClickListener(this);
+
 
 
 /*
@@ -225,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     Usuari usuari = (Usuari) ois.readObject();
                     if(usuari!=null){
+                        toast = 0;
                         Log.e("PROVA","OBJECTE: "+usuari);
                         out.writeInt(0);
 
@@ -234,11 +241,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ois.close();
                         s.close();
 
+
                         startActivity(i);
 
 
                     }else{
+
+                        toast = 1;
+
+
+
+
                         out.writeInt(1);
+
                     }
                     //PrintWriter output = new PrintWriter(out);
 
@@ -261,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         thread.start();
+
         //return correcte2;
     }
 
@@ -269,6 +285,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         sendMessage(edtLogin.getText().toString(),edtPassword.getText().toString());
+
+        if(toast==1){
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast_layout,
+                    (ViewGroup) findViewById(R.id.toast_layout_root));
+            txvToast = (TextView) layout.findViewById(R.id.txvToast);
+            txvToast.setText("El login o la contraseña son incorrectos");
+
+            Toast toast = new Toast(getApplicationContext());
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
+        }
 
     }
 

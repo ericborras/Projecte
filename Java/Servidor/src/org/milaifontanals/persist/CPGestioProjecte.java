@@ -10,6 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +45,7 @@ public class CPGestioProjecte implements IPersistence{
     PreparedStatement psTasca, psEntradaTasca;
     PreparedStatement psNotificacionsPendents;
     PreparedStatement psNovaEntrada;
+    PreparedStatement psUsuarisProjecte;
     
     @Override
     public void connect(String nomFitx) {
@@ -182,7 +187,8 @@ public class CPGestioProjecte implements IPersistence{
         return projectes;
     }
     
-    public List<Tasca> getTasques(int id_usuari){
+    public List<Tasca> getTasques(int id_usuari, int id_projecte){
+        System.out.println("PARAMETRE ID_PROJECTE: "+id_projecte);
         List<Tasca> tasques = new ArrayList();
         
         Tasca tasca = null;
@@ -197,6 +203,7 @@ public class CPGestioProjecte implements IPersistence{
             stTasques = con.createStatement();
             
             psTasquesAssignades.setInt(1, id_usuari);
+            psTasquesAssignades.setInt(2, id_projecte);
             
             rsTasques = psTasquesAssignades.executeQuery();
             System.out.println("CONSULTA: "+psTasquesAssignades.toString());
@@ -352,6 +359,68 @@ public class CPGestioProjecte implements IPersistence{
     }
     
     
+    public List<Entrada> getEntrades(int id_tasca){
+
+        Tasca tasca = null;
+        List<Entrada> entrades = new ArrayList();
+        
+
+        
+        Statement stEntrada = null;
+        ResultSet rsEntrada = null;
+        
+        try {
+
+            
+            //Buscar les entrades de la tasca
+            stEntrada = con.createStatement();
+            
+            psEntradaTasca.setInt(1, id_tasca);
+            
+            rsEntrada = psEntradaTasca.executeQuery();
+            
+            while(rsEntrada.next()){
+                Entrada entrada = new Entrada(rsEntrada.getInt("numero"),rsEntrada.getDate("data_entrada"),rsEntrada.getString("entrada"),new Usuari(rsEntrada.getInt("escriptor_id"),rsEntrada.getString("escriptor_nom"),rsEntrada.getString("escriptor_cognom1")),new Usuari(rsEntrada.getInt("assignacio_id"),rsEntrada.getString("assignacio_nom"),rsEntrada.getString("assignacio_cognom1")));                             
+                
+                 //ESTAT
+                switch(rsEntrada.getInt("nou_estat")){
+                    
+                    case 0:
+                        entrada.setNouEstat(Estat.TANCADA_SENSE_SOLUCIO);
+                        break;
+                        
+                    case 1:
+                        entrada.setNouEstat(Estat.TANCADA_RESOLTA);
+                        break;
+                        
+                    case 2:
+                        entrada.setNouEstat(Estat.TANCADA_DUPLICADA);
+                        break;
+                        
+                    case 3:
+                        entrada.setNouEstat(Estat.OBERTA_NO_ASSIGNADA);
+                        break;
+                        
+                    case 4:
+                        entrada.setNouEstat(Estat.OBERTA_ASSIGNADA);
+                        break;
+                    
+                }
+                
+                entrades.add(entrada);
+                
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new ServidorException("Error: ",ex);
+        }
+        
+        return entrades;
+        
+    }
+    
+    
     public List<Tasca> getNotificacionsPendents(int id_usuari){
         
         List<Tasca> tasques = new ArrayList();
@@ -384,6 +453,80 @@ public class CPGestioProjecte implements IPersistence{
         
     }
     
+    public boolean NovaEntrada(String entrada, int nova_assignacio, int escriptor, int nou_estat, int tasca_id){
+        
+        Statement stEntrada = null;
+        
+        try{
+            
+            stEntrada = con.createStatement();
+            
+            java.sql.Date date = java.sql.Date.valueOf(LocalDate.now());
+            
+            psNovaEntrada.setDate(1, date);
+            psNovaEntrada.setString(2, entrada);
+            if(nova_assignacio!=-1){
+                psNovaEntrada.setInt(3, nova_assignacio);
+            }else{
+                psNovaEntrada.setNull(3, Types.INTEGER);
+            }
+            
+            psNovaEntrada.setInt(4, escriptor);
+            
+            if(nou_estat!=-1){
+                psNovaEntrada.setInt(5, nou_estat);
+            }else{
+                psNovaEntrada.setNull(5, Types.INTEGER);
+            }
+            
+            psNovaEntrada.setInt(6, tasca_id);
+            
+            int i = psNovaEntrada.executeUpdate();
+            
+            if(i!=1){
+                return false;
+            }
+
+            commit();
+            return true;
+        }catch(Exception ex){
+            rollback();
+            return false;
+        }
+        
+        
+        
+    }
+    
+    public List<Usuari> GetUsuarisProjecte(int id_projecte){
+        List<Usuari> usuaris = new ArrayList();
+        
+        Statement stUsuarisProjecte = null;
+        ResultSet rsUsuarisProjecte = null;
+        
+        try {
+            stUsuarisProjecte = con.createStatement();
+            psUsuarisProjecte.setInt(1, id_projecte);
+            
+            rsUsuarisProjecte = psUsuarisProjecte.executeQuery();
+            while(rsUsuarisProjecte.next()){
+                Usuari usuari = new Usuari(rsUsuarisProjecte.getInt("id"),rsUsuarisProjecte.getString("nom"),rsUsuarisProjecte.getString("cognom1"));
+                
+                String cognom2 = rsUsuarisProjecte.getString("cognom2");              
+                if(cognom2!=null){
+                    usuari.setCognom2(cognom2);
+                }
+                
+                usuaris.add(usuari);
+            }
+                                 
+        } catch (SQLException ex) {
+            
+            throw new ServidorException("Error: "+ex);
+        }
+        
+        return usuaris;
+    }
     
     private void prepararStatements() throws SQLException {
         
@@ -409,7 +552,7 @@ public class CPGestioProjecte implements IPersistence{
                                                     "from tasca t join usuari u on t.propietari = u.id\n" +
                                                     "			 join usuari us on t.responsable = us.id\n" +
                                                     "             join projecte p on t.projecte_id = p.id\n" +
-                                                    "where t.propietari = ? and t.id_estat = 4");
+                                                    "where t.propietari = ? and t.id_estat = 4 and t.projecte_id = ?");
         
         
         psTasca = con.prepareStatement("select t.id, t.data_creacio, t.nom, t.descripcio, t.data_limit, u.id as id_responsable, u.nom as nom_responsable, u.cognom1 as cognom1_responsable, e.id_estat as id_estat,e.nom as nom_estat, p.id as id_projecte, p.nom as nom_projecte, p.descripcio as descripcio_projecte  \n" +
@@ -426,7 +569,12 @@ public class CPGestioProjecte implements IPersistence{
                                                         "where (t.id_estat=4 or t.id_estat=3) and t.propietari=?");
         
         psNovaEntrada = con.prepareStatement("insert into entrada(numero,data_entrada,entrada,nova_assignacio,escriptor,nou_estat,tasca_id) \n" +
-"  values(NULL,?,?,?,?,?,?);");
+"  values(NULL,?,?,?,?,?,?)");
+        
+        psUsuarisProjecte = con.prepareStatement("select u.id, u.nom, u.cognom1, u.cognom2\n" +
+                                                "from projecte_usuari pu join usuari u on pu.id_usuari = u.id\n" +
+                                                "where pu.id_projecte = ?");
+        
     
     }
     

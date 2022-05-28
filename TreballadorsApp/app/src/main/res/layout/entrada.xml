@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginBottom="10dp">
+    </View>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1"
+        android:rowCount="5">
+
+        <LinearLayout>
+            <TextView
+                android:text="7"
+                android:id="@+id/txvIdEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="30dp">
+
+            </TextView>
+
+            <TextView
+                android:text="Entrada"
+                android:id="@+id/txvEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="Fecha entrada "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="17dp">
+
+            </TextView>
+
+            <TextView
+                android:text="16/05/2022 15:00"
+                android:id="@+id/txvDataEntrada"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nueva asignación "
+                android:layout_marginRight="10dp"
+                android:textSize="17dp">
+
+            </TextView>
+
+            <TextView
+                android:text="Marisela de Reguera"
+                android:id="@+id/txvNovaAssignacioEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="Autor "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_marginRight="10dp">
+
+            </TextView>
+
+            <TextView
+                android:text="Macario Peres"
+                android:id="@+id/txvEscriptorEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="Estado "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_marginRight="10dp">
+
+            </TextView>
+
+            <TextView
+                android:text="OBERTA_ASSIGNADA"
+                android:id="@+id/txvNouEstatEntrada"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </LinearLayout>
+
+
+
+    </GridLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="10dp">
+    </View>
+
+
+
+</LinearLayout>

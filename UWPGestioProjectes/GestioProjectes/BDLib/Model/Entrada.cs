@@ -24,6 +24,13 @@ namespace BDLib.Model
             this.nouEstat = nouEstat;
         }
 
+        public Entrada(int numero, DateTime dataEntrada, string entrada_e)
+        {
+            this.numero = numero;
+            this.dataEntrada = dataEntrada;
+            this.entrada_e = entrada_e;
+        }
+
         public int Numero { get => numero; set => numero = value; }
         public DateTime DataEntrada { get => dataEntrada; set => dataEntrada = value; }
         public string Entrada_e { get => entrada_e; set => entrada_e = value; }

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EntradesActivity">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1"
+        android:rowCount="9">
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Entrades tasca"
+            android:textSize="30dp"
+            android:layout_marginBottom="10dp">
+
+        </TextView>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="6"
+                android:id="@+id/txvIdTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvNomTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hacer búsqueda"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/txvDescripcioTascaEntrada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tarea que consiste en hacer la base de datos"
+            android:textSize="17dp">
+
+        </TextView>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+            <TextView
+                android:text="Fecha creación"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textSize="17dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvDataCreacioTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15/05/2022 15:00"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="Fecha límite "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvDataLimitTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30/05/2022"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+            <TextView
+                android:text="Responsable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_marginRight="10dp">
+
+            </TextView>
+            <TextView
+                android:id="@+id/txvResponsableTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plácido Merino Jauregui"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginLeft="5dp">
+
+            <TextView
+                android:text="Estado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:layout_marginRight="10dp">
+
+            </TextView>
+
+            <TextView
+                android:text="TANCADA_SENSE_SOLUCIO"
+                android:id="@+id/txvEstatTascaEntrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold">
+
+            </TextView>
+        </LinearLayout>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/btnNovaEntrada"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Nova entrada"
+            android:layout_gravity="center">
+
+        </Button>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcyEntrades"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+    </GridLayout>
+
+</LinearLayout>

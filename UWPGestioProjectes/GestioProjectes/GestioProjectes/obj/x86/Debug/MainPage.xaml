@@ -20,18 +20,18 @@
         <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <controls:DataGrid x:ConnectionId='2' x:Name="dtgProjectes"                                                  Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+            <controls:DataGrid x:ConnectionId='22' x:Name="dtgProjectes"                                                  Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
 
                 <controls:DataGrid.Columns>
 
-                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nom}" Foreground="#2D6399"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nom}"></controls:DataGridTextColumn>
 
-                    <controls:DataGridTextColumn Header="Descripción" Binding="{Binding Descripcio}" Foreground="#2D6399"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Descripción" Binding="{Binding Descripcio}"></controls:DataGridTextColumn>
 
                     <controls:DataGridTextColumn Header="Jefe proyecto" Binding="{Binding CapProjecte.Nomcomplet}"></controls:DataGridTextColumn>
 
@@ -50,17 +50,17 @@
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Nombre " VerticalAlignment="Center"></TextBlock>
-                    <TextBox x:ConnectionId='9' x:Name="txbNomProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></TextBox>
+                    <TextBox x:ConnectionId='29' x:Name="txbNomProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></TextBox>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Descripción proyecto " VerticalAlignment="Center"></TextBlock>
-                    <TextBox x:ConnectionId='8' x:Name="txbDescProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="80" AcceptsReturn="True"></TextBox>
+                    <TextBox x:ConnectionId='28' x:Name="txbDescProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="80" AcceptsReturn="True"></TextBox>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Jefe proyecto " VerticalAlignment="Center"></TextBlock>
-                    <ComboBox x:ConnectionId='7' x:Name="cboCapProjecte"                                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="130"></ComboBox>
+                    <ComboBox x:ConnectionId='27' x:Name="cboCapProjecte"                                                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
                 </StackPanel>
 
             </Grid>
@@ -76,12 +76,199 @@
                 </Grid.RowDefinitions>
 
 
-                <Button x:ConnectionId='3' x:Name="btnNouProjecte"                              Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
-                <Button x:ConnectionId='4' x:Name="btnSaveProjecte"                               Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
-                <Button x:ConnectionId='5' x:Name="btnCancelProjecte"                                 Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
-                <Button x:ConnectionId='6' x:Name="btnEliminaProjecte"                                  Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+                <Button x:ConnectionId='23' x:Name="btnNouProjecte"                              Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
+                <Button x:ConnectionId='24' x:Name="btnSaveProjecte"                               Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
+                <Button x:ConnectionId='25' x:Name="btnCancelProjecte"                                 Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
+                <Button x:ConnectionId='26' x:Name="btnEliminaProjecte"                                  Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
 
             </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,70,0,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <controls:DataGrid x:ConnectionId='11' x:Name="dtgTasques"                                                Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+
+                <controls:DataGrid.Columns>
+
+                    <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nom}"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Descripción" Binding="{Binding Descripcio}"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Fecha creación" Binding="{Binding DataCreacio}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Fecha límite" Binding="{Binding DataLimit}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Propietario" Binding="{Binding Propietari.Nomcomplet}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Responsable" Binding="{Binding Responsable.Nomcomplet}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Estat" Binding="{Binding Estat.Nom_estat}"></controls:DataGridTextColumn>
+
+
+                </controls:DataGrid.Columns>
+
+            </controls:DataGrid>
+
+            <Grid Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Nombre " VerticalAlignment="Center"></TextBlock>
+                    <TextBox x:ConnectionId='21' x:Name="txbNomTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></TextBox>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Descripción " VerticalAlignment="Center"></TextBlock>
+                    <TextBox x:ConnectionId='20' x:Name="txbDescripcioTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></TextBox>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Fecha límite " VerticalAlignment="Center"></TextBlock>
+                    <DatePicker x:ConnectionId='19' x:Name="txbDataLimitTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></DatePicker>
+                </StackPanel>
+
+            </Grid>
+
+
+            <Grid Grid.Column="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Propietario " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='18' x:Name="cboPropietariTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Responsable " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='17' x:Name="cboResponsableTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Estado " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='16' x:Name="cboEstadoTasca" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid Grid.Column="3">
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <Button x:ConnectionId='12' x:Name="btnNouTasca"                           Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
+                <Button x:ConnectionId='13' x:Name="btnSaveTasca"                            Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
+                <Button x:ConnectionId='14' x:Name="btnCancelTasca"                              Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
+                <Button x:ConnectionId='15' x:Name="btnEliminaTasca"                               Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            
+            <controls:DataGrid x:ConnectionId='2' x:Name="dtgEntrada"                                                Grid.Column="0" BorderThickness="5" Background="White" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+
+                <controls:DataGrid.Columns>
+
+                    <controls:DataGridTextColumn Header="Número" Binding="{Binding Numero}"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Fecha Entrada" Binding="{Binding DataEntrada}"></controls:DataGridTextColumn>
+
+                    <controls:DataGridTextColumn Header="Entrada" Binding="{Binding Entrada_e}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Escritor" Binding="{Binding Escriptor.id}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nueva assignación" Binding="{Binding Propietari.NovaAssignacio.id}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nuevo estado" Binding="{Binding Responsable.NouEstat}"></controls:DataGridTextColumn>
+                    
+
+                </controls:DataGrid.Columns>
+
+            </controls:DataGrid>
+
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Entrada " VerticalAlignment="Center"></TextBlock>
+                <TextBox x:ConnectionId='10' x:Name="txbEntrada" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Height="200"></TextBox>
+            </StackPanel>
+
+            <Grid Grid.Column="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Nueva assignación " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='9' x:Name="cboNovaAssign" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Escritor " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='8' x:Name="cboEscriptor" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Nuevo estado " VerticalAlignment="Center"></TextBlock>
+                    <ComboBox x:ConnectionId='7' x:Name="cboNouEstat" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
+                </StackPanel>
+            </Grid>
+            
+
+            <Grid Grid.Column="3">
+
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <Button x:ConnectionId='3' x:Name="btnNouEntrada"                             Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
+                <Button x:ConnectionId='4' x:Name="btnSaveEntrada"                              Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
+                <Button x:ConnectionId='5' x:Name="btnCancelEntrada"                                Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
+                <Button x:ConnectionId='6' x:Name="btnEliminaEntrada"                                 Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+
+            </Grid>
+
+
 
         </Grid>
 

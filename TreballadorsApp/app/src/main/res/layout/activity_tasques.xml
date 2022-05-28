@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:columnCount="1"
-        android:rowCount="6"
+        android:rowCount="8"
         >
 
         <TextView
@@ -19,7 +19,8 @@
             android:textSize="30dp"
             android:text="Proyectos abiertos"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold">
 
         </TextView>
 
@@ -38,13 +39,25 @@
 
             </EditText>
 
-            <EditText
-                android:id="@+id/edtSearchDescripcio"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/spnProjecte"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:hint="Descripción del proyecto...">
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
+                >
 
-            </EditText>
+            </Spinner>
+
+            <Spinner
+                android:id="@+id/spnEstatTasca"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
+                >
+
+            </Spinner>
 
 
 
@@ -55,16 +68,16 @@
             android:layout_width="wrap_content"
             android:layout_marginBottom="10dp">
 
-            <Spinner
-                android:id="@+id/spnProjecte"
-                android:layout_width="100dp"
+            <EditText
+                android:id="@+id/edtSearchDescripcio"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="90dp"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="center"
-                >
+                android:hint="Descripción proyecto..."
+                android:layout_marginRight="15dp">
 
-            </Spinner>
+            </EditText>
+
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,30 +96,23 @@
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center">
 
             <Button
                 android:id="@+id/btnEsborraFiltres"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:text="Eliminar filtros">
+                android:text="Eliminar filtros"
+                android:layout_marginLeft="20dp">
 
             </Button>
 
-            <Spinner
-                android:id="@+id/spnEstatTasca"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="center"
-                >
 
-            </Spinner>
 
             <Button
                 android:id="@+id/btnCerca"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Buscar">
 
@@ -115,6 +121,23 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:text="Proyectos"
+            android:textSize="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center">
+
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcyProjectes"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="30dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
 
         <androidx.recyclerview.widget.RecyclerView

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#DDDDDC"
+    android:layout_marginBottom="20dp">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1"
+        android:rowCount="5">
+
+        <LinearLayout
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/txvIdTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6"
+                android:layout_marginRight="30dp"
+                android:textStyle="bold"
+                android:textSize="20dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvNomTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyecto en java"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                >
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/txvDescripcioTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proyecto de desarrollo de una aplicación en Java, que permite gestionar la contabilidad.">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Responsable: "
+                android:layout_marginRight="30dp"
+                android:textSize="17dp">
+
+            </TextView>
+            <TextView
+                android:id="@+id/txvResponsableTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:text="Plácido Merino">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout android:layout_marginBottom="5dp">
+            <TextView
+                android:textSize="17dp"
+                android:text="Fecha límite: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvDataLimitTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15/05/2022"
+                android:textSize="17dp"
+                android:textStyle="bold"
+                >
+
+            </TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout>
+            <TextView
+                android:textSize="17dp"
+                android:text="Estado: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/txvEstatTasca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OBERTA_ASSIGNADA"
+                android:textStyle="bold"
+                android:textSize="17dp">
+
+            </TextView>
+        </LinearLayout>
+
+
+
+    </GridLayout>
+
+</LinearLayout>

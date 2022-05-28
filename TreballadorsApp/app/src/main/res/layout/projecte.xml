@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/linProjecte">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="1"
+        android:rowCount="3">
+
+        <LinearLayout
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:text="1"
+                android:id="@+id/txvIdProjecte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:textSize="30dp">
+
+            </TextView>
+
+            <TextView
+                android:textStyle="bold"
+                android:text="Proyecto aplicación android"
+                android:id="@+id/txvNomProjecte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24dp">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:text="Proyecto de desarrollo de una aplicación en dispositivos móbiles Android, que permite generar informes personalizados."
+                android:id="@+id/txvDescripcioProjecte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout>
+            <TextView
+                android:textSize="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jefe: "
+                android:layout_marginRight="20dp">
+
+            </TextView>
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="23dp"
+                android:text="Plácido Merino"
+                android:id="@+id/txvCapProjecte"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+        </LinearLayout>
+
+    </GridLayout>
+
+</LinearLayout>

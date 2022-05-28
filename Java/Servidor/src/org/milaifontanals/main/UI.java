@@ -63,7 +63,8 @@ public class UI {
     private Thread thread;
     private ServerSocket socket_connections;
     
-    private static final int port = 4444;
+    private static final int port = 44444;
+    private static final String address = "10.132.0.120";
     
     public UI(){
         capa_pers = new CPGestioProjecte();
@@ -135,13 +136,31 @@ public class UI {
                 btn_engega.setEnabled(false);
 
 
+                try (ServerSocket serverSocket = new ServerSocket(port)) {
+ 
+                    System.out.println("Server is listening on port " + port);
+
+                    while (true) {
+                        Socket socket = serverSocket.accept();
+                        System.out.println("New client connected");
+
+                        new ServerThread(socket).start();
+                    }
+
+                } catch (IOException ex) {
+                    System.out.println("Server exception: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
                 
+                /*
                 
                 thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             socket_connections = new ServerSocket(port);
+                            
+                            
                         } catch (IOException ex) {
                             Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -154,7 +173,7 @@ public class UI {
                                 s = socket_connections.accept();
                                 System.out.println("Nou client connectat : " + s);                               
                               
-                                
+                                new ServerThread(socket).start();
                                                                    
                                 ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
                                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
@@ -205,7 +224,7 @@ public class UI {
                                             System.out.println("PROJECTES HA ANAT BÉ");
                                         }else{
                                             System.out.println("PROJECTES NO HA ANAT BÉ");
-                                        }*/
+                                        }
                                         
                                         
                                         
@@ -217,14 +236,14 @@ public class UI {
                                                               
 
                             } catch (Exception e) {
-                                System.out.println("PRIMER TRY CATCH: "+e.getMessage());
+                                System.out.println("ERROR: "+e.getMessage());
                                 
                                 
                                 
                                 try {
                                     s.close();
                                 } catch (IOException ex) {
-                                    System.out.println("SEGON TRY CATCH: "+ex.getMessage());
+                                    System.out.println("ERROR: "+ex.getMessage());
                                 }
                                 e.printStackTrace();
                             }
@@ -244,7 +263,7 @@ public class UI {
                             }catch(Exception ex){
                                 throw new ServidorException("Error: ",ex);
                             }
-                            */
+                            
                             //System.out.println(json);
                     }
                             }
@@ -255,7 +274,7 @@ public class UI {
                 }catch(Exception ex){
                     System.out.println("EE ERROR: "+ex.getMessage());
                 }
-                
+                */
                     
                 
                 
