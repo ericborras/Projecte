@@ -52,6 +52,17 @@ namespace GestioProjectes
         private ObservableCollection<Estat> estats = new ObservableCollection<Estat>();
 
 
+        private ObservableCollection<Entrada> entrades = new ObservableCollection<Entrada>();
+        private Entrada entrada_seleccionada;
+        private bool modeAltaEntrades = false;
+        private bool modeEditEntrades = true;
+        private int idxNovaAssignEntrada = -1;
+        private int idxEscriptorEntrada = -1;
+        private int idxEstatEntrada = -1;
+        
+
+
+
 
         public MainPage()
         {
@@ -275,7 +286,7 @@ namespace GestioProjectes
 
             txbNomTasca.Text = "";
             txbDescripcioTasca.Text = "";
-            //txbDataLimitTasca.SelectedDate = null;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            txbDataLimitTasca.SelectedDate = null;
 
             cboEstadoTasca.SelectedIndex = -1;
             cboPropietariTasca.SelectedIndex = -1;
@@ -286,73 +297,84 @@ namespace GestioProjectes
         private void btnSaveTasca_Click(object sender, RoutedEventArgs e)
         {
 
-            if (txbNomTasca.Text.Trim().Length > 0 && txbDescripcioTasca.Text.Trim().Length > 0 && cboPropietariTasca.SelectedIndex!= -1 && cboEstadoTasca.SelectedIndex!= -1)
+
+            if (projecte != null)
             {
-
-                Tasca tasc = new Tasca(txbNomTasca.Text.Trim(), txbDescripcioTasca.Text.Trim());
-                tasc.DataCreacio = DateTime.Now;
-                tasc.Propietari = (Usuari)cboPropietariTasca.SelectedItem;
-
-
-                tasc.Estat = (Estat)cboEstadoTasca.SelectedItem;
-
-                if (cboResponsableTasca.SelectedIndex != -1)
+                if (txbNomTasca.Text.Trim().Length > 0 && txbDescripcioTasca.Text.Trim().Length > 0 && cboPropietariTasca.SelectedIndex != -1 && cboEstadoTasca.SelectedIndex != -1)
                 {
-                    tasc.Responsable = (Usuari)cboResponsableTasca.SelectedItem;
-                }
-                /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                if (txbDataLimitTasca.SelectedDate != null)
-                {
-                    tasc.DataLimit = txbDataLimitTasca.Date.DateTime;
-                }
-                */
-                if (modeAltaTasques)
-                {
-                    
 
-                    if(CPGestioProjectes.InsertTasca(tasc, projecte.Id))
+                    Tasca tasc = new Tasca(txbNomTasca.Text.Trim(), txbDescripcioTasca.Text.Trim());
+                    tasc.DataCreacio = DateTime.Now;
+                    tasc.Propietari = (Usuari)cboPropietariTasca.SelectedItem;
+
+
+                    tasc.Estat = (Estat)cboEstadoTasca.SelectedItem;
+
+                    if (cboResponsableTasca.SelectedIndex != -1)
+                    {
+                        tasc.Responsable = (Usuari)cboResponsableTasca.SelectedItem;
+                    }
+
+                    if (txbDataLimitTasca.SelectedDate != null)
+                    {
+                        tasc.DataLimit = txbDataLimitTasca.Date.DateTime;
+                    }
+
+                    if (modeAltaTasques)
                     {
 
-                        tasques = CPGestioProjectes.GetUsuarisTasquesProjecte(projecte.Id);
-                        dtgTasques.ItemsSource = null;
-                        dtgTasques.ItemsSource = tasques;
 
-                        mostraMissatge("Inserción", "Se ha insertado la tarea correctamente", "OK");
+                        if (CPGestioProjectes.InsertTasca(tasc, projecte.Id))
+                        {
+
+                            tasques = CPGestioProjectes.GetUsuarisTasquesProjecte(projecte.Id);
+                            dtgTasques.ItemsSource = null;
+                            dtgTasques.ItemsSource = tasques;
+
+                            mostraMissatge("Inserción", "Se ha insertado la tarea correctamente", "OK");
+                        }
+                        else
+                        {
+                            mostraMissatge("Error", "Error al insertar la tarea", "OK");
+                        }
+
                     }
                     else
                     {
-                        mostraMissatge("Error", "Error al insertar la tarea", "OK");
+                        //Mode edició
+
+                        if (CPGestioProjectes.updateTasca(tasc, projecte.Id))
+                        {
+                            tasques = CPGestioProjectes.GetUsuarisTasquesProjecte(projecte.Id);
+                            dtgTasques.ItemsSource = null;
+                            dtgTasques.ItemsSource = tasques;
+
+                            mostraMissatge("Inserción", "Se ha actualizado la tarea correctamente", "OK");
+                        }
+                        else
+                        {
+                            mostraMissatge("Error", "Error al actualizar la tarea", "OK");
+                        }
+
+
+
+
+
                     }
 
                 }
                 else
                 {
-                    //Mode edició
-
-                    if (CPGestioProjectes.updateTasca(tasc, projecte.Id))
-                    {
-                        tasques = CPGestioProjectes.GetUsuarisTasquesProjecte(projecte.Id);
-                        dtgTasques.ItemsSource = null;
-                        dtgTasques.ItemsSource = tasques;
-
-                        mostraMissatge("Inserción", "Se ha actualizado la tarea correctamente", "OK");
-                    }
-                    else
-                    {
-                        mostraMissatge("Error", "Error al actualizar la tarea", "OK");
-                    } 
-
-
-
-
-
+                    mostraMissatge("Error", "Los campos nombre, descripción, propietario, estado son obligatorios", "OK");
                 }
 
             }
             else
             {
-                mostraMissatge("Error", "Los campos nombre, descripción, propietario, estado son obligatorios", "OK");
+                mostraMissatge("Error", "Debes seleccionar el proyecto primero", "OK");
             }
+
+            
 
 
 
@@ -379,7 +401,8 @@ namespace GestioProjectes
 
         private void btnEliminaTasca_Click(object sender, RoutedEventArgs e)
         {
-
+            btnEliminaTasca.IsEnabled = false;
+            DisplayDeleteTasca();
         }
 
         private void dtgTasques_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -387,6 +410,8 @@ namespace GestioProjectes
 
             modeEditTasques = true;
             modeAltaTasques = false;
+
+            btnEliminaTasca.IsEnabled = true;
 
 
             tasca = (Tasca)dtgTasques.SelectedItem;
@@ -446,7 +471,18 @@ namespace GestioProjectes
                 cboEstadoTasca.SelectedIndex = idxEstatTasca;
 
 
+
+
+
+
+                //Mostrar info de les entrades de la tasca
+                entrades = CPGestioProjectes.GetEntradesTasca(tasca.Id);
+                dtgEntrada.ItemsSource = entrades;
+
             }
+
+
+
 
 
 
@@ -461,26 +497,347 @@ namespace GestioProjectes
         private void dtgEntrada_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            modeAltaEntrades = false;
+            modeEditEntrades = true;
+
+            entrada_seleccionada = (Entrada)dtgEntrada.SelectedItem;
+
+            if (entrada_seleccionada != null)
+            {
+                btnEliminaEntrada.IsEnabled = true;
+
+                txbEntrada.Text = entrada_seleccionada.Entrada_e;
+
+
+                cboNovaAssign.ItemsSource = usuaris_projecte;
+                cboNovaAssign.DisplayMemberPath = "Nomcomplet";
+                if (entrada_seleccionada.NovaAssignacio != null) {
+
+
+                    for (int i = 0; i < usuaris_projecte.Count; i++)
+                    {
+                        if (usuaris_projecte[i].Id == entrada_seleccionada.NovaAssignacio.Id)
+                        {
+                            idxNovaAssignEntrada = i;
+                        }
+                    }
+                    cboNovaAssign.SelectedIndex = idxNovaAssignEntrada;
+                }
+
+
+                cboEscriptor.ItemsSource = usuaris_projecte;
+                cboEscriptor.DisplayMemberPath = "Nomcomplet";
+                for (int i = 0; i < usuaris_projecte.Count; i++)
+                {
+                    if (usuaris_projecte[i].Id == entrada_seleccionada.Escriptor.Id)
+                    {
+                        idxEscriptorEntrada = i;
+                    }
+                }
+                cboEscriptor.SelectedIndex = idxEscriptorEntrada;
+
+
+
+                estats = CPGestioProjectes.GetUsuarisTasquesEstats();
+                cboNouEstat.ItemsSource = estats;
+                cboNouEstat.DisplayMemberPath = "Nom_estat";
+                for (int i = 0; i < estats.Count; i++)
+                {
+                    if (estats[i].Codi_estat == entrada_seleccionada.NouEstat.Codi_estat)
+                    {
+                        idxEstatEntrada = i;
+                    }
+                }
+                cboNouEstat.SelectedIndex = idxEstatEntrada;
+
+
+            }
+
+
         }
 
         private void btnNouEntrada_Click(object sender, RoutedEventArgs e)
         {
+            modeAltaEntrades = true;
+            modeEditEntrades = false;
+
+            txbEntrada.Text = "";
+            cboNovaAssign.SelectedIndex = -1;
+            cboEscriptor.SelectedIndex = -1;
+            cboNouEstat.SelectedIndex = -1;
+
 
         }
 
         private void btnSaveEntrada_Click(object sender, RoutedEventArgs e)
         {
 
+
+            if (tasca != null)
+            {
+                if (txbEntrada.Text.Trim().Length == 0 || cboEscriptor.SelectedIndex == -1)
+                {
+                    mostraMissatge("Error", "Debes ponerle un nombre a la entrada y debe tener un escritor", "OK");
+                }
+                else
+                {
+
+                    Entrada entrada = new Entrada(DateTime.Now, txbEntrada.Text.Trim());
+
+                    if (cboNovaAssign.SelectedIndex != -1)
+                    {
+                        Usuari novaAssignacio = (Usuari)cboNovaAssign.SelectedItem;
+                        entrada.NovaAssignacio = novaAssignacio;
+                    }
+
+                    Usuari escriptor = (Usuari)cboEscriptor.SelectedItem;
+                    entrada.Escriptor = escriptor;
+
+                    if (cboNouEstat.SelectedIndex != -1)
+                    {
+                        Estat estat = (Estat)cboNouEstat.SelectedItem;
+                        entrada.NouEstat = estat;
+                    }
+
+                    if (modeAltaEntrades)
+                    {
+                        if (CPGestioProjectes.InsertEntrada(entrada, tasca.Id))
+                        {
+                            entrades = CPGestioProjectes.GetEntradesTasca(tasca.Id);
+                            dtgEntrada.ItemsSource = null;
+                            dtgEntrada.ItemsSource = entrades;
+
+                            mostraMissatge("Inserción", "Se ha insertado la entrada correctamente", "OK");
+                        }
+                        else
+                        {
+                            mostraMissatge("Error", "No se ha podido insertar la entrada", "OK");
+                        }
+
+
+                    }
+                    else
+                    {
+                        entrada.Numero = entrada_seleccionada.Numero;
+                        //Mode edició
+                        if (CPGestioProjectes.updateEntrada(entrada))
+                        {
+                            entrades = CPGestioProjectes.GetEntradesTasca(tasca.Id);
+                            dtgEntrada.ItemsSource = null;
+                            dtgEntrada.ItemsSource = entrades;
+
+                            mostraMissatge("Actualización", "Se ha actualizado la entrada correctamente", "OK");
+                        }
+                        else
+                        {
+                            mostraMissatge("Error", "No se ha podido actualizar la entrada", "OK");
+                        }
+                    }
+
+
+                }
+            }
+            else
+            {
+                mostraMissatge("Error", "Tienes que seleccionar a que tarea pertenece", "OK");
+            }
+
         }
+
+
+
+
+        private async void DisplayDeleteTasca()
+        {
+            ContentDialog deleteFileDialog = new ContentDialog
+            {
+                Title = "Eliminar permanentemente",
+                Content = "¿Estás seguro de querer eliminar la tarea? Se eliminarán TODAS las entradas asociadas",
+                PrimaryButtonText = "Eliminar",
+                CloseButtonText = "Cancelar"
+            };
+
+            ContentDialogResult result = await deleteFileDialog.ShowAsync();
+
+            // Delete the file if the user clicked the primary button.
+            /// Otherwise, do nothing.
+            if (result == ContentDialogResult.Primary)
+            {
+                bool esborrats = true;
+
+                foreach(Entrada entrada in entrades)
+                {
+                    if (!CPGestioProjectes.deleteEntrada(entrada.Numero))
+                    {
+                        esborrats = false;
+                    }
+                }
+
+                if (esborrats)
+                {
+                    //En cas que s'hagin esborrat correctament les entrades corresponents, eliminar la tasca
+
+
+
+                    if (CPGestioProjectes.deleteTasca(tasca.Id))
+                    {
+
+
+                        dtgEntrada.ItemsSource = null;
+
+                        tasques.Remove(tasca);
+                        dtgTasques.ItemsSource = null;
+                        dtgTasques.ItemsSource = tasques;
+
+
+                        txbNomTasca.Text = "";
+                        txbDescripcioTasca.Text = "";
+                        txbDataLimitTasca.SelectedDate = null;
+                        cboPropietariTasca.SelectedIndex = -1;
+                        cboResponsableTasca.SelectedIndex = -1;
+                        cboEstadoTasca.SelectedIndex = -1;
+
+
+                        txbEntrada.Text = "";
+                        cboEscriptor.SelectedIndex = -1;
+                        cboNouEstat.SelectedIndex = -1;
+                        cboNovaAssign.SelectedIndex = -1;
+
+
+
+                        mostraMissatge("Eliminar", "Se ha eliminado correctamente la tarea y todas las entradas relacionadas", "OK");
+                    }
+                    else
+                    {
+                        mostraMissatge("Error", "No se ha podido eliminar la tarea", "OK");
+                    }
+
+
+                }
+                else
+                {
+                    mostraMissatge("Error", "No se ha podido eliminar la tarea porque alguna entrada no se ha eliminado correctamente", "OK");
+                }
+                
+
+                
+
+            }
+            else
+            {
+                // The user clicked the CLoseButton, pressed ESC, Gamepad B, or the system back button.
+                // Do nothing.
+
+                btnEliminaTasca.IsEnabled = true;
+            }
+        }
+
+
+
+        private async void DisplayDeleteEntrada()
+        {
+            ContentDialog deleteFileDialog = new ContentDialog
+            {
+                Title = "Eliminar permanentemente",
+                Content = "¿Estás seguro de querer eliminar la entrada?",
+                PrimaryButtonText = "Eliminar",
+                CloseButtonText = "Cancelar"
+            };
+
+            ContentDialogResult result = await deleteFileDialog.ShowAsync();
+
+            // Delete the file if the user clicked the primary button.
+            /// Otherwise, do nothing.
+            if (result == ContentDialogResult.Primary)
+            {
+
+                if (CPGestioProjectes.deleteEntrada(entrada_seleccionada.Numero))
+                {
+                    entrades = CPGestioProjectes.GetEntradesTasca(tasca.Id);
+                    dtgEntrada.ItemsSource = null;
+                    dtgEntrada.ItemsSource = entrades;
+
+                    txbEntrada.Text = "";
+                    cboEscriptor.SelectedIndex = -1;
+                    cboNouEstat.SelectedIndex = -1;
+                    cboNovaAssign.SelectedIndex = -1;
+
+                    mostraMissatge("Eliminar", "Se ha eliminado la entrada correctamente", "OK");
+                }
+                else
+                {
+                    mostraMissatge("Error", "No se ha podido eliminar la entrada", "OK");
+                }
+
+            }
+            else
+            {
+                // The user clicked the CLoseButton, pressed ESC, Gamepad B, or the system back button.
+                // Do nothing.
+
+                btnEliminaEntrada.IsEnabled = true;
+            }
+        }
+
+
+
+
 
         private void btnCancelEntrada_Click(object sender, RoutedEventArgs e)
         {
+
+            if (entrada_seleccionada != null)
+            {
+                txbEntrada.Text = entrada_seleccionada.Entrada_e;
+
+
+                if (entrada_seleccionada.NovaAssignacio != null)
+                {
+                    for (int i = 0; i < usuaris_projecte.Count; i++)
+                    {
+                        if (usuaris_projecte[i].Id == entrada_seleccionada.NovaAssignacio.Id)
+                        {
+                            idxNovaAssignEntrada = i;
+                        }
+                    }
+                    cboPropietariTasca.SelectedIndex = idxNovaAssignEntrada;
+                }
+
+
+                for (int i = 0; i < usuaris_projecte.Count; i++)
+                {
+                    if (usuaris_projecte[i].Id == entrada_seleccionada.Escriptor.Id)
+                    {
+                        idxEscriptorEntrada = i;
+                    }
+                }
+                cboEscriptor.SelectedIndex = idxEscriptorEntrada;
+
+
+                if (entrada_seleccionada.NouEstat != null)
+                {
+                    for (int i = 0; i < estats.Count; i++)
+                    {
+                        if (estats[i].Codi_estat == entrada_seleccionada.NouEstat.Codi_estat)
+                        {
+                            idxEstatEntrada = i;
+                        }
+                    }
+                    cboNouEstat.SelectedIndex = idxEstatEntrada;
+                }
+
+
+
+            }
+
+
 
         }
 
         private void btnEliminaEntrada_Click(object sender, RoutedEventArgs e)
         {
-
+            btnEliminaEntrada.IsEnabled = false;
+            DisplayDeleteEntrada();
         }
 
         private void btnEliminaProjecte_Click(object sender, RoutedEventArgs e)
@@ -490,6 +847,143 @@ namespace GestioProjectes
 
 
             btnEliminaProjecte.IsEnabled = false;
+
+            DisplayDeleteProjecte();
+
+
+
+        }
+
+
+        private async void DisplayDeleteProjecte()
+        {
+            ContentDialog deleteFileDialog = new ContentDialog
+            {
+                Title = "Eliminar permanentemente",
+                Content = "¿Estás seguro de querer eliminar el proyecto? Se eliminarán TODAS las tareas y entradas asociadas",
+                PrimaryButtonText = "Eliminar",
+                CloseButtonText = "Cancelar"
+            };
+
+            ContentDialogResult result = await deleteFileDialog.ShowAsync();
+
+            // Delete the file if the user clicked the primary button.
+            /// Otherwise, do nothing.
+            if (result == ContentDialogResult.Primary)
+            {
+                bool esborrats = true;
+
+                foreach (Tasca t in tasques)
+                {
+                    if (!CPGestioProjectes.deleteEntradaCascade(t.Id))
+                    {
+                        esborrats = false;
+                    }
+                }
+                
+                if (esborrats)
+                {
+                    //En cas que s'hagin esborrat correctament les entrades corresponents, eliminar la tasca
+                    Debug.WriteLine("SE HAN ELIMINADO TODAS LAS ENTRADAS!!!");
+                    if (tasques.Count > 0)
+                    {
+                        if (!CPGestioProjectes.deleteTascaCascade(projecte.Id))
+                        {
+                            esborrats = false;
+                        }
+                    }
+
+
+
+
+                    if (esborrats)
+                    {
+                        Debug.WriteLine("SE HAN ELIMINADO TODAS LAS TASCAS!!!");
+
+                        
+                        if (!CPGestioProjectes.deleteProjecteUsuari(projecte.Id))
+                        {
+                            esborrats = false;
+                        }
+
+
+                        if (esborrats)
+                        {
+                            if (CPGestioProjectes.deleteProjecte(projecte.Id))
+                            {
+                                dtgEntrada.ItemsSource = null;
+
+                                tasques.Remove(tasca);
+                                dtgTasques.ItemsSource = null;
+
+
+                                txbNomTasca.Text = "";
+                                txbDescripcioTasca.Text = "";
+                                txbDataLimitTasca.SelectedDate = null;
+                                cboPropietariTasca.SelectedIndex = -1;
+                                cboResponsableTasca.SelectedIndex = -1;
+                                cboEstadoTasca.SelectedIndex = -1;
+
+
+                                txbEntrada.Text = "";
+                                cboEscriptor.SelectedIndex = -1;
+                                cboNouEstat.SelectedIndex = -1;
+                                cboNovaAssign.SelectedIndex = -1;
+
+                                dtgProjectes.ItemsSource = null;
+                                projectes.Remove(projecte);
+                                dtgProjectes.ItemsSource = projectes;
+
+                                txbNomProjecte.Text = "";
+                                txbDescProjecte.Text = "";
+                                cboCapProjecte.SelectedIndex = -1;
+
+                                mostraMissatge("Eliminar", "Se ha eliminado el proyecto correctamente", "OK");
+
+                            }
+                            else
+                            {
+                                mostraMissatge("Error", "No se ha podido eliminar el proyecto", "OK");
+                            }
+
+
+                        }
+                        else
+                        {
+                            mostraMissatge("Error", "No se ha podido eliminar el proyecto porque algun proyecto-usuario no se ha borrado", "OK");
+                        }
+
+                        
+
+
+                       
+
+                    }
+                    else
+                    {
+                        mostraMissatge("Error", "No se ha podido eliminar el proyecto porque alguna tarea no se ha eliminado correctamente", "OK");
+                    }
+
+
+
+
+                }
+                else
+                {
+                    mostraMissatge("Error", "No se ha podido eliminar el proyecto porque alguna entrada no se ha eliminado correctamente", "OK");
+                }
+
+
+
+
+            }
+            else
+            {
+                // The user clicked the CLoseButton, pressed ESC, Gamepad B, or the system back button.
+                // Do nothing.
+
+                btnEliminaProjecte.IsEnabled = true;
+            }
         }
     }
 }

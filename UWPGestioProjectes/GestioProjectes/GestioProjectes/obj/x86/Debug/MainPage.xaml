@@ -76,10 +76,49 @@
                 </Grid.RowDefinitions>
 
 
-                <Button x:ConnectionId='23' x:Name="btnNouProjecte"                              Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
-                <Button x:ConnectionId='24' x:Name="btnSaveProjecte"                               Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
-                <Button x:ConnectionId='25' x:Name="btnCancelProjecte"                                 Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
-                <Button x:ConnectionId='26' x:Name="btnEliminaProjecte"                                  Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+                <Button x:ConnectionId='23' x:Name="btnNouProjecte"                              Grid.Row="0" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                                FontFamily="Segoe MDL2 Assets" 
+                                Glyph="&#xE710;"/>
+                            <TextBlock Padding="6,0,0,0">Nuevo</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                
+                <Button x:ConnectionId='24' x:Name="btnSaveProjecte"                               Grid.Row="2" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74E;"/>
+                            <TextBlock Padding="6,0,0,0">Guardar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                
+                <Button x:ConnectionId='25' x:Name="btnCancelProjecte"                                 Grid.Row="1" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#59180;"/>
+                            <TextBlock Padding="6,0,0,0">Cancelar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='26' x:Name="btnEliminaProjecte"                                  Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74D;"/>
+                            <TextBlock Padding="6,0,0,0">Eliminar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
             </Grid>
 
@@ -181,16 +220,52 @@
                 </Grid.RowDefinitions>
 
 
-                <Button x:ConnectionId='12' x:Name="btnNouTasca"                           Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
-                <Button x:ConnectionId='13' x:Name="btnSaveTasca"                            Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
-                <Button x:ConnectionId='14' x:Name="btnCancelTasca"                              Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
-                <Button x:ConnectionId='15' x:Name="btnEliminaTasca"                               Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+                <Button x:ConnectionId='12' x:Name="btnNouTasca"                           Grid.Row="0" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                                FontFamily="Segoe MDL2 Assets" 
+                                Glyph="&#xE710;"/>
+                            <TextBlock Padding="6,0,0,0">Nuevo</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='13' x:Name="btnSaveTasca"                            Grid.Row="2" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74E;"/>
+                            <TextBlock Padding="6,0,0,0">Guardar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='14' x:Name="btnCancelTasca"                              Grid.Row="1" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#59180;"/>
+                            <TextBlock Padding="6,0,0,0">Cancelar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='15' x:Name="btnEliminaTasca"                               Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74D;"/>
+                            <TextBlock Padding="6,0,0,0">Eliminar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
             </Grid>
 
         </Grid>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0,70,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -208,9 +283,9 @@
                     <controls:DataGridTextColumn Header="Fecha Entrada" Binding="{Binding DataEntrada}"></controls:DataGridTextColumn>
 
                     <controls:DataGridTextColumn Header="Entrada" Binding="{Binding Entrada_e}"></controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Escritor" Binding="{Binding Escriptor.id}"></controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Nueva assignación" Binding="{Binding Propietari.NovaAssignacio.id}"></controls:DataGridTextColumn>
-                    <controls:DataGridTextColumn Header="Nuevo estado" Binding="{Binding Responsable.NouEstat}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Escritor" Binding="{Binding Escriptor.Nomcomplet}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nueva assignación" Binding="{Binding NovaAssignacio.Nomcomplet}"></controls:DataGridTextColumn>
+                    <controls:DataGridTextColumn Header="Nuevo estado" Binding="{Binding NouEstat.Nom_estat}"></controls:DataGridTextColumn>
                     
 
                 </controls:DataGrid.Columns>
@@ -220,7 +295,7 @@
 
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="Entrada " VerticalAlignment="Center"></TextBlock>
-                <TextBox x:ConnectionId='10' x:Name="txbEntrada" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Height="200"></TextBox>
+                <TextBox x:ConnectionId='10' x:Name="txbEntrada" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Height="150" AcceptsReturn="True"></TextBox>
             </StackPanel>
 
             <Grid Grid.Column="2">
@@ -261,10 +336,46 @@
                 </Grid.RowDefinitions>
 
 
-                <Button x:ConnectionId='3' x:Name="btnNouEntrada"                             Grid.Row="0" HorizontalAlignment="Center">Nuevo</Button>
-                <Button x:ConnectionId='4' x:Name="btnSaveEntrada"                              Grid.Row="2" HorizontalAlignment="Center">Guardar</Button>
-                <Button x:ConnectionId='5' x:Name="btnCancelEntrada"                                Grid.Row="1" HorizontalAlignment="Center">Cancelar</Button>
-                <Button x:ConnectionId='6' x:Name="btnEliminaEntrada"                                 Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">Eliminar</Button>
+                <Button x:ConnectionId='3' x:Name="btnNouEntrada"                             Grid.Row="0" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                                FontFamily="Segoe MDL2 Assets" 
+                                Glyph="&#xE710;"/>
+                            <TextBlock Padding="6,0,0,0">Nuevo</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='4' x:Name="btnSaveEntrada"                              Grid.Row="2" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74E;"/>
+                            <TextBlock Padding="6,0,0,0">Guardar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='5' x:Name="btnCancelEntrada"                                Grid.Row="1" HorizontalAlignment="Center">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#59180;"/>
+                            <TextBlock Padding="6,0,0,0">Cancelar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button x:ConnectionId='6' x:Name="btnEliminaEntrada"                                 Grid.Row="3" HorizontalAlignment="Center" IsEnabled="False">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon 
+                            FontFamily="Segoe MDL2 Assets" 
+                            Glyph="&#xE74D;"/>
+                            <TextBlock Padding="6,0,0,0">Eliminar</TextBlock>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
             </Grid>
 

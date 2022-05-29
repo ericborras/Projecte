@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Roots >
   <Roots.PropertyPathNames>
-    <RootPropertyPathName Name="Responsable" />
     <RootPropertyPathName Name="NouEstat" />
-    <RootPropertyPathName Name="Propietari" />
+    <RootPropertyPathName Name="Nom_estat" />
     <RootPropertyPathName Name="NovaAssignacio" />
-    <RootPropertyPathName Name="id" />
+    <RootPropertyPathName Name="Nomcomplet" />
     <RootPropertyPathName Name="Escriptor" />
     <RootPropertyPathName Name="Entrada_e" />
     <RootPropertyPathName Name="DataEntrada" />
     <RootPropertyPathName Name="Numero" />
     <RootPropertyPathName Name="Estat" />
-    <RootPropertyPathName Name="Nom_estat" />
-    <RootPropertyPathName Name="Nomcomplet" />
+    <RootPropertyPathName Name="Responsable" />
+    <RootPropertyPathName Name="Propietari" />
     <RootPropertyPathName Name="DataLimit" />
     <RootPropertyPathName Name="DataCreacio" />
     <RootPropertyPathName Name="Descripcio" />
@@ -64,7 +63,13 @@
       <RootProperty Name="IsEnabled" />
       <RootEvent Name="Click" />
     </RootType>
+    <RootType FullName="Windows.UI.Xaml.Controls.FontIcon">
+      <RootProperty Name="FontFamily" />
+      <RootProperty Name="Glyph" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.TextBlock">
+      <RootProperty Name="Padding" />
+      <RootProperty Name="Inlines" />
       <RootProperty Name="Text" />
       <RootProperty Name="VerticalAlignment" />
     </RootType>

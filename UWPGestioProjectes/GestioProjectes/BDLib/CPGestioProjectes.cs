@@ -711,7 +711,77 @@ namespace BDLib
 
                          Entrada entrada = new Entrada(numero,data_entrada,ent);
 
+                         try
+                         {
+                             int id_nova_assign = reader.GetInt32(ordinals["novass_id"]);
+                             String novass_nom = reader.GetString(ordinals["novass_nom"]);
+                             String novass_cognom1 = reader.GetString(ordinals["novass_cognom1"]);
 
+                             String novass_cognom2 = null;
+                             try
+                             {
+                                 novass_cognom2 = reader.GetString(ordinals["novass_cognom2"]);
+                             }
+                             catch { }
+                             
+                             Usuari nova_assignacio;
+                             if (novass_cognom2 != null)
+                             {
+                                 nova_assignacio = new Usuari(id_nova_assign, novass_nom, novass_cognom1, novass_cognom2);
+                                 nova_assignacio.Nomcomplet = novass_nom + " " + novass_cognom1 + " " + novass_cognom2;
+                             }
+                             else
+                             {
+                                 nova_assignacio = new Usuari(id_nova_assign, novass_nom, novass_cognom1, null);
+                                 nova_assignacio.Nomcomplet = novass_nom + " " + novass_cognom1;
+                             }
+
+                             entrada.NovaAssignacio = nova_assignacio;
+
+                         }
+                         catch
+                         {}
+
+
+
+                             
+
+
+
+
+                         int id_escriptor = reader.GetInt32(ordinals["escriptor_id"]);
+                         String nom_escriptor = reader.GetString(ordinals["escriptor_nom"]);
+                         String cognom1_escriptor = reader.GetString(ordinals["escriptor_cognom1"]);
+
+                         Usuari escriptor;
+
+                         String cognom2_escriptor = null;
+                         try
+                         {
+                             cognom2_escriptor = reader.GetString(ordinals["escriptor_cognom2"]);
+                         }
+                         catch { }
+                         
+                         if (cognom2_escriptor != null)
+                         {
+                             escriptor = new Usuari(id_escriptor,nom_escriptor,cognom1_escriptor,cognom2_escriptor);
+                             escriptor.Nomcomplet = nom_escriptor + " " + cognom1_escriptor + " " + cognom2_escriptor;
+                         }
+                         else
+                         {
+                             escriptor = new Usuari(id_escriptor, nom_escriptor, cognom1_escriptor, null);
+                             escriptor.Nomcomplet = nom_escriptor + " " + cognom1_escriptor;
+                         }
+                         entrada.Escriptor = escriptor;
+
+                         int id_estat = reader.GetInt32(ordinals["estat_id"]);
+                         String nom_estat = reader.GetString(ordinals["estat_nom"]);
+
+                         if (nom_estat != null)
+                         {
+                             Estat estat = new Estat(id_estat, nom_estat);
+                             entrada.NouEstat = estat;
+                         }
 
 
 
@@ -724,6 +794,355 @@ namespace BDLib
                  });
         }
 
+
+
+        public static bool InsertEntrada(Entrada entrada, int tasca_id)
+        {
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        DBUtils.crearParametre(consulta, "data_entrada", entrada.DataEntrada, DbType.DateTime);
+                        DBUtils.crearParametre(consulta, "entrada", entrada.Entrada_e, DbType.String);
+                        DBUtils.crearParametre(consulta, "escriptor", entrada.Escriptor.Id, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "nou_estat", entrada.NouEstat.Codi_estat, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "nova_assignacio", entrada.NovaAssignacio.Id, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "tasca_id", tasca_id, DbType.Int32);
+
+                       
+
+                        consulta.CommandText = "insert into entrada(numero,data_entrada,entrada,escriptor,nou_estat,nova_assignacio,tasca_id) values(null,@data_entrada,@entrada,@escriptor,@nou_estat,@nova_assignacio,@tasca_id)";
+
+                        int numeroDeFiles = -1;
+
+                        try
+                        {
+                            numeroDeFiles = consulta.ExecuteNonQuery(); //per fer un update o un delete
+                        }
+                        catch { }
+
+                        if (numeroDeFiles != 1)
+                        {
+                            //shit happens
+                            transaccio.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            transaccio.Commit();
+                            return true;
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+        public static bool updateEntrada(Entrada e)
+        {
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        DBUtils.crearParametre(consulta, "numero", e.Numero, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "entrada", e.Entrada_e, DbType.String);
+                        DBUtils.crearParametre(consulta, "escriptor", e.Escriptor.Id, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "nou_estat", e.NouEstat.Codi_estat, DbType.Int32);
+                        DBUtils.crearParametre(consulta, "nova_assignacio", e.NovaAssignacio.Id, DbType.Int32);
+
+                        Debug.WriteLine("NUMERO: " + e.Numero + " ENTRADA: " + e.Entrada_e + " ESCRITOR: " + e.Escriptor.Nom + " ESTADO: " + e.NouEstat.Nom_estat + " ASSIGNACION: " + e.NovaAssignacio.Nom);
+                        consulta.CommandText = "update entrada set entrada = @entrada, escriptor = @escriptor, nou_estat = @nou_estat, nova_assignacio = @nova_assignacio where numero = @numero";
+                       
+
+                        int numeroDeFiles = -1;
+
+                        try
+                        {
+                            numeroDeFiles = consulta.ExecuteNonQuery(); //per fer un update o un delete
+                        }
+                        catch { }
+
+
+                        if (numeroDeFiles != 1)
+                        {
+                            //shit happens
+                            transaccio.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            transaccio.Commit();
+                            return true;
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+
+
+        public static bool deleteEntrada(int id_entrada)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        Debug.WriteLine("ID ENTRADA: " + id_entrada);
+                        DBUtils.crearParametre(consulta, "numero", id_entrada, DbType.Int32);
+
+                        consulta.CommandText = "delete from entrada where numero = @numero ";
+
+
+                        int numDeleted = consulta.ExecuteNonQuery();
+                        Debug.WriteLine("NUMDELETED ENTRADA: " + numDeleted);
+                        if (numDeleted != 1)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        transaccio.Commit();
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
+
+
+
+        public static bool deleteTasca(int id_tasca)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+
+                        DBUtils.crearParametre(consulta, "id_tasca", id_tasca, DbType.Int32);
+
+                        consulta.CommandText = "delete from tasca where id = @id_tasca ";
+
+
+                        int numDeleted = -1;
+                        try
+                        {
+                            numDeleted = consulta.ExecuteNonQuery();
+                        }
+                        catch(Exception ex)
+                        {
+                            Debug.WriteLine("ERRORRRRR: " + ex.Message);
+                        }
+
+                        
+                           
+                        if (numDeleted != 1)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        else
+                        {
+                            transaccio.Commit();
+                        }
+                        
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
+
+
+        public static bool deleteProjecte(int id_projecte)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        Debug.WriteLine("ID PROJECTE: "+id_projecte);
+                        DBUtils.crearParametre(consulta, "id_projecte", id_projecte, DbType.Int32);
+
+                        consulta.CommandText = "delete from projecte where id = @id_projecte ";
+
+
+                        int numDeleted = consulta.ExecuteNonQuery();
+                        if (numDeleted != 1)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        transaccio.Commit();
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
+
+
+        public static bool deleteProjecteUsuari(int id_projecte)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        Debug.WriteLine("ID PROJECTE: " + id_projecte);
+                        DBUtils.crearParametre(consulta, "id_projecte", id_projecte, DbType.Int32);
+
+                        consulta.CommandText = "delete from projecte_usuari where id_projecte = @id_projecte ";
+
+
+                        int numDeleted = consulta.ExecuteNonQuery();
+                        if (numDeleted == 0)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        transaccio.Commit();
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
+
+
+
+        public static bool deleteTascaCascade(int id_projecte)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+
+                        DBUtils.crearParametre(consulta, "id_projecte", id_projecte, DbType.Int32);
+
+                        consulta.CommandText = "delete from tasca where projecte_id = @id_projecte";
+
+
+                        int numDeleted = -1;
+                        try
+                        {
+                            numDeleted = consulta.ExecuteNonQuery();
+                        }
+                        catch { }
+
+                        Debug.WriteLine("NUMDELETED TASCA CASCADE: " + numDeleted);
+                        if (numDeleted == 0)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        else
+                        {
+                            transaccio.Commit();
+                        }
+
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
+
+
+        public static bool deleteEntradaCascade(int id_tasca)
+        {
+            bool haAnatBe = true;
+            using (MyDBContext context = new MyDBContext(stringConn)) //crea el contexte de la base de dades
+            {
+                using (DbConnection connection = context.Database.GetDbConnection()) //pren la conexxio de la BD
+                {
+                    connection.Open();
+                    DbTransaction transaccio = connection.BeginTransaction(); //Creacio d'una transaccio
+
+                    using (DbCommand consulta = connection.CreateCommand())
+                    {
+                        consulta.Transaction = transaccio; // marques la consulta dins de la transacció
+
+                        DBUtils.crearParametre(consulta, "numero", id_tasca, DbType.Int32);
+
+                        consulta.CommandText = "delete from entrada where tasca_id = @numero ";
+
+
+                        int numDeleted = consulta.ExecuteNonQuery();
+                        Debug.WriteLine("NUMDELETED ENTRADA: " + numDeleted);
+                        if (numDeleted == 0)
+                        {
+                            transaccio.Rollback();
+                            haAnatBe = false;
+                        }
+                        else
+                        {
+                            transaccio.Commit();
+                        }
+                        
+                        return haAnatBe;
+                    }
+                }
+
+            }
+        }
 
 
         public void close()
