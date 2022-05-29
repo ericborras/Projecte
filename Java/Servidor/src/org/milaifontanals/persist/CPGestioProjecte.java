@@ -46,6 +46,9 @@ public class CPGestioProjecte implements IPersistence{
     PreparedStatement psNotificacionsPendents;
     PreparedStatement psNovaEntrada;
     PreparedStatement psUsuarisProjecte;
+    PreparedStatement psTasquesFiltre;
+    PreparedStatement psProjecteFiltre;
+    
     
     @Override
     public void connect(String nomFitx) {
@@ -528,6 +531,96 @@ public class CPGestioProjecte implements IPersistence{
         return usuaris;
     }
     
+    //Passar els possibles filtres per llegir el resultset que pertoqui
+    public List<Tasca> getTasquesFiltre(String sql, String nomTasca, String descripcioTasca, boolean tascaTancada){
+        
+        List<Tasca> tasques = new ArrayList();
+        
+        Statement stTasques = null;
+        ResultSet rsTasques = null;
+        
+        try {
+            stTasques = con.createStatement();
+            
+            
+            
+            //public Tasca(int id, Date dataCreacio, String nom, String descripcio, Date dataLimit, Usuari responsable) {
+            
+            if(nomTasca.length()>0 && descripcioTasca.length()>0 && tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);                                
+            }else if(nomTasca.length()>0 && descripcioTasca.length()>0 && !tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()==0 && descripcioTasca.length()>0 && !tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()>0 && descripcioTasca.length()==0 && !tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()==0 && descripcioTasca.length()>0 && tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()>0 && descripcioTasca.length()==0 && tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()==0 && descripcioTasca.length()==0 && tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }else if(nomTasca.length()==0 && descripcioTasca.length()==0 && !tascaTancada){
+                rsTasques = stTasques.executeQuery(sql);
+            }
+            
+
+            while(rsTasques.next()){
+                tasques.add(new Tasca(rsTasques.getInt("id"),rsTasques.getDate("data_creacio"),rsTasques.getString("nom"),
+                                rsTasques.getString("descripcio"), rsTasques.getDate("data_limit"),new Usuari(rsTasques.getInt("responsable_id"),
+                                rsTasques.getString("responsable_nom"), rsTasques.getString("responsable_cognom1"))));
+
+            }
+            
+        } catch (SQLException ex) {
+            throw new ServidorException("Error: ",ex);
+        }
+        
+        
+        
+        return tasques;
+        
+    }
+    
+    
+    
+    public List<Projecte> getProjectesFiltre(int id_usuari, int id_projecte){
+        List<Projecte> projectes = new ArrayList();
+        
+        Projecte projecte = null;
+        Usuari capProjecte = null;
+        
+        Statement stProjectes = null;
+        ResultSet rsProjectes = null;
+
+        try {
+            stProjectes = con.createStatement();
+            
+            psProjecteFiltre.setInt(1, id_usuari);
+            psProjecteFiltre.setInt(2, id_projecte);
+            
+            
+            rsProjectes = psProjecteFiltre.executeQuery();
+            System.out.println("CONSULTA: "+psProjecteFiltre.toString());
+            while(rsProjectes.next()){
+                projecte = new Projecte(rsProjectes.getInt("id"),rsProjectes.getString("nom"),rsProjectes.getString("descripcio"));              
+                
+                capProjecte = new Usuari(rsProjectes.getInt("id_cap_projecte"),rsProjectes.getString("nom_cap_projecte"),rsProjectes.getString("cognom1"));
+                projecte.setCapProjecte(capProjecte);
+                
+                
+                projectes.add(projecte);
+            }                   
+        } catch (SQLException ex) {
+            throw new ServidorException("Error: ",ex);
+        }
+        
+        
+        return projectes;
+    }
+    
+    
+    
     private void prepararStatements() throws SQLException {
         
         //Consulta login
@@ -574,6 +667,11 @@ public class CPGestioProjecte implements IPersistence{
         psUsuarisProjecte = con.prepareStatement("select u.id, u.nom, u.cognom1, u.cognom2\n" +
                                                 "from projecte_usuari pu join usuari u on pu.id_usuari = u.id\n" +
                                                 "where pu.id_projecte = ?");
+        
+        psProjecteFiltre = con.prepareStatement("select p.id, p.nom, p.descripcio, u.nom as nom_cap_projecte, u.cognom1, u.id as id_cap_projecte\n" +
+                                                "      from projecte p join projecte_usuari pr on p.id = pr.id_projecte \n" +
+                                                "      join usuari u on u.id = p.cap_projecte\n" +
+                                                "where pr.id_usuari = ? and p.id = ?");
         
     
     }

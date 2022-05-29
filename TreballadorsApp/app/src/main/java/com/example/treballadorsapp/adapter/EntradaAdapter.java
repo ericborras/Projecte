@@ -1,5 +1,6 @@
 package com.example.treballadorsapp.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,13 +46,19 @@ public class EntradaAdapter extends RecyclerView.Adapter<EntradaAdapter.ViewHold
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         holder.txvDataEntrada.setText(sdf.format(actual.getDataEntrada()));
 
-        if(actual.getNovaAssignacio()!=null){
+        Log.e("PROVA","ACTUAL "+actual.getNovaAssignacio());
+        try{
+            if(!actual.getNovaAssignacio().getNom().equals("null") && !actual.getNovaAssignacio().getNom().equals("null")){
 
-            if(actual.getNovaAssignacio().getCognom2()!=null){
-                holder.txvNovaAssignacioEntrada.setText(actual.getNovaAssignacio().getNom()+" "+actual.getNovaAssignacio().getCognom1()+" "+actual.getNovaAssignacio().getCognom2());
-            }else{
-                holder.txvNovaAssignacioEntrada.setText(actual.getNovaAssignacio().getNom()+" "+actual.getNovaAssignacio().getCognom1());
+                if(actual.getNovaAssignacio().getCognom2()!=null){
+                    holder.txvNovaAssignacioEntrada.setText(actual.getNovaAssignacio().getNom()+" "+actual.getNovaAssignacio().getCognom1()+" "+actual.getNovaAssignacio().getCognom2());
+                }else{
+                    holder.txvNovaAssignacioEntrada.setText(actual.getNovaAssignacio().getNom()+" "+actual.getNovaAssignacio().getCognom1());
+                }
             }
+        }catch (Exception ex){
+            Log.e("PROVA","SOC NULL");
+            holder.txvNovaAssignacioEntrada.setText("");
         }
 
         if(actual.getNouEstat()!=null){

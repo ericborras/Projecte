@@ -54,7 +54,13 @@ public class TascaAdapter extends RecyclerView.Adapter<TascaAdapter.ViewHolder>{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         holder.txvDataLimitTasca.setText(sdf.format(actual.getDataCreacio()));
 
-        holder.txvEstatTasca.setText(actual.getEstat().toString());
+        try{
+            holder.txvEstatTasca.setText(actual.getEstat().toString());
+        }catch(Exception ex){
+
+        }
+
+
 
 
 

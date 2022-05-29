@@ -178,6 +178,53 @@ public class ServerThread extends Thread{
                     
                     break;
                     
+                case 7:
+                    
+                    //Cas de consulta personalitzada de la cerca
+                    String consulta = ois.readUTF();
+                    
+                    System.out.println("CONSULTA: "+consulta);
+                    
+                    String nomTasca = ois.readUTF();
+                    String descripcioTasca = ois.readUTF();
+                    boolean tascaTancada = ois.readBoolean();
+                    
+                    List<Tasca> tasques_filtre = capa_pers.getTasquesFiltre(consulta, nomTasca, descripcioTasca, tascaTancada);
+                    
+                    
+                    out.writeInt(tasques_filtre.size());
+                    out.flush();
+                    
+                    for(Tasca t : tasques_filtre){
+                        out.writeObject(t);
+                        out.flush();
+                    }
+                    
+                    if(ois.readInt()==0){
+                        System.out.println("FILTRE TASQUES HA ANAT BÉ");
+                    }else{
+                        System.out.println("FILTRE TASQUES NO HA ANAT BÉ");
+                    }
+                    
+                    break;
+                    
+                case 8:
+                    
+                    id_usuari = ois.readInt();
+                    id_projecte = ois.readInt();
+                    
+                    List<Projecte> projectes_filtre = capa_pers.getProjectesFiltre(id_usuari, id_projecte);
+                    
+                    out.writeObject(projectes_filtre.get(0));
+                    out.flush();
+                    
+                    if(ois.readInt()==0){
+                        System.out.println("FILTRE PROJECTES HA ANAT BÉ");
+                    }else{
+                        System.out.println("FILTRE PROJECTES NO HA ANAT BÉ");
+                    }
+                    
+                    break;
             }
                                 
             out.close();
