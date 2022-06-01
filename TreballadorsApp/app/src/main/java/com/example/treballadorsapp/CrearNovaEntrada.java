@@ -2,6 +2,7 @@ package com.example.treballadorsapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -194,7 +195,23 @@ public class CrearNovaEntrada extends AppCompatActivity implements View.OnClickL
                     out.flush();
 
                     if(ois.readInt()==1){
+                        LayoutInflater inflater = getLayoutInflater();
+                        View layout = inflater.inflate(R.layout.toast_layout,
+                                (ViewGroup) findViewById(R.id.toast_layout_root));
+                        txvToast = (TextView) layout.findViewById(R.id.txvToast);
+                        txvToast.setText("La entrada se ha creado correctamente");
+
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(layout);
+                        toast.show();
+
+
+
                         Log.e("PROVA", "S'HA INSERTAT CORRECTAMENT");
+
+                        Intent i = new Intent(this,EntradesActivity.class);
+                        startActivity(i);
                     }else{
                         Log.e("PROVA","HI HA HAGUT ALGUN ERROR");
                     }
@@ -237,6 +254,7 @@ public class CrearNovaEntrada extends AppCompatActivity implements View.OnClickL
                 toast.setView(layout);
                 toast.show();
             }
+
 
         }else if(view.getId()==R.id.btnCancelar){
 

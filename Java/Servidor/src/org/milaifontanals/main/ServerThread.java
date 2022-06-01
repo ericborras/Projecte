@@ -35,7 +35,7 @@ public class ServerThread extends Thread{
             
             CPGestioProjecte capa_pers = new CPGestioProjecte();
             capa_pers.connect(arxiu);
-                                                                   
+                                                                               
             System.out.println("Abans tipus operacio");
             int tipus_operacio = ois.readInt();
             System.out.println("Tipus operació: "+tipus_operacio);

@@ -64,7 +64,6 @@ public class UI {
     private ServerSocket socket_connections;
     
     private static final int port = 44444;
-    private static final String address = "10.132.0.120";
     
     public UI(){
         capa_pers = new CPGestioProjecte();
@@ -130,27 +129,37 @@ public class UI {
                 thread.stop();
                 
             }else if(button.getName().equals("engega")){
-                System.out.println("engega");
-                capa_pers.connect(arxiu);
-                btn_atura.setEnabled(true);
-                btn_engega.setEnabled(false);
+                
+                thread = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        System.out.println("engega");
+                        capa_pers.connect(arxiu);
+                        btn_atura.setEnabled(true);
+                        btn_engega.setEnabled(false);
 
 
-                try (ServerSocket serverSocket = new ServerSocket(port)) {
- 
-                    System.out.println("Server is listening on port " + port);
+                        try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-                    while (true) {
-                        Socket socket = serverSocket.accept();
-                        System.out.println("New client connected");
+                            System.out.println("Server is listening on port " + port);
 
-                        new ServerThread(socket).start();
+                            while (true) {
+                                Socket socket = serverSocket.accept();
+                                System.out.println("New client connected");
+
+                                new ServerThread(socket).start();
+                            }
+
+                        } catch (IOException ex) {
+                            System.out.println("Server exception: " + ex.getMessage());
+                            ex.printStackTrace();
+                        }
+                    
                     }
-
-                } catch (IOException ex) {
-                    System.out.println("Server exception: " + ex.getMessage());
-                    ex.printStackTrace();
-                }
+                });
+                thread.start();
+                
+                
                 
                 /*
                 

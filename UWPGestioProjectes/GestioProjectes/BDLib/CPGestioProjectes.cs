@@ -580,11 +580,19 @@ namespace BDLib
                         DBUtils.crearParametre(consulta, "descripcio", t.Descripcio, DbType.String);
                         DBUtils.crearParametre(consulta, "data_limit", t.DataLimit, DbType.DateTime);
                         DBUtils.crearParametre(consulta, "propietari", t.Propietari.Id, DbType.Int32);
-                        DBUtils.crearParametre(consulta, "responsable", t.Responsable.Id, DbType.Int32);
+                        if (t.Responsable != null)
+                        {
+                            DBUtils.crearParametre(consulta, "responsable", t.Responsable.Id, DbType.Int32);
+                        }
+                        else
+                        {
+                            DBUtils.crearParametre(consulta, "responsable", null, DbType.Int32);
+                        }
+                        
                         DBUtils.crearParametre(consulta, "id_estat", t.Estat.Codi_estat, DbType.Int32);
                         DBUtils.crearParametre(consulta, "projecte_id", projecte_id, DbType.Int32);
 
-                        Debug.WriteLine("DATA CREACIO " + t.DataCreacio + " NOM " + t.Nom + " DESCRIPCIO " + t.Descripcio + " DATA LIMIT " + t.DataLimit + " PROPIETARI" + t.Propietari.Id + " RESPONSABLE " + t.Responsable.Id + " ESTAT " + t.Estat.Codi_estat + " PROJECTE " + projecte_id);
+                        //Debug.WriteLine("DATA CREACIO " + t.DataCreacio + " NOM " + t.Nom + " DESCRIPCIO " + t.Descripcio + " DATA LIMIT " + t.DataLimit + " PROPIETARI" + t.Propietari.Id + " RESPONSABLE " + t.Responsable.Id + " ESTAT " + t.Estat.Codi_estat + " PROJECTE " + projecte_id);
 
                         consulta.CommandText = "insert into tasca values(NULL, @data_creacio, @nom, @descripcio, @data_limit, @propietari, @responsable, @id_estat, @projecte_id)";
 

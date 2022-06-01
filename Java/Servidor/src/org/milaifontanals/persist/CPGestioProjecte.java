@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +50,13 @@ public class CPGestioProjecte implements IPersistence{
     PreparedStatement psTasquesFiltre;
     PreparedStatement psProjecteFiltre;
     
+    SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    
+    
+    private Date getActualDate(){
+        return new Date(System.currentTimeMillis());
+    }
+    
     
     @Override
     public void connect(String nomFitx) {
@@ -71,11 +79,12 @@ public class CPGestioProjecte implements IPersistence{
         // Ja tenim les 3 propietats
         con = null;
         try {
+            
+            
             con = DriverManager.getConnection(url, usu, pwd);
             con.setAutoCommit(false);//Evitar autocommit
             con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            llista_log.add(0,"Connectat a la base de dades correctament");
-            System.out.println("Connectat a la base de dades correctament");
+            llista_log.add(0,"Usuario "+usu+" conectado a la base de datos correctamente en la dirección "+url+" a las "+formatter.format(getActualDate()));           
             prepararStatements();
         } catch (SQLException ex) {
             llista_log.add(0,"Error en establir connexió amb la BD. Més info: "+ex.getMessage());
@@ -89,7 +98,7 @@ public class CPGestioProjecte implements IPersistence{
             if (con != null) {
                 rollback(); // Si no es fa commit o rollback casca... Excepció
                 con.close();
-                llista_log.add(0,"Connexió amb la base de dades tancada correctament");
+                llista_log.add(0,"Conexión con la base de datos cerrada correctamente a las "+formatter.format(getActualDate()));
                 System.out.println("Connexió amb la base de dades tancada correctament");
             }
         } catch (SQLException ex) {

@@ -86,8 +86,21 @@ namespace GestioProjectes
                 usuaris_projecte = CPGestioProjectes.GetUsuarisProjecte(projecte.Id);
                 cboCapProjecte.ItemsSource = usuaris_projecte;
                 cboCapProjecte.DisplayMemberPath = "Nomcomplet";
-                             
-                for(int i = 0; i < usuaris_projecte.Count; i++)
+
+                cboPropietariTasca.ItemsSource = usuaris_projecte;
+                cboPropietariTasca.DisplayMemberPath = "Nomcomplet";
+
+                cboResponsableTasca.ItemsSource = usuaris_projecte;
+                cboResponsableTasca.DisplayMemberPath = "Nomcomplet";
+
+                cboNovaAssign.ItemsSource = usuaris_projecte;
+                cboNovaAssign.DisplayMemberPath = "Nomcomplet";
+
+                cboEscriptor.ItemsSource = usuaris_projecte;
+                cboEscriptor.DisplayMemberPath = "Nomcomplet";
+
+
+                for (int i = 0; i < usuaris_projecte.Count; i++)
                 {
                     if (usuaris_projecte[i].Id == projecte.CapProjecte.Id)
                     {
@@ -96,6 +109,13 @@ namespace GestioProjectes
                 }
                 cboCapProjecte.SelectedIndex = idxCapProjecte;
 
+
+                estats = CPGestioProjectes.GetUsuarisTasquesEstats();
+                cboEstadoTasca.ItemsSource = estats;
+                cboEstadoTasca.DisplayMemberPath = "Nom_estat";
+
+                cboNouEstat.ItemsSource = estats;
+                cboNouEstat.DisplayMemberPath = "Nom_estat";
 
                 tasques = CPGestioProjectes.GetUsuarisTasquesProjecte(projecte.Id);
                 dtgTasques.ItemsSource = tasques;
@@ -445,10 +465,18 @@ namespace GestioProjectes
 
                 for(int i = 0;i< usuaris_projecte.Count; i++)
                 {
-                    if(usuaris_projecte[i].Id == tasca.Responsable.Id)
+                    if (tasca.Responsable != null)
                     {
-                        idxResponsableTasca = i;
+                        if (usuaris_projecte[i].Id == tasca.Responsable.Id)
+                        {
+                            idxResponsableTasca = i;
+                        }
                     }
+                    else
+                    {
+                        idxResponsableTasca = -1;
+                    }
+
                 }
                 cboResponsableTasca.SelectedIndex = idxResponsableTasca;
 
