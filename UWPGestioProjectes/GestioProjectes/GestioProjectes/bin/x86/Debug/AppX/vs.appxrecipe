@@ -30,13 +30,13 @@
     <AppXManifest Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2022-05-29T21:50:29.331</Modified>
+      <Modified>2022-06-01T14:00:06.872</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\GestioProjectes.exe">
       <PackagePath>entrypoint\GestioProjectes.exe</PackagePath>
-      <Modified>2022-05-29T21:50:28.859</Modified>
+      <Modified>2022-06-01T14:00:06.375</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Lenovo T530\.nuget\packages\bouncycastle.netcore\1.8.3\lib\netstandard2.0\BouncyCastle.Crypto.dll">
       <PackagePath>BouncyCastle.Crypto.dll</PackagePath>
@@ -184,7 +184,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\BDLib\bin\Debug\netstandard2.0\BDLib.dll">
       <PackagePath>BDLib.dll</PackagePath>
-      <Modified>2022-05-29T21:45:06.047</Modified>
+      <Modified>2022-06-01T13:36:01.089</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\bin\10.0.18362.0\XamlCompiler\Microsoft.UI.Xaml.Markup.winmd">
       <PackagePath>Microsoft.UI.Xaml.Markup.winmd</PackagePath>
@@ -194,9 +194,17 @@
       <PackagePath>Microsoft.Toolkit.Uwp.UI.Controls.DataGrid\Microsoft.Toolkit.Uwp.UI.Controls.DataGrid.xr.xml</PackagePath>
       <Modified>2020-08-12T20:03:04.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Properties\Default.rd.xml">
-      <PackagePath>Properties\Default.rd.xml</PackagePath>
-      <Modified>2022-05-24T09:16:34.833</Modified>
+    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Assets\images\fondo.jpg">
+      <PackagePath>Assets\images\fondo.jpg</PackagePath>
+      <Modified>2022-06-01T13:53:18.783</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Assets\images\fons2.jpg">
+      <PackagePath>Assets\images\fons2.jpg</PackagePath>
+      <Modified>2022-06-01T13:49:24.002</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Assets\images\fons.png">
+      <PackagePath>Assets\images\fons.png</PackagePath>
+      <Modified>2022-06-01T13:39:05.465</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
@@ -232,17 +240,25 @@
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
       <Modified>2021-01-31T20:42:27.129</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\Properties\Default.rd.xml">
+      <PackagePath>Properties\Default.rd.xml</PackagePath>
+      <Modified>2022-05-24T09:16:34.833</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\GestioProjectes.xr.xml">
       <PackagePath>GestioProjectes.xr.xml</PackagePath>
-      <Modified>2022-05-29T19:31:57.352</Modified>
+      <Modified>2022-06-01T13:53:43.946</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2022-05-29T21:50:28.786</Modified>
+      <Modified>2022-06-01T13:42:48.974</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2022-05-29T21:50:28.786</Modified>
+      <Modified>2022-06-01T14:00:06.283</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Report.xbf">
+      <PackagePath>Report.xbf</PackagePath>
+      <Modified>2022-06-01T13:42:48.974</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.18362.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
@@ -250,11 +266,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2022-05-29T11:01:37.350</Modified>
+      <Modified>2022-06-01T13:53:44.226</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Core\GestioProjectes.exe">
       <PackagePath>GestioProjectes.exe</PackagePath>
-      <Modified>2022-05-29T21:50:29.331</Modified>
+      <Modified>2022-06-01T14:00:06.856</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

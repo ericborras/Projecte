@@ -13,6 +13,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.DefaultListModel;
 import org.milaifontanals.IPersistence;
+import org.milaifontanals.PersistenceException;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.ProjecteUsuari;
 import org.milaifontanals.model.Rol;
@@ -22,7 +23,15 @@ import org.milaifontanals.model.Usuari;
  *
  * @author Usuari
  */
-public class Persistencia{
+public class Persistencia implements IPersistence{
+
+    public EntityManager getEm() {
+        return em;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
 
     EntityManager em = null;
     
@@ -32,11 +41,9 @@ public class Persistencia{
     
     
     //@Override
-    public EntityManager obrir_connexio() {
+    public EntityManager obrir_connexio(String up) {
         
-        String up = "UP-MYSQL";
         EntityManagerFactory emf = null;
-        em = null;
         try {
             em = null;
             emf = null;
@@ -182,7 +189,95 @@ public class Persistencia{
 
         return modelLlista;
     }
+
+    @Override
+    public void connect(String nomFitx) throws PersistenceException {
+        obrir_connexio(nomFitx);
+    }
+
+    @Override
+    public void close() throws PersistenceException {
+        EntityManagerFactory emf = null;
+        try {
+            emf = em.getEntityManagerFactory();
+            em.close();
+            em = null;
+        } catch (Exception ex) {
+ 
+        } finally {
+            if (emf != null) {
+                emf.close();
+            }
+        }
+    }
+
+    @Override
+    public void commit() throws PersistenceException {
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public void rollback() throws PersistenceException {
+        em.getTransaction().rollback();
+    }
     
+    public void guardaCanvis(Object o){
+        //if(em!=null){
+            //em.getTransaction().begin();                      
+            em.persist(o);
+            //commit();
+            //em.clear();
+        //}
+
+    }
+    
+    public void sobreEscriureCanvis(Object o){
+
+        //if(em!=null){
+          //  em.getTransaction().begin();
+            em.merge(o);
+            //commit();
+            //em.clear();
+        //}     
+    }
+    
+    
+    public void esborrar(Object o){
+        //if(em!=null){
+          //  em.getTransaction().begin();                     
+            em.remove(o);
+
+            //commit();
+        //}
+    }
+    
+    public void modificarOEsborrar(Object o){
+        //em.getTransaction().begin();
+        em.remove(em.contains(o) ? o : em.merge(o));
+        //commit();
+    }
+
+    public ProjecteUsuari find(Class<ProjecteUsuari> aClass, Integer get) {
+        
+        return em.find(aClass,get);
+        
+    }
+    
+    public void neteja(){
+        em.clear();
+    }
+    
+    public void flush(){
+        em.flush();
+    }
+    
+    public void comensaTransaccio(){
+        em.getTransaction().begin();
+    }
+    
+    public void tancaConnexio(){
+        em.close();
+    }
 
 
     

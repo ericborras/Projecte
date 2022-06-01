@@ -9,22 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -37,9 +27,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import static org.milaifontanals.MD5Utils.bytesToHex;
@@ -93,7 +81,7 @@ public class UI {
     
     //Persistència
     private Persistencia pers_mysql;
-    private EntityManager em = null;
+    //private EntityManager em = null;
     
     
     
@@ -128,14 +116,14 @@ public class UI {
     public UI(){ 
         pers_mysql = new Persistencia();
         
-        em = pers_mysql.obrir_connexio();
+        pers_mysql.connect("UP-MYSQL");
         
         //Per defecte està en mode edit
         modeEdit = true;
         
         
         
-        if(em==null){
+        if(pers_mysql.getEm()==null){
             //Mostrar pantalla error
             gui_error();
         }else{
@@ -190,7 +178,7 @@ public class UI {
 
                 switch(dialogButton){
                     case JOptionPane.YES_OPTION:
-                        pers_mysql.tancar_connexio();
+                        pers_mysql.close();
                         System.exit(0);
                         break;
                     case JOptionPane.NO_OPTION:
@@ -643,12 +631,17 @@ public class UI {
                     
                     try{
                         
+                        pers_mysql.comensaTransaccio();
+                        pers_mysql.guardaCanvis(u);
+                        pers_mysql.commit();
+                        pers_mysql.neteja();
                         
+                        /*
                         em.getTransaction().begin();                      
                         em.persist(u);
                         em.getTransaction().commit();
                         em.clear();
-                        
+                        */
                         try{
                             //Guardar a la modelLlist
                             usuaris.addElement(u);
@@ -660,6 +653,7 @@ public class UI {
                     }catch(Exception ex){
                         System.out.println(ex.getMessage());
                         JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido guardar el usuario","Error al guardar",JOptionPane.ERROR_MESSAGE);
+                        pers_mysql.rollback();
                     }
 
                         
@@ -690,12 +684,16 @@ public class UI {
                         
                     try{
                         
-                        
+                        pers_mysql.comensaTransaccio();
+                        pers_mysql.sobreEscriureCanvis(usuari);
+                        pers_mysql.commit();
+                        pers_mysql.neteja();
+                        /*
                         em.getTransaction().begin();
                         em.merge(usuari);
                         em.getTransaction().commit();
                         em.clear();
-                        
+                        */
                         try{
                             //Guardar a la modelLlist
                             //usuaris.addElement(u);
@@ -705,6 +703,7 @@ public class UI {
                         
                         JOptionPane.showMessageDialog(contenidor_principal,"Usuario modificado con éxito","Modificar",JOptionPane.INFORMATION_MESSAGE);
                     }catch(Exception ex){
+                        pers_mysql.rollback();
                         System.out.println(ex.getMessage());
                         JOptionPane.showMessageDialog(contenidor_principal,"Error al modificar el usuario","Error al modificar",JOptionPane.ERROR_MESSAGE);
                     }
@@ -726,7 +725,7 @@ public class UI {
             
             
         }
-
+        
         private void eliminar_usuari() {
             
             //Esborrar usuari
@@ -744,12 +743,17 @@ public class UI {
                                                         null);
                     if(n==0){                      
                         System.out.println("SI");
-
+                        
+                        pers_mysql.comensaTransaccio();                       
+                        pers_mysql.esborrar(usuari);
+                        pers_mysql.commit();
+                        /*
                         em.getTransaction().begin();
                         System.out.println(usuari);                       
                         em.remove(usuari);
                         
                         em.getTransaction().commit();
+                        */
                         
                         //Treure de la llista
                         //Esborrar en memoria
@@ -774,16 +778,22 @@ public class UI {
                 
             }catch(Exception ex){
                 merge = true;
-                em.getTransaction().rollback();             
+                pers_mysql.rollback();
+                //em.getTransaction().rollback();             
                 System.out.println(ex.getMessage());
                 
             }
             
             if(merge){
                 try{
+                    /*
                     em.getTransaction().begin();
                     em.remove(em.contains(usuari) ? usuari : em.merge(usuari));
                     em.getTransaction().commit();
+                    */
+                    pers_mysql.comensaTransaccio();
+                    pers_mysql.modificarOEsborrar(usuari);
+                    pers_mysql.commit();
                     
                     //Treure de la llista
                     //Esborrar en memoria
@@ -802,6 +812,7 @@ public class UI {
                     
                     JOptionPane.showMessageDialog(contenidor_principal,"Usuario eliminado con éxito","Eliminar usuario",JOptionPane.INFORMATION_MESSAGE);
                 }catch(Exception ex){
+                    pers_mysql.rollback();
                     JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido eliminar el usuario","Error al eliminar el usuario",JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -899,47 +910,59 @@ public class UI {
         }
 
         private void guardar_usuari_projecte() {
-                      
+                     
             try{
                         
                 //Esborrem els que estan seleccionats
-                em.getTransaction().begin();                             
+                //em.getTransaction().begin(); 
+                pers_mysql.comensaTransaccio();
                 System.out.println("PROJECTES USUARIS PER ESBORRAR: "+projectes_usuaris_per_esborrar.size());
                 int qt=0;
                 for(ProjecteUsuari pru : projectes_usuaris_per_esborrar){                                                   
-                    ProjecteUsuari pru_find = em.find(ProjecteUsuari.class, llista_ids_projectes.get(qt));
+                    ProjecteUsuari pru_find = pers_mysql.find(ProjecteUsuari.class, llista_ids_projectes.get(qt));
                     
                     try{
-                       em.remove(pru_find); 
+                       pers_mysql.esborrar(pru_find);
+                       //em.remove(pru_find); 
                     }catch(Exception ex){
-                        em.merge(pru_find);
-                        em.remove(pru);                     
+                        pers_mysql.sobreEscriureCanvis(pru_find);
+                        pers_mysql.esborrar(pru);
+                        //em.merge(pru_find);
+                        //em.remove(pru);                     
                     }
                     qt++;
                 }
                 
                 projectes_usuaris_per_esborrar.clear();
-                em.getTransaction().commit();
-                em.clear();
+                
+                pers_mysql.commit();
+                pers_mysql.neteja();
+                //em.getTransaction().commit();
+                //em.clear();
 
                 //---------------------------------------
-                
-                em.getTransaction().begin(); 
+                pers_mysql.comensaTransaccio();
+                //em.getTransaction().begin(); 
                 //Afegim
                 for(ProjecteUsuari pru : projectes_usuari_per_afegir){
-                    em.persist(pru);
-                    em.flush();
+                    pers_mysql.guardaCanvis(pru);
+                    pers_mysql.flush();
+                    //em.persist(pru);
+                    //em.flush();
 
                 }
                 System.out.println("PROJECTES USUARI PER AFEGIR: "+projectes_usuari_per_afegir.size());
                 projectes_usuari_per_afegir.clear();
-                em.getTransaction().commit();
-                em.clear();
+                pers_mysql.commit();
+                pers_mysql.neteja();
+                //em.getTransaction().commit();
+                //em.clear();
                 
                 llista_ids_projectes.clear();
 
                 JOptionPane.showMessageDialog(contenidor_principal,"Assignación de usarios realizada con éxito","Modificar",JOptionPane.INFORMATION_MESSAGE);
             }catch(Exception ex){
+                pers_mysql.rollback();
                 System.out.println(ex.getMessage());
                 JOptionPane.showMessageDialog(contenidor_principal,"Error al modificar las asignaciones de usuarios","Error al modificar",JOptionPane.ERROR_MESSAGE);
             }
@@ -980,6 +1003,8 @@ public class UI {
            
             
         }
+
+
     
     
     }

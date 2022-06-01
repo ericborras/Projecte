@@ -13,7 +13,7 @@ namespace BDLib
     public class CPGestioProjectes : IPersistence 
     {
 
-        private static string stringConn= "Server=localhost;Database=gestio_projectes;UID=root;Password=";
+        private static string stringConn= "Server=51.68.224.27;Database=dam2_eborras;UID=dam2-eborras;Password=3483W";
 
         private delegate T callable_query<T>(DbCommand consulta);
 

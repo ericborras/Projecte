@@ -12,9 +12,9 @@
         <class>org.milaifontanals.model.Rol</class>
         <properties>
             <property name="javax.persistence.jdbc.url" 
-                      value="jdbc:mysql://localhost:3306/gestio_projectes"/>
-            <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value=""/>
+                      value="jdbc:mysql://51.68.224.27:3306/dam2_eborras"/>
+            <property name="javax.persistence.jdbc.user" value="dam2-eborras"/>
+            <property name="javax.persistence.jdbc.password" value="3483W"/>
             <property name="javax.persistence.jdbc.driver" 
                       value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.show_sql" value="true"/>

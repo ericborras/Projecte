@@ -24,10 +24,10 @@ public interface IPersistence {
     Rol[] mostrar_rols();
     */
     
-    void connect(String nomFitx);
-    void close();
-    void commit();
-    void rollback();
+    void connect(String nomFitx) throws PersistenceException;
+    void close() throws PersistenceException;
+    void commit() throws PersistenceException;
+    void rollback() throws PersistenceException;
     
     
     

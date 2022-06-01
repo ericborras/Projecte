@@ -1,0 +1,26 @@
+1-
+
+select t.id, t.data_creacio, t.data_limit, t.descripcio, e.nom, p.nom as projecte_nom, up.nom as propietari_nom, up.cognom1 as propietari_cognom1, up.cognom2 as propietari_cognom2, ur.nom as responsable_nom,ur.cognom1 as responsable_cognom1, ur.cognom2 as responsable_cognom2  
+from tasca t join estat e on t.id_estat = e.id_estat
+	     left join projecte p on t.projecte_id = p.id
+             join usuari up on t.propietari = up.id
+             left join usuari ur on t.responsable = ur.id
+where t.propietari = 8
+order by t.id_estat desc;
+
+
+
+2-
+
+select t.id, t.data_creacio, t.data_limit, t.descripcio, e.nom, p.nom as projecte_nom, up.nom as propietari_nom, up.cognom1 as propietari_cognom1, up.cognom2 as propietari_cognom2, ur.nom as responsable_nom,ur.cognom1 as responsable_cognom1, ur.cognom2 as responsable_cognom2, en.numero as entrada_numero, en.data_entrada as entrada_dataentrada, en.entrada as entrada_text, en.escriptor as entrada_escriptor, uen.nom as entrada_nomescriptor, uen.cognom1 as entrada_cognom1escriptor, uen.cognom2 as entrada_cognom2escriptor, nov.nom as entrada_nomassignacio, nov.cognom1 as entrada_cognom1assignacio, nov.cognom2 as entrada_cognom2assignacio, est.nom as entrada_nouestat    
+from tasca t join estat e on t.id_estat = e.id_estat
+	     left join projecte p on t.projecte_id = p.id
+             join usuari up on t.propietari = up.id
+             left join usuari ur on t.responsable = ur.id
+             left join entrada en on t.id = en.tasca_id
+             join usuari uen on en.escriptor = uen.id
+             left join usuari nov on en.nova_assignacio = nov.id
+             join estat est on en.nou_estat = est.id_estat
+where t.id_estat = 3 or t.id_estat = 4
+order by t.id_estat desc;
+

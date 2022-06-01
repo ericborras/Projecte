@@ -59,8 +59,6 @@ namespace GestioProjectes
         private int idxNovaAssignEntrada = -1;
         private int idxEscriptorEntrada = -1;
         private int idxEstatEntrada = -1;
-        
-
 
 
 
@@ -854,6 +852,11 @@ namespace GestioProjectes
 
         }
 
+
+        private void btnGoReport_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Report));
+        }
 
         private async void DisplayDeleteProjecte()
         {

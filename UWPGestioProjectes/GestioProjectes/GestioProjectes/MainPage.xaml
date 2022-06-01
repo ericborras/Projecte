@@ -10,12 +10,17 @@
     Loaded="Page_Loaded">
 
     <Grid>
-
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/images/fondo.jpg"></ImageBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
+
+
 
         <Grid Grid.Row="0">
 
@@ -25,8 +30,8 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <controls:DataGrid x:Name="dtgProjectes" SelectionChanged="dtgProjectes_SelectionChanged" Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
-
+            <controls:DataGrid x:Name="dtgProjectes" SelectionChanged="dtgProjectes_SelectionChanged" Grid.Column="0" BorderThickness="5" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single" Background="#DFDFDF">
+                
                 <controls:DataGrid.Columns>
 
                     <controls:DataGridTextColumn Header="Nombre" Binding="{Binding Nom}"></controls:DataGridTextColumn>
@@ -55,7 +60,7 @@
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="Descripción proyecto " VerticalAlignment="Center"></TextBlock>
-                    <TextBox x:Name="txbDescProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="80" AcceptsReturn="True"></TextBox>
+                    <TextBox x:Name="txbDescProjecte" HorizontalAlignment="Left" VerticalAlignment="Center" Width="220" Height="70" AcceptsReturn="True"></TextBox>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -133,7 +138,7 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <controls:DataGrid x:Name="dtgTasques" SelectionChanged="dtgTasques_SelectionChanged" Grid.Column="0" BorderThickness="5" Background="white" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+            <controls:DataGrid x:Name="dtgTasques" SelectionChanged="dtgTasques_SelectionChanged" Grid.Column="0" BorderThickness="5" Background="#DFDFDF" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
 
                 <controls:DataGrid.Columns>
 
@@ -273,8 +278,8 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            
-            <controls:DataGrid x:Name="dtgEntrada" SelectionChanged="dtgEntrada_SelectionChanged" Grid.Column="0" BorderThickness="5" Background="White" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
+
+            <controls:DataGrid x:Name="dtgEntrada" SelectionChanged="dtgEntrada_SelectionChanged" Grid.Column="0" BorderThickness="5" Background="#DFDFDF" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" SelectionMode="Single">
 
                 <controls:DataGrid.Columns>
 
@@ -286,7 +291,7 @@
                     <controls:DataGridTextColumn Header="Escritor" Binding="{Binding Escriptor.Nomcomplet}"></controls:DataGridTextColumn>
                     <controls:DataGridTextColumn Header="Nueva assignación" Binding="{Binding NovaAssignacio.Nomcomplet}"></controls:DataGridTextColumn>
                     <controls:DataGridTextColumn Header="Nuevo estado" Binding="{Binding NouEstat.Nom_estat}"></controls:DataGridTextColumn>
-                    
+
 
                 </controls:DataGrid.Columns>
 
@@ -323,7 +328,7 @@
                     <ComboBox x:Name="cboNouEstat" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200"></ComboBox>
                 </StackPanel>
             </Grid>
-            
+
 
             <Grid Grid.Column="3">
 
@@ -383,5 +388,8 @@
 
         </Grid>
 
+
+        <Button Grid.Row="3" x:Name="btnGoReport" Click="btnGoReport_Click">Report</Button>
+        
     </Grid>
 </Page>

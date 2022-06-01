@@ -107,3 +107,8 @@ E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\o
 E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\excluded.layout.resfiles
 E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\excluded.layout.resfiles.intermediate
 E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\.winmd_cache\$Microsoft.UI.Xaml.Markup.winmd_636885274160000000.json
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\bin\x86\Debug\Report.xbf
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\Report.g.i.cs
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\Report.g.cs
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\Report.xaml
+E:\2n\M13-Projecte\Projecte\UWPGestioProjectes\GestioProjectes\GestioProjectes\obj\x86\Debug\Report.xbf
