@@ -324,6 +324,7 @@ namespace GestioProjectes
                     Tasca tasc = new Tasca(txbNomTasca.Text.Trim(), txbDescripcioTasca.Text.Trim());
                     tasc.DataCreacio = DateTime.Now;
                     tasc.Propietari = (Usuari)cboPropietariTasca.SelectedItem;
+                    
 
 
                     tasc.Estat = (Estat)cboEstadoTasca.SelectedItem;
@@ -360,6 +361,8 @@ namespace GestioProjectes
                     else
                     {
                         //Mode edició
+                        Tasca taux = (Tasca)dtgTasques.SelectedItem;
+                        tasc.Id = taux.Id;
 
                         if (CPGestioProjectes.updateTasca(tasc, projecte.Id))
                         {

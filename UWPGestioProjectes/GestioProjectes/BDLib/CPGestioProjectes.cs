@@ -648,7 +648,7 @@ namespace BDLib
                         DBUtils.crearParametre(consulta, "id_estat", t.Estat.Codi_estat, DbType.Int32);
 
                         consulta.CommandText = "update tasca set nom = @nom, descripcio = @descripcio, data_limit = @data_limit, propietari = @propietari, responsable = @responsable, id_estat = @id_estat where id = @id";
-                        Debug.WriteLine(" NOM " + t.Nom + " DESCRIPCIO " + t.Descripcio + " DATA LIMIT " + t.DataLimit + " PROPIETARI" + t.Propietari.Id + " RESPONSABLE " + t.Responsable.Id + " ESTAT " + t.Estat.Codi_estat + " PROJECTE " + projecte_id);
+                        Debug.WriteLine(" NOM " + t.Nom + " DESCRIPCIO " + t.Descripcio + " DATA LIMIT " + t.DataLimit + " PROPIETARI" + t.Propietari.Id + " RESPONSABLE " + t.Responsable.Id + " ESTAT " + t.Estat.Codi_estat + " PROJECTE " + projecte_id+" TASCA: "+t.Id);
 
                         int numeroDeFiles = -1;
 
