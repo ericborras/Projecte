@@ -5,8 +5,11 @@
  */
 package org.milaifontanals.persistence;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -43,8 +46,18 @@ public class Persistencia implements IPersistence{
     //@Override
     public EntityManager obrir_connexio(String up) {
         
+        
         EntityManagerFactory emf = null;
+        Properties props = new Properties();
         try {
+            
+            props.load(new FileInputStream("properties.properties"));
+            
+            up = props.getProperty("up");
+            props.remove("up");
+            
+            HashMap<String,String> p = new HashMap(props);
+            
             em = null;
             emf = null;
             System.out.println("Intent amb " + up);
