@@ -440,7 +440,7 @@ public class UI {
 
     private void disseny_south() {
         panell_guarda = new JPanel();
-        btn_guarda = new JButton("Guarda");
+        btn_guarda = new JButton("Guardar");
         btn_guarda.setName("guarda");
         btn_guarda.addActionListener(gb);
         

@@ -37,8 +37,8 @@ public class CrearNovaEntrada extends AppCompatActivity implements View.OnClickL
 
 
     private static final int port = 44444;
-    //private static final String address = "10.132.0.120";
-    private static final String address = "192.168.0.11";
+    private static final String address = "10.132.0.120";
+    //private static final String address = "192.168.0.11";
 
     List<Usuari> usuaris = new ArrayList<>();
 
