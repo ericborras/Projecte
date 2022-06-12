@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Usuari implements Serializable{
@@ -19,38 +21,38 @@ public class Usuari implements Serializable{
     private List<ProjecteUsuari> projectes_usuaris;
 
     public Usuari(int id, String nom, String cognom1, String cognom2, Date dataNaixement, String login, String passwdHash, List<Tasca> tasques, List<ProjecteUsuari> projectes_usuaris) {
-        this.id = id;
-        this.nom = nom;
-        this.cognom1 = cognom1;
-        this.cognom2 = cognom2;
-        this.dataNaixement = dataNaixement;
-        this.login = login;
-        this.passwdHash = passwdHash;
-        this.tasques = tasques;
-        this.projectes_usuaris = projectes_usuaris;
+        setId(id);
+        setNom(nom);
+        setCognom1(cognom1);
+        setCognom2(cognom2);
+        setDataNaixement(dataNaixement);
+        setLogin(login);
+        setPasswdHash(passwdHash);
+        setTasques(tasques);
+        setProjectes(projectes_usuaris);
     }
 
     public Usuari(String nom, String cognom1, Date dataNaixement, String login, String passwdHash) {
-        this.nom = nom;
-        this.cognom1 = cognom1;
-        this.dataNaixement = dataNaixement;
-        this.login = login;
-        this.passwdHash = passwdHash;
+        setNom(nom);
+        setCognom1(cognom1);
+        setDataNaixement(dataNaixement);
+        setLogin(login);
+        setPasswdHash(passwdHash);
     }
 
     public Usuari(int id, String nom, String cognom1, Date dataNaixement, String login, String passwdHash) {
-        this.id = id;
-        this.nom = nom;
-        this.cognom1 = cognom1;
-        this.dataNaixement = dataNaixement;
-        this.login = login;
-        this.passwdHash = passwdHash;
+        setId(id);
+        setNom(nom);
+        setCognom1(cognom1);
+        setDataNaixement(dataNaixement);
+        setLogin(login);
+        setPasswdHash(passwdHash);
     }
 
     public Usuari(int id, String nom, String cognom1) {
-        this.id = id;
-        this.nom = nom;
-        this.cognom1 = cognom1;
+        setId(id);
+        setNom(nom);
+        setCognom1(cognom1);
     }
 
 
@@ -74,6 +76,16 @@ public class Usuari implements Serializable{
     }
 
     public void setNom(String nom) {
+        
+        Pattern pattern = Pattern
+                .compile("^[\\p{L} .'-]+$");
+        
+        Matcher valida = pattern.matcher(nom);
+        
+        if(!valida.matches()){
+            throw new RuntimeException("El nombre sólo puede contener carácteres válidos");
+        }
+        
         this.nom = nom;
     }
 
@@ -82,6 +94,16 @@ public class Usuari implements Serializable{
     }
 
     public void setCognom1(String cognom1) {
+        
+        Pattern pattern = Pattern
+                .compile("^[\\p{L} .'-]+$");
+        
+        Matcher valida = pattern.matcher(cognom1);
+        
+        if(!valida.matches()){
+            throw new RuntimeException("El primer apellido sólo puede contener carácteres válidos");
+        }
+        
         this.cognom1 = cognom1;
     }
 
@@ -90,6 +112,17 @@ public class Usuari implements Serializable{
     }
 
     public void setCognom2(String cognom2) {
+        
+        if(cognom2!=null){
+            Pattern pattern = Pattern
+                .compile("^[\\p{L} .'-]+$");
+        
+            Matcher valida = pattern.matcher(cognom2);
+
+            if(!valida.matches()){
+                throw new RuntimeException("El segundo apellido sólo puede contener carácteres válidos");
+            }
+        }        
         this.cognom2 = cognom2;
     }
 

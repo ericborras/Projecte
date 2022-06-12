@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.milaifontanals.persist;
+package org.milaifontanals.capa;
 
 import java.util.List;
 import org.milaifontanals.model.Entrada;
@@ -14,7 +14,6 @@ import org.milaifontanals.model.Tasca;
  * @author Lenovo T530
  */
 public class DetallTasca {
-    
     private Tasca tasca;
     private List<Entrada> entrades;
 
@@ -44,8 +43,4 @@ public class DetallTasca {
     public void setEntrades(List<Entrada> entrades) {
         this.entrades = entrades;
     }
-    
-    
-    
-    
 }

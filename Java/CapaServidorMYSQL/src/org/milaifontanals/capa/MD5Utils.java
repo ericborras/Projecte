@@ -1,16 +1,21 @@
-
-package org.milaifontanals.utils;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.milaifontanals.capa;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
+/**
+ *
+ * @author Lenovo T530
+ */
 public class MD5Utils {
     
-
-
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private static final String OUTPUT_FORMAT = "%-20s:%s";
 
@@ -32,6 +37,4 @@ public class MD5Utils {
         }
         return sb.toString();
     }
-    
-    
 }

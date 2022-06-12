@@ -1,5 +1,5 @@
-package org.milaifontanals.persist;
 
+package org.milaifontanals.capa;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,28 +13,24 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import org.milaifontanals.IPersistence;
-import org.milaifontanals.exception.ServidorException;
+import org.milaifontanals.PersistenceException;
 import org.milaifontanals.model.Entrada;
 import org.milaifontanals.model.Estat;
 import org.milaifontanals.model.Projecte;
+import org.milaifontanals.model.ProjecteUsuari;
+import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Tasca;
 import org.milaifontanals.model.Usuari;
-import org.milaifontanals.utils.MD5Utils;
-import static org.milaifontanals.utils.MD5Utils.bytesToHex;
 
 
-public class CPGestioProjecte implements IPersistence{
-
+public class CapaServidorMYSQL implements IPersistence{
+    
     private Connection con;  
     //LLISTA QUE CONTÉ TOT EL QUE VA PASSANT
     public DefaultListModel llista_log = new DefaultListModel();
@@ -52,21 +48,24 @@ public class CPGestioProjecte implements IPersistence{
     
     SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     
-    
-    private Date getActualDate(){
-        return new Date(System.currentTimeMillis());
+    public CapaServidorMYSQL(){
+        
     }
     
+    @Override
+    public DefaultListModel getLog(){
+        return llista_log;
+    }
     
     @Override
-    public void connect(String nomFitx) {
+    public void obrir_connexio(String nomFitx) throws PersistenceException {
         
         Properties p = new Properties();
         try {
             p.load(new FileReader(nomFitx));
         } catch (IOException ex) {
             llista_log.add(0,"Problemes en carregar el fitxer de configuració. Més info: "+ex.getMessage());
-            throw new ServidorException("Problemes en carregar el fitxer de configuració. Més info: " + ex.getMessage(), ex);
+            throw new PersistenceException("Problemes en carregar el fitxer de configuració. Més info: " + ex.getMessage(), ex);
         }
 
         String url = p.getProperty("url");
@@ -74,12 +73,11 @@ public class CPGestioProjecte implements IPersistence{
         String pwd = p.getProperty("contrasenya");
         if (url == null || usu == null || pwd == null) {
             llista_log.add(0,"Manca alguna de les propietats: url, usuari, contrasenya");
-            throw new ServidorException("Manca alguna de les propietats: url, usuari, contrasenya");
+            throw new PersistenceException("Manca alguna de les propietats: url, usuari, contrasenya");
         }
         // Ja tenim les 3 propietats
         con = null;
         try {
-            
             
             con = DriverManager.getConnection(url, usu, pwd);
             con.setAutoCommit(false);//Evitar autocommit
@@ -88,12 +86,15 @@ public class CPGestioProjecte implements IPersistence{
             prepararStatements();
         } catch (SQLException ex) {
             llista_log.add(0,"Error en establir connexió amb la BD. Més info: "+ex.getMessage());
-            throw new ServidorException("Error en establir connexió amb la BD", ex);
+            throw new PersistenceException("Error en establir connexió amb la BD", ex);
         }
-    }
-
+        
+        
+        
+    }   
+    
     @Override
-    public void close() {
+    public void tancaConnexio() throws PersistenceException {
         try {
             if (con != null) {
                 rollback(); // Si no es fa commit o rollback casca... Excepció
@@ -103,39 +104,42 @@ public class CPGestioProjecte implements IPersistence{
             }
         } catch (SQLException ex) {
             llista_log.add(0,"Error en tancar connexió amb la BD: "+ex.getMessage());
-            throw new ServidorException("Error en tancar connexió amb la BD", ex);
+            throw new PersistenceException("Error en tancar connexió amb la BD", ex);
         }
     }
-
+    
+    
+    
     @Override
-    public void commit() {
+    public void commit() throws PersistenceException {
         try {
             con.commit();
         } catch (SQLException ex) {
             llista_log.add(0,"Error en realitzar commit: "+ex.getMessage());
-            throw new ServidorException("Error en realitzar commit",ex);
+            throw new PersistenceException("Error en realitzar commit",ex);
         }
     }
-
+    
+    
     @Override
-    public void rollback() {
-        try {
+    public void rollback() throws PersistenceException {
+       try {
             con.rollback();
         } catch (SQLException ex) {
             llista_log.add(0,"Error en realitzar rollback: "+ex.getMessage());
-            throw new ServidorException("Error en realitzar rollback",ex);
+            throw new PersistenceException("Error en realitzar rollback",ex);
         }
     }
-
     
-    public Usuari getLogin(String login, String password){
-        
+    
+    @Override
+    public Usuari getLogin(String login, String password) throws PersistenceException {
         Usuari usuari = null;
         
         //Passar la password a hash
         MD5Utils md5 = new MD5Utils();
         byte[] md5InBytes = md5.digest(password.getBytes(StandardCharsets.UTF_8));
-        String hash = bytesToHex(md5InBytes);
+        String hash = MD5Utils.bytesToHex(md5InBytes);
         
         Statement stLogin = null;
         ResultSet rsLogin = null;
@@ -157,16 +161,14 @@ public class CPGestioProjecte implements IPersistence{
                 }               
             }                   
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         return usuari;
-        
-        
-        
-    } 
-    
-    public List<Projecte> getProjectes(int id_usuari){
+    }
+
+    @Override
+    public List<Projecte> getProjectes(int id_usuari) throws PersistenceException {
         List<Projecte> projectes = new ArrayList();
         
         Projecte projecte = null;
@@ -192,14 +194,15 @@ public class CPGestioProjecte implements IPersistence{
                 projectes.add(projecte);
             }                   
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         
         return projectes;
     }
-    
-    public List<Tasca> getTasques(int id_usuari, int id_projecte){
+
+    @Override
+    public List<Tasca> getTasques(int id_usuari, int id_projecte) throws PersistenceException {
         System.out.println("PARAMETRE ID_PROJECTE: "+id_projecte);
         List<Tasca> tasques = new ArrayList();
         
@@ -264,11 +267,12 @@ public class CPGestioProjecte implements IPersistence{
                 tasques.add(tasca);
             }                   
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         return tasques;
     }
+    
     
     public DetallTasca getDetallTasca(int id_usuari, int id_tasca){
         DetallTasca detallTasca = null;
@@ -363,17 +367,16 @@ public class CPGestioProjecte implements IPersistence{
             
             
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         return detallTasca;
         
     }
-    
-    
-    public List<Entrada> getEntrades(int id_tasca){
 
-        Tasca tasca = null;
+    @Override
+    public List<Entrada> getEntrades(int id_tasca) throws PersistenceException {
+         Tasca tasca = null;
         List<Entrada> entrades = new ArrayList();
         
 
@@ -425,16 +428,14 @@ public class CPGestioProjecte implements IPersistence{
             
             
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         return entrades;
-        
     }
-    
-    
-    public List<Tasca> getNotificacionsPendents(int id_usuari){
-        
+
+    @Override
+    public List<Tasca> getNotificacionsPendents(int id_usuari) throws PersistenceException {
         List<Tasca> tasques = new ArrayList();
         
         Statement stNotificacions = null;
@@ -456,17 +457,16 @@ public class CPGestioProjecte implements IPersistence{
             
             
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         
         
         return tasques;
-        
     }
-    
-    public boolean NovaEntrada(String entrada, int nova_assignacio, int escriptor, int nou_estat, int tasca_id){
-        
+
+    @Override
+    public boolean NovaEntrada(String entrada, int nova_assignacio, int escriptor, int nou_estat, int tasca_id) throws PersistenceException {
         Statement stEntrada = null;
         
         try{
@@ -505,12 +505,10 @@ public class CPGestioProjecte implements IPersistence{
             rollback();
             return false;
         }
-        
-        
-        
     }
-    
-    public List<Usuari> GetUsuarisProjecte(int id_projecte){
+
+    @Override
+    public List<Usuari> GetUsuarisProjecte(int id_projecte) throws PersistenceException {
         List<Usuari> usuaris = new ArrayList();
         
         Statement stUsuarisProjecte = null;
@@ -534,16 +532,15 @@ public class CPGestioProjecte implements IPersistence{
                                  
         } catch (SQLException ex) {
             
-            throw new ServidorException("Error: "+ex);
+            throw new PersistenceException("Error: "+ex);
         }
         
         return usuaris;
     }
-    
-    //Passar els possibles filtres per llegir el resultset que pertoqui
-    public List<Tasca> getTasquesFiltre(String sql, String nomTasca, String descripcioTasca, boolean tascaTancada){
-        
-        List<Tasca> tasques = new ArrayList();
+
+    @Override
+    public List<Tasca> getTasquesFiltre(String sql, String nomTasca, String descripcioTasca, boolean tascaTancada) throws PersistenceException {
+                List<Tasca> tasques = new ArrayList();
         
         Statement stTasques = null;
         ResultSet rsTasques = null;
@@ -582,18 +579,16 @@ public class CPGestioProjecte implements IPersistence{
             }
             
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         
         
         return tasques;
-        
     }
-    
-    
-    
-    public List<Projecte> getProjectesFiltre(int id_usuari, int id_projecte){
+
+    @Override
+    public List<Projecte> getProjectesFiltre(int id_usuari, int id_projecte) throws PersistenceException {
         List<Projecte> projectes = new ArrayList();
         
         Projecte projecte = null;
@@ -621,7 +616,7 @@ public class CPGestioProjecte implements IPersistence{
                 projectes.add(projecte);
             }                   
         } catch (SQLException ex) {
-            throw new ServidorException("Error: ",ex);
+            throw new PersistenceException("Error: ",ex);
         }
         
         
@@ -629,6 +624,95 @@ public class CPGestioProjecte implements IPersistence{
     }
     
     
+        
+    private Date getActualDate(){
+        return new Date(System.currentTimeMillis());
+    }
+    
+    
+    
+    
+
+
+    @Override
+    public void tancar_connexio() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel mostrar_usuaris() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Projecte[] mostrar_projectes() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Rol[] mostrar_rols() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ProjecteUsuari> mostrar_projecteUsuari(int identi_proj) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel mostrar_usuarsisPerProjecte(int id_projecte) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel mostrar_usuarsisPerProjectePendent(int id_projecte) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+
+
+    @Override
+    public void guardaCanvis(Object o) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void sobreEscriureCanvis(Object o) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void esborrar(Object o) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modificarOEsborrar(Object o) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ProjecteUsuari find(Class<ProjecteUsuari> aClass, Integer get) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void neteja() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void flush() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void comensaTransaccio() throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
     
     private void prepararStatements() throws SQLException {
         
@@ -684,5 +768,8 @@ public class CPGestioProjecte implements IPersistence{
         
     
     }
+    
+    
+    
     
 }

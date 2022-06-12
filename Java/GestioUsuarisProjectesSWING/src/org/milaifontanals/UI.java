@@ -9,12 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Properties;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -31,11 +34,11 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import static org.milaifontanals.MD5Utils.bytesToHex;
+import org.milaifontanals.capa.CapaMYSQL;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.ProjecteUsuari;
 import org.milaifontanals.model.Rol;
 import org.milaifontanals.model.Usuari;
-import org.milaifontanals.persistence.Persistencia;
 
 
 public class UI {
@@ -80,7 +83,7 @@ public class UI {
     private DefaultListModel usuaris_assignar_projecte = null;
     
     //Persistència
-    private Persistencia pers_mysql;
+    private IPersistence pers_mysql;
     //private EntityManager em = null;
     
     
@@ -113,32 +116,48 @@ public class UI {
     private int idx_llista_usuaris;
     private int day,month,year;
     
-    public UI(){ 
-        pers_mysql = new Persistencia();
+    public UI(String nomFitxer){ 
+        try {
+            Properties props = new Properties();
+            props.load(new FileInputStream(nomFitxer));
+            String nom_capa = props.getProperty("capa");
+
+            // des de fitxer de propietats o via args. Mai per codi
+            pers_mysql = (IPersistence) Class.forName(nom_capa).newInstance();
+            System.out.println("Capa carregada i en funcionament");
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+            System.out.println("No es pot carregar capa per motiu.....");
+            return;
+        } catch (PersistenceException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        } catch (IOException ex) {
+            System.out.println("No es pot trobar el fitxer de propietats.....");
+            return;
+        }
         
-        pers_mysql.connect("UP-MYSQL");
+        try{
+            pers_mysql.obrir_connexio(nomFitxer);
+        }catch(Exception ex){
+            gui_error();
+        }
+        
         
         //Per defecte està en mode edit
         modeEdit = true;
-        
-        
-        
-        if(pers_mysql.getEm()==null){
-            //Mostrar pantalla error
-            gui_error();
-        }else{
-            usuaris = pers_mysql.mostrar_usuaris();
-            projectes = pers_mysql.mostrar_projectes();
-            rols = pers_mysql.mostrar_rols();
-            s_rols = new String[rols.length];
-            for(int i=0;i<rols.length;i++){
-                s_rols[i] = rols[i].getNom();
-            }
-            gui();
+
+        usuaris = pers_mysql.mostrar_usuaris();
+        projectes = pers_mysql.mostrar_projectes();
+        rols = pers_mysql.mostrar_rols();
+        s_rols = new String[rols.length];
+        for(int i=0;i<rols.length;i++){
+            s_rols[i] = rols[i].getNom();
+        }
+        gui();
            
            
             
-        }
+        
     }
         
     
@@ -178,7 +197,7 @@ public class UI {
 
                 switch(dialogButton){
                     case JOptionPane.YES_OPTION:
-                        pers_mysql.close();
+                        pers_mysql.tancaConnexio();
                         System.exit(0);
                         break;
                     case JOptionPane.NO_OPTION:
@@ -606,8 +625,8 @@ public class UI {
         private void guardar_usuari() {
 
             if(modeAlta){
-                if(text_nom_usuari.getText().length()>0 && text_cognom1_usuari.getText().length()>0 && text_login_usuari.getText().length()>0 
-                && text_passwd.getText().length()>0 && text_naix_usuari.getText().length()>0)
+                if(text_nom_usuari.getText().trim().length()>0 && text_cognom1_usuari.getText().trim().length()>0 && text_login_usuari.getText().trim().length()>0 
+                && text_passwd.getText().trim().length()>0 && text_naix_usuari.getText().length()>0)
                 {
                     //Construir objecte usuari
                     
@@ -624,51 +643,55 @@ public class UI {
                     
                     
                     
-                    Usuari u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),data_naix,text_login_usuari.getText(),hash);
-                    if(text_cognom2_usuari.getText().length()>0){
-                        u.setCognom2(text_cognom2_usuari.getText());
-                    }
+                    Usuari u = null;
                     
                     try{
-                        
-                        pers_mysql.comensaTransaccio();
-                        pers_mysql.guardaCanvis(u);
-                        pers_mysql.commit();
-                        pers_mysql.neteja();
-                        
-                        /*
-                        em.getTransaction().begin();                      
-                        em.persist(u);
-                        em.getTransaction().commit();
-                        em.clear();
-                        */
-                        try{
-                            //Guardar a la modelLlist
-                            usuaris.addElement(u);
-                        }catch(Exception ex){
-                        
+                        u = new Usuari(text_nom_usuari.getText(),text_cognom1_usuari.getText(),data_naix,text_login_usuari.getText(),hash);
+                    
+                        if(text_cognom2_usuari.getText().length()>0){
+                           u.setCognom2(text_cognom2_usuari.getText());
                         }
-                        
-                        JOptionPane.showMessageDialog(contenidor_principal,"Usuario guardado con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
-                    }catch(Exception ex){
-                        System.out.println(ex.getMessage());
-                        JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido guardar el usuario","Error al guardar",JOptionPane.ERROR_MESSAGE);
-                        pers_mysql.rollback();
+
+                        try{
+
+                           pers_mysql.comensaTransaccio();
+                           pers_mysql.guardaCanvis(u);
+                           pers_mysql.commit();
+                           pers_mysql.neteja();
+
+                           /*
+                           em.getTransaction().begin();                      
+                           em.persist(u);
+                           em.getTransaction().commit();
+                           em.clear();
+                           */
+                           try{
+                               //Guardar a la modelLlist
+                               usuaris.addElement(u);
+                           }catch(Exception ex){
+
+                           }
+
+                           JOptionPane.showMessageDialog(contenidor_principal,"Usuario guardado con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
+                        }catch(Exception ex){
+                            System.out.println(ex.getMessage());
+                            JOptionPane.showMessageDialog(contenidor_principal,"No se ha podido guardar el usuario","Error al guardar",JOptionPane.ERROR_MESSAGE);
+                            pers_mysql.rollback();
+                        }
+                    
+                    
+                    }catch(RuntimeException ex){
+                        JOptionPane.showMessageDialog(contenidor_principal,ex.getMessage(),"Error al guardar",JOptionPane.ERROR_MESSAGE);
                     }
-
-                        
                     
-                    
-                    
-
                 }else{
                     JOptionPane.showMessageDialog(contenidor_principal,"Nombre, el primer apellido, login, password y fecha nacimiento son obligatorios","Error al guardar",JOptionPane.ERROR_MESSAGE);
                 }
             }else{
                 //MODE UPDATE
                 if(usuari!=null){
-                    if(text_nom_usuari.getText().length()>0 && text_cognom1_usuari.getText().length()>0 && text_login_usuari.getText().length()>0 
-                    && text_passwd.getText().length()>0 && text_naix_usuari.getText().length()>0)
+                    if(text_nom_usuari.getText().trim().length()>0 && text_cognom1_usuari.getText().trim().length()>0 && text_login_usuari.getText().trim().length()>0 
+                    && text_passwd.getText().trim().length()>0 && text_naix_usuari.getText().length()>0)
                     {
                         usuari.setNom(text_nom_usuari.getText());
                         usuari.setCognom1(text_cognom1_usuari.getText());

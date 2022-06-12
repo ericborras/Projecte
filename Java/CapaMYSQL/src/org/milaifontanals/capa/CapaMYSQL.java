@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.milaifontanals.persistence;
+
+
+package org.milaifontanals.capa;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -17,43 +13,32 @@ import javax.persistence.Query;
 import javax.swing.DefaultListModel;
 import org.milaifontanals.IPersistence;
 import org.milaifontanals.PersistenceException;
+import org.milaifontanals.model.Entrada;
 import org.milaifontanals.model.Projecte;
 import org.milaifontanals.model.ProjecteUsuari;
 import org.milaifontanals.model.Rol;
+import org.milaifontanals.model.Tasca;
 import org.milaifontanals.model.Usuari;
 
-/**
- *
- * @author Usuari
- */
-public class Persistencia implements IPersistence{
 
-    public EntityManager getEm() {
-        return em;
-    }
+public class CapaMYSQL implements IPersistence{
 
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
-    EntityManager em = null;
+    private EntityManager em;
     
-    public Persistencia(){
+    public CapaMYSQL(){
         
     }
     
-    
-    //@Override
-    public EntityManager obrir_connexio(String up) {
-        
-        
+    @Override
+    public void obrir_connexio(String nomFitx) throws PersistenceException {
+            
         EntityManagerFactory emf = null;
         Properties props = new Properties();
         try {
             
-            props.load(new FileInputStream("properties.properties"));
+            props.load(new FileInputStream(nomFitx));
             
-            up = props.getProperty("up");
+            String up = props.getProperty("up");
             props.remove("up");
             
             HashMap<String,String> p = new HashMap(props);
@@ -66,8 +51,6 @@ public class Persistencia implements IPersistence{
             em = emf.createEntityManager();
             System.out.println();
             System.out.println("EntityManager creat");
-            
-            return em;
             
             
         } catch (Exception ex) {
@@ -83,16 +66,13 @@ public class Persistencia implements IPersistence{
             System.out.print(ex.getCause() != null ? "Caused by:" + ex.getCause().getMessage() + "\n" : "");
             System.out.println("Traça:");
             ex.printStackTrace();
-            
-            return null;
         }
-        
         
     }
 
-    //@Override
-    public void tancar_connexio() {
-        EntityManagerFactory emf = null;
+    @Override
+    public void tancar_connexio() throws PersistenceException {
+       EntityManagerFactory emf = null;
         try {
             emf = em.getEntityManagerFactory();
             em.close();
@@ -106,9 +86,8 @@ public class Persistencia implements IPersistence{
         }
     }
 
-    //@Override
-    public DefaultListModel mostrar_usuaris() {
-        
+    @Override
+    public DefaultListModel mostrar_usuaris() throws PersistenceException {
         Query q = em.createNamedQuery("foundUsuaris");
 
         List<Usuari> ll = (List<Usuari>)q.getResultList();
@@ -125,11 +104,10 @@ public class Persistencia implements IPersistence{
 
         }
         return modelLlista;
-        
     }
 
-    //@Override
-    public Projecte[] mostrar_projectes() {
+    @Override
+    public Projecte[] mostrar_projectes() throws PersistenceException {
         Query q = em.createNamedQuery("foundProjectes");
 
         List<Projecte> ll = (List<Projecte>)q.getResultList();
@@ -142,9 +120,8 @@ public class Persistencia implements IPersistence{
         return projectes;
     }
 
-    //@Override
-    public Rol[] mostrar_rols() {
-        
+    @Override
+    public Rol[] mostrar_rols() throws PersistenceException {
         Query q = em.createNamedQuery("foundRol");
 
         List<Rol> ll = (List<Rol>)q.getResultList();
@@ -156,11 +133,10 @@ public class Persistencia implements IPersistence{
         }
 
         return rols;
-        
-        
     }
-    
-    public List<ProjecteUsuari> mostrar_projecteUsuari(int identi_proj){
+
+    @Override
+    public List<ProjecteUsuari> mostrar_projecteUsuari(int identi_proj) throws PersistenceException {
         Query q = em.createNamedQuery("foundProjecteUsuari");
         q.setParameter("identi_proj", identi_proj);
         List<ProjecteUsuari> ll = (List<ProjecteUsuari>)q.getResultList();
@@ -172,8 +148,9 @@ public class Persistencia implements IPersistence{
 
         return ll;
     }
-    
-    public DefaultListModel mostrar_usuarsisPerProjecte(int id_projecte){
+
+    @Override
+    public DefaultListModel mostrar_usuarsisPerProjecte(int id_projecte) throws PersistenceException {
         Query q = em.createNamedQuery("foundProjecteUsuariByProject");
         q.setParameter("numero", id_projecte);
 
@@ -187,8 +164,9 @@ public class Persistencia implements IPersistence{
 
         return modelLlista;
     }
-    
-    public DefaultListModel mostrar_usuarsisPerProjectePendent(int id_projecte){
+
+    @Override
+    public DefaultListModel mostrar_usuarsisPerProjectePendent(int id_projecte) throws PersistenceException {
         Query q = em.createNamedQuery("foundUsuarisProjectPending");
         q.setParameter("iden_projecte", id_projecte);
 
@@ -204,27 +182,6 @@ public class Persistencia implements IPersistence{
     }
 
     @Override
-    public void connect(String nomFitx) throws PersistenceException {
-        obrir_connexio(nomFitx);
-    }
-
-    @Override
-    public void close() throws PersistenceException {
-        EntityManagerFactory emf = null;
-        try {
-            emf = em.getEntityManagerFactory();
-            em.close();
-            em = null;
-        } catch (Exception ex) {
- 
-        } finally {
-            if (emf != null) {
-                emf.close();
-            }
-        }
-    }
-
-    @Override
     public void commit() throws PersistenceException {
         em.getTransaction().commit();
     }
@@ -233,66 +190,113 @@ public class Persistencia implements IPersistence{
     public void rollback() throws PersistenceException {
         em.getTransaction().rollback();
     }
-    
-    public void guardaCanvis(Object o){
-        //if(em!=null){
-            //em.getTransaction().begin();                      
-            em.persist(o);
-            //commit();
-            //em.clear();
-        //}
 
+    @Override
+    public void guardaCanvis(Object o) throws PersistenceException {
+        em.persist(o);
     }
-    
-    public void sobreEscriureCanvis(Object o){
 
-        //if(em!=null){
-          //  em.getTransaction().begin();
-            em.merge(o);
-            //commit();
-            //em.clear();
-        //}     
+    @Override
+    public void sobreEscriureCanvis(Object o) throws PersistenceException {
+        em.merge(o);
     }
-    
-    
-    public void esborrar(Object o){
-        //if(em!=null){
-          //  em.getTransaction().begin();                     
-            em.remove(o);
 
-            //commit();
-        //}
+    @Override
+    public void esborrar(Object o) throws PersistenceException {
+        em.remove(o);
     }
-    
-    public void modificarOEsborrar(Object o){
-        //em.getTransaction().begin();
+
+    @Override
+    public void modificarOEsborrar(Object o) throws PersistenceException {
         em.remove(em.contains(o) ? o : em.merge(o));
-        //commit();
     }
 
-    public ProjecteUsuari find(Class<ProjecteUsuari> aClass, Integer get) {
-        
+    @Override
+    public ProjecteUsuari find(Class<ProjecteUsuari> aClass, Integer get) throws PersistenceException {
         return em.find(aClass,get);
-        
     }
-    
-    public void neteja(){
+
+    @Override
+    public void neteja() throws PersistenceException {
         em.clear();
     }
-    
-    public void flush(){
+
+    @Override
+    public void flush() throws PersistenceException {
         em.flush();
     }
-    
-    public void comensaTransaccio(){
+
+    @Override
+    public void comensaTransaccio() throws PersistenceException {
         em.getTransaction().begin();
     }
-    
-    public void tancaConnexio(){
+
+    @Override
+    public void tancaConnexio() throws PersistenceException {
         em.close();
     }
 
+    @Override
+    public Usuari getLogin(String login, String password) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    @Override
+    public List<Projecte> getProjectes(int id_usuari) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Tasca> getTasques(int id_usuari, int id_projecte) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Entrada> getEntrades(int id_tasca) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Tasca> getNotificacionsPendents(int id_usuari) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean NovaEntrada(String entrada, int nova_assignacio, int escriptor, int nou_estat, int tasca_id) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Usuari> GetUsuarisProjecte(int id_projecte) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Tasca> getTasquesFiltre(String sql, String nomTasca, String descripcioTasca, boolean tascaTancada) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Projecte> getProjectesFiltre(int id_usuari, int id_projecte) throws PersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel getLog() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
